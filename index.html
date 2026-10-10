@@ -272,12 +272,14 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <div class="counter-wrap">
     <div class="counter-form">
       <h2 style="color:var(--gold)">🚫 Who keeps killing you?</h2>
-      <p style="color:var(--muted);font-size:14px;margin:6px 0 12px;line-height:1.6">3 steps, that's all: <b>1️⃣</b> type their hero name · <b>2️⃣</b> tap the button · <b>3️⃣</b> buy the ⭐ items it shows. They'll suddenly hit like a wet noodle.</p>
-      <div style="font-size:14px;margin-bottom:6px"><span class="stepnum">1</span><b>Enemy hero name:</b></div>
+      <p style="color:var(--muted);font-size:14px;margin:6px 0 12px;line-height:1.6">Tell us <b>your hero</b> + <b>their hero</b> and we'll rebuild YOUR 6 items for that exact fight. (Leave yours empty for a general answer.)</p>
+      <div style="font-size:14px;margin-bottom:6px"><span class="stepnum">1</span><b>I am playing:</b></div>
+      <input id="myHeroInput" list="heroList" placeholder="e.g. Minotaur, Layla, Hayabusa…">
+      <div style="font-size:14px;margin:10px 0 6px"><span class="stepnum">2</span><b>Who keeps killing me:</b></div>
       <input id="counterInput" list="heroList" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…">
       <datalist id="heroList"></datalist>
-      <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">2</span><b>Tap:</b></div>
-      <button onclick="findCounter()">Show My Counter Build 🛡️</button>
+      <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">3</span><b>Tap:</b></div>
+      <button onclick="findCounter()">What should I buy? 🛡️</button>
       <div style="margin-top:10px;color:var(--muted);font-size:12px">Popular:</div>
       <div class="quick-picks" id="quickPicks"></div>
       <div class="meta-box" style="margin-top:12px">
@@ -421,6 +423,7 @@ const HEROES = [
 {name:"Rafaela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Necklace of Durance","Oracle","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Speed + heal + reveal vs Natalia/Aamon. Buy Durance on her.",counters:["Chou","Karrie","Ling"],counterItems:["Antique Cuirass","Athena's Shield","Dominance Ice"]},
 {name:"Diggie",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Necklace of Durance","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Hard-counters all CC ults (Tigreal, Atlas, Franco). Pick him into engage comps.",counters:["Hayabusa","Ling","Karrie"],counterItems:["Athena's Shield","Blade Armor","Radiant Armor"]},
 {name:"Mathilda",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Karrie+Mathilda dash synergy is S-tier. CC her dash path.",counters:["Chou","Karrie","Diggie"],counterItems:["Dominance Ice","Athena's Shield","Blade Armor"]},
+{name:"Minotaur",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Rage bar is everything: full rage = big heal + knock-up ult. Engage when red, peel while building it.",counters:["Diggie","Karrie","Valir"],counterItems:["Purify","Radiant Armor","Sea Halberd"]},
 {name:"Faramis",role:"Support",lane:"Mid / Roam",dmg:"magic-dps",build:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Support · Inspire + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Nether Realm denies death. Burst outside ult + anti-heal.",counters:["Karrie","Lunox","Esmeralda"],counterItems:["Sea Halberd","Radiant Armor","Divine Glaive"]},
 {name:"Fanny",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Blade of Despair","Hunter Strike","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Cable queen. Khufra + Antique + lock her with suppress.",counters:["Khufra","Wind of Nature","Minsitthar"],counterItems:["Wind of Nature","Antique Cuirass","Dominance Ice"]},
 {name:"Martis",role:"Fighter",lane:"Jungle / EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Antique Cuirass","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Retribution / Flicker",tips:"Anti-CC + execute. Kite his skill-immune window.",counters:["Esmeralda","Karrie","Uranus"],counterItems:["Blade Armor","Dominance Ice","Twilight Armor"]},
@@ -445,7 +448,7 @@ const HEROES = [
 ];
 
 /* Full 133 roster for search completeness (role fallback if not curated above) */
-const EXTRA_HEROES = ["Aulus","Badang","Bane","Barats","Baxia","Benedetta","Brody","Carmilla","Chip","Cici","Dyrroth","Edith","Floryn","Freya","Grock","Guinevere","Hanzo","Harley","Helcurt","Hilda","Ixia","Jawhead","Johnson","Joy","Kagura","Kaja","Kalea","Khaleed","Lapu-Lapu","Leomord","Lolita","Luo Yi","Lylia","Masha","Minsitthar","Natan","Nolan","Novaria","Obsidia","Popol and Kupa","Roger","Suyou","Thamuz","Vale","Valir","Vexana","Xavier","Yi Sun-shin","Yin","Zetian","Zhask","Akai","Argus","Aurora","Minotaur","Moskov","Karrie","Hylos","Zhuxin","Pharsa","Paquito","Silvanna"];
+const EXTRA_HEROES = ["Aulus","Badang","Bane","Barats","Baxia","Benedetta","Brody","Carmilla","Chip","Cici","Dyrroth","Edith","Floryn","Freya","Grock","Guinevere","Hanzo","Harley","Helcurt","Hilda","Ixia","Jawhead","Johnson","Joy","Kagura","Kaja","Kalea","Khaleed","Lapu-Lapu","Leomord","Lolita","Luo Yi","Lylia","Masha","Minsitthar","Natan","Nolan","Novaria","Obsidia","Popol and Kupa","Roger","Suyou","Thamuz","Vale","Valir","Vexana","Xavier","Yi Sun-shin","Yin","Zetian","Zhask","Akai","Argus","Aurora","Moskov","Karrie","Hylos","Zhuxin","Pharsa","Paquito","Silvanna"];
 const ROLE_FALLBACK = {Tank:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"],Fighter:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Assassin:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Mage:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],Marksman:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Wind of Nature"],Support:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"]};
 
 /* merge extras as fallback entries so search finds all 133 */
@@ -531,7 +534,7 @@ function renderAll(){
   $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
   renderShop();
   const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
-  $("tankGrid").innerHTML=HEROES.filter(h=>["Tigreal","Atlas","Khufra","Belerick","Hylos","Gloo","Franco","Gatotkaca","Uranus","Esmeralda","Fredrinn","Akai","Baxia","Barats","Johnson"].includes(h.name)).map(cardHTML).join("");
+  $("tankGrid").innerHTML=HEROES.filter(h=>["Tigreal","Atlas","Khufra","Belerick","Hylos","Gloo","Franco","Gatotkaca","Uranus","Esmeralda","Fredrinn","Akai","Baxia","Barats","Johnson","Minotaur"].includes(h.name)).map(cardHTML).join("");
   $("damageGrid").innerHTML=HEROES.filter(h=>["Hayabusa","Ling","Lancelot","Gusion","Nolan","Aamon","Karina","Saber","Fanny","Julian","Paquito","Yu Zhong","Dyrroth","Aldous","Chou","Terizla","Martis","Alice","Selena","Natalia","Balmond","Ruby","Phoveus","X.Borg"].includes(h.name)).map(cardHTML).join("");
   $("supportGrid").innerHTML=HEROES.filter(h=>["Tank","Support"].includes(h.role)).slice(0,20).map(cardHTML).join("")||by("Support");
   $("marksmanGrid").innerHTML=HEROES.filter(h=>h.role==="Marksman").map(cardHTML).join("");
@@ -621,7 +624,7 @@ function openHero(name,kind){
   <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b></div></div></div>
   <div class="variant-row" id="vBtns">${VARIANT_TABS.map(([k,label])=>`<button data-k="${k}" class="${k===kind?"active":""}" onclick="showVariant('${esc}','${k}')">${label}</button>`).join("")}</div>
   <div id="vBody"></div>
-  <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${esc}')" style="color:var(--gold)">Open in Counter tab →</a> · <a href="#" onclick="event.preventDefault();closeModal();switchTab('shop')" style="color:var(--cyan)">Where are these items in the shop? →</a></div>
+  <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${esc}')" style="color:var(--gold)">Open in Counter tab →</a> · <a href="#" onclick="event.preventDefault();closeModal();switchTab('shop')" style="color:var(--cyan)">Where are these items in the shop? →</a><br><a href="#" onclick="event.preventDefault();closeModal();setMyHero('${esc}')" style="color:var(--green)">🛡️ I play ${h.name} — someone kills me, help me survive →</a></div>
   <button onclick="setMain('${esc}')" style="margin-top:10px;padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:#111;cursor:pointer;font-weight:700">⭐ Set ${h.name} as my main</button>`;
   $("modalBg").classList.add("open");
   showVariant(name,kind);
@@ -666,6 +669,7 @@ document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>switchTab(b.d
 document.querySelectorAll("#roleFilter button").forEach(b=>b.onclick=()=>{activeRole=b.dataset.role;document.querySelectorAll("#roleFilter button").forEach(x=>x.classList.toggle("active",x===b));renderAll();});
 $("globalSearch").addEventListener("input",renderAll);
 $("counterInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
+$("myHeroInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
 
 /* ===== SHOP GUIDE ===== */
 let activeShopCat="Attack";
@@ -690,12 +694,96 @@ function counterPlan(h){
   else{phys=["Antique Cuirass","Blade Armor"];magic=["Athena's Shield","Radiant Armor"];explain=`<b>${h.name}</b> deals <b>MIXED damage</b>. Cover both sides: <b>Antique Cuirass/Blade Armor</b> + <b>Athena's/Radiant</b>, then Immortality.`;}
   return {phys,magic,util,explain};
 }
+/* ===== MY-HERO vs ENEMY matchup counter ("I play X, they play Y") ===== */
+function antiHealFor(role){
+  if(role==="Tank"||role==="Support") return "Dominance Ice";
+  if(role==="Mage") return "Glowing Wand";
+  return "Sea Halberd";
+}
+function matchupCounters(myH,enH){
+  const d=enH.dmg;
+  if(d==="phys-burst") return ["Antique Cuirass","Twilight Armor"];
+  if(d==="phys-dps") return ["Blade Armor","Dominance Ice"];
+  if(d==="magic-burst") return ["Athena's Shield"];
+  if(d==="magic-dps") return ["Radiant Armor"];
+  if(d==="sustain") return [antiHealFor(myH.role)];
+  return ["Antique Cuirass","Athena's Shield"];
+}
+/* Rebuild MY hero's 6 items for this exact enemy: keep identity, inject counters early */
+function matchupBuild(myH,counters,magicFoe){
+  let boots=myH.build[0];
+  if(magicFoe&&["Warrior Boots","Swift Boots","Rapid Boots"].includes(boots)) boots="Tough Boots";
+  const base=myH.build.slice(1);
+  const hasImmo=base.includes("Immortality");
+  const pool=counters.filter(c=>c!==boots);
+  const identity=base.find(b=>b!=="Immortality"&&!pool.includes(b));
+  const cap=hasImmo?5:6;
+  let out=[boots];
+  if(identity) out.push(identity);
+  for(const c of pool){ if(out.length>=cap) break; if(!out.includes(c)) out.push(c); }
+  for(const b of base){ if(out.length>=cap) break; if(!out.includes(b)) out.push(b); }
+  if(hasImmo&&!out.includes("Immortality")) out.push("Immortality");
+  return out.slice(0,6);
+}
+const FOE_STYLE = {
+"phys-burst":"deletes one hero in a single skill combo",
+"phys-dps":"wins by hitting you over and over (crits / fast basics)",
+"magic-burst":"a 100-to-0 magic combo",
+"magic-dps":"constant magic damage, every second",
+"sustain":"out-heals everything you do to them",
+"mixed":"hurts both physically AND magically"};
+function matchupTips(myH,enH,counters){
+  const t=[];
+  if(enH.counters.includes(myH.name)) t.push(`⚠️ Heads-up: ${enH.name} is a known counter to ${myH.name}. Don't fight them alone — wait for your team, then go together.`);
+  else if(myH.counters.includes(enH.name)) t.push(`✅ Good news: ${myH.name} naturally bothers ${enH.name}. Play bold — but still buy the ⭐ items below.`);
+  const d=enH.dmg, c0=counters[0]||"your counter item";
+  if(d==="phys-burst") t.push(`Their whole game is ONE combo. Buy ${c0} as your 2nd item — never 5th. Save your escape for AFTER their dash, not before.`);
+  else if(d==="phys-dps") t.push(`Don't stand still trading hits — you will lose. Let your tank touch them first, then hit from behind.`);
+  else if(d==="magic-burst") t.push(`Spread out so one combo can't catch your whole team. Finish your magic defense BEFORE the mid-game fights start.`);
+  else if(d==="magic-dps") t.push(`Walk OUT of their damage zones instead of tanking them, then re-engage when the zone ends.`);
+  else if(d==="sustain") t.push(`Stop hitting the unkillable one. With anti-heal bought, kill their healer or carry FIRST, then clean up.`);
+  else t.push(`They hurt both ways — one physical + one magic item, then back to your normal build.`);
+  if(myH.role==="Tank") t.push(`As the tank, stand BETWEEN ${enH.name} and your carry. Your life for theirs is a winning trade.`);
+  else if(myH.role==="Support") t.push(`Save your heal/shield for the exact moment ${enH.name} dives. Healing early wastes it.`);
+  else if(myH.role==="Marksman") t.push(`Only hit ${enH.name} when your tank is in front of you. No tank nearby = go farm another lane.`);
+  else if(myH.role==="Mage") t.push(`Poke ${enH.name} from max range. Never walk up to finish them — that's how mages die.`);
+  else if(myH.role==="Assassin") t.push(`If ${enH.name} bought armor, SKIP them — kill their squishy teammates first, then clean up.`);
+  else t.push(`Take SHORT trades then back off. Long all-ins favor ${enH.name} once their core item is done.`);
+  return t;
+}
+function renderMatchup(myH,enH){
+  const counters=matchupCounters(myH,enH);
+  const magicFoe=enH.dmg.indexOf("magic")===0;
+  const build=matchupBuild(myH,counters,magicFoe);
+  const squishy=["Marksman","Mage","Assassin","Support"].includes(myH.role);
+  const style=FOE_STYLE[enH.dmg]||"a bit of everything";
+  const e1=myH.name.replace(/'/g,"\\'"), e2=enH.name.replace(/'/g,"\\'");
+  return `
+  <h2 style="color:var(--gold)">🛡️ ${myH.name} (you) vs ${enH.name} (them)</h2>
+  <p style="color:var(--muted);font-size:13px">You: <b>${myH.role}</b> · Them: <b>${enH.role}</b> — ${style}</p>
+  <div class="counter-item danger"><b>The problem:</b><br>${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd.`}</div>
+  <div class="counter-item"><b>⭐ Buy these (as ${myH.name}):</b><br>
+    ${counters.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab</span>`).join("<br><br>")}</div>
+  <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><br>
+    ${build.map((b,i)=>`${i+1}. <b>${b}</b> <span style="color:var(--cyan)">(Shop → ${itemShop(b)})</span>`).join("<br>")}
+    <br><small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
+  <div class="tips">🧠 <b>How to play it:</b><br>${matchupTips(myH,enH,counters).map(t=>"• "+t).join("<br>")}</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <button onclick="openHero('${e1}')" style="padding:10px 14px;border-radius:10px;border:1px solid var(--gold);background:#0b1230;color:var(--gold);cursor:pointer;font-weight:700">My other ${myH.name} builds</button>
+    <button onclick="openHero('${e2}')" style="padding:10px 14px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:var(--text);cursor:pointer;font-weight:700">Their ${enH.name} build</button>
+  </div>`;
+}
+function setMyHero(n){switchTab("counter");$("myHeroInput").value=n;if($("counterInput"))$("counterInput").focus();}
 function findCounter(){
-  const q=($("counterInput").value||"").trim().toLowerCase();
   const box=$("counterResult");
-  if(!q){box.innerHTML="<p style='color:var(--muted)'>Type an enemy hero first.</p>";return;}
+  const mq=(($("myHeroInput")&&$("myHeroInput").value)||"").trim().toLowerCase();
+  const q=($("counterInput").value||"").trim().toLowerCase();
+  if(!q){box.innerHTML="<p style='color:var(--muted)'>Type the enemy hero first (step 2).</p>";return;}
   let h=HEROES.find(x=>x.name.toLowerCase()===q)||HEROES.find(x=>x.name.toLowerCase().includes(q));
   if(!h){box.innerHTML=`<p>❌ Hero "<b>${q}</b>" not found. Try: Hayabusa, Eudora, Lesley, Wanwan, Estes…</p>`;return;}
+  const myH=mq?(HEROES.find(x=>x.name.toLowerCase()===mq)||HEROES.find(x=>x.name.toLowerCase().includes(mq))):null;
+  if(mq&&!myH){box.innerHTML=`<p>❌ Your hero "<b>${mq}</b>" not found — check the spelling, or leave step 1 empty for a general answer.</p>`;return;}
+  if(myH){box.innerHTML=renderMatchup(myH,h);return;}
   const plan=counterPlan(h);
   const must=[...plan.phys.slice(0,2),...plan.magic.slice(0,2),...plan.util.slice(0,1),...h.counterItems].filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
   box.innerHTML=`
