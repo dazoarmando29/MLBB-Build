@@ -18,8 +18,10 @@
   --green:#22c55e; --red:#ef4444; --purple:#a855f7; --cyan:#06b6d4;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{background:linear-gradient(180deg,#0a0f22,#0d1330 40%,#101a3d);color:var(--text);font-family:'Segoe UI',-apple-system,Roboto,Arial,sans-serif;min-height:100vh;min-height:100dvh;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-x:clip;padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:linear-gradient(180deg,#0a0f22,#0d1330 40%,#101a3d);color:var(--text);font-family:'Segoe UI',-apple-system,Roboto,Arial,sans-serif;min-height:100vh;min-height:100dvh;font-size:16.5px;line-height:1.65;overflow-x:hidden;overflow-x:clip;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sec-card p.desc,.meta-box,.tips,.step,.plain,.newbie p{max-width:72ch}
+.sec-card h2,.newbie h2{font-size:clamp(17px,4.6vw,19px);line-height:1.35}
 button,input{font-family:inherit;touch-action:manipulation}
 header{padding-top:calc(18px + env(safe-area-inset-top,0px))}
 header{position:-webkit-sticky;position:sticky}
@@ -105,10 +107,16 @@ main{max-width:1150px;margin:0 auto;padding:18px 14px 60px}
   .hero-card .avatar{width:54px;height:54px;font-size:22px}
   .searchbar{flex-direction:column}
   .searchbar button{width:100%}
-  nav.tabs button{padding:11px 12px;font-size:12.5px;min-height:44px}
+  nav.tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs button{flex:0 0 auto;padding:11px 14px;font-size:12.5px;min-height:44px}
   .modal{padding:16px}
   .counter-wrap{grid-template-columns:1fr}
+  .modal-bg{align-items:flex-end;padding:0}
+  .modal{max-width:100%;width:100%;border-radius:18px 18px 0 0;border-left:none;border-right:none;border-bottom:none;max-height:92vh;max-height:92dvh;padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+  .modal-bg.open .modal{animation:rise .22s ease}
 }
+@keyframes rise{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
 .hero-card h3{font-size:14px}
 .hero-card .role{font-size:11px;color:var(--gold);margin:4px 0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .hero-card .lane{font-size:11px;color:var(--muted)}
