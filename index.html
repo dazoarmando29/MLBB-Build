@@ -495,7 +495,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
   Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
-  <span style="font-size:12px">v3.0 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
+  <span style="font-size:12px">v3.1 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
   <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
@@ -896,15 +896,15 @@ const VARIANT_OVERRIDES = {
 "Faramis":{
   tank:{items:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],note:"Tank Faramis: stay alive to cast Nether Realm — dead Faramis casts nothing."}},
 "Alice":{
-  lifesteal:{items:["Demon Shoes","Clock of Destiny","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive"],note:"Maximum drain Alice: ult + Concentrated + Oracle out-heals whole teams. Enemy anti-heal is your ONLY fear — kill their holder first."}},
+  lifesteal:{items:["Demon Shoes","Clock of Destiny","Concentrated Energy","Oracle","Holy Crystal","Winter Crown"],note:"Maximum drain Alice: ult + Concentrated + Oracle out-heals whole teams, Winter Crown freezes the burst that would stop you. Enemy anti-heal is your ONLY fear — kill their holder first."}},
 "Ruby":{
   lifesteal:{items:["Tough Boots","War Axe","Endless Battle","Oracle","Haas's Claws","Immortality"],note:"Unkillable Ruby: every CC skill pays you HP. Chain S1+S2 nonstop and watch bars refill."}},
 "Alucard":{
-  lifesteal:{items:["Tough Boots","War Axe","Endless Battle","Haas's Claws","Blade of Despair","Queen's Wings"],note:"Classic Alucard fantasy: jump in at half HP, spin, walk out full. Dies to hard CC + anti-heal — track both."}},
+  lifesteal:{items:["Tough Boots","War Axe","Endless Battle","Haas's Claws","Queen's Wings","Immortality"],note:"Classic Alucard fantasy: jump in at half HP, spin, walk out full — now with a second life. Swap Immortality → Blade of Despair when ahead."}},
 "Yu Zhong":{
   lifesteal:{items:["Tough Boots","War Axe","Oracle","Endless Battle","Dominance Ice","Immortality"],note:"Dragon drain: ult + Oracle + War Axe stacks. Without enemy anti-heal you are immortal."}},
 "Esmeralda":{
-  lifesteal:{items:["Arcane Boots","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive","Blood Wings"],note:"Shield-steal + spell vamp Esmeralda: every S2 both shields AND heals you."}}
+  lifesteal:{items:["Arcane Boots","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive","Winter Crown"],note:"Shield-steal + spell vamp Esmeralda: every S2 both shields AND heals you. Winter Crown freezes the burst that would pop you."}}
 };
 const AS_MM = ["Karrie","Claude","Moskov","Hanabi","Kimmy","Wanwan","Natan","Ixia","Sun","Zilong","Obsidia","Popol and Kupa","Irithel"];
 function genDamage(h){
@@ -939,9 +939,9 @@ function genSupport(h){
 }
 function genLifesteal(h){
   const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].lifesteal; if(ov) return ov;
-  if(h.role==="Marksman") return {items:["Swift Boots","Haas's Claws","Berserker's Fury","Scarlet Phantom","Demon Hunter Sword","Wind of Nature"],note:"Drain marksman: Haas's Claws heals MORE under 40% HP — play brave when low, that's when you're strongest."};
-  if(h.role==="Mage"||h.dmg.indexOf("magic")===0) return {items:["Demon Shoes","Concentrated Energy","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],note:"Spell-vamp mage: every skill pays you HP. Poke forever, never recall. Dies to burst — keep distance."};
-  if(h.role==="Assassin") return {items:["Rapid Boots","Endless Battle","Haas's Claws","Blade of Despair","Malefic Roar","Queen's Wings"],note:"Drain assassin: Endless true damage + Haas heals every dive. Queen's Wings saves the escape."};
+  if(h.role==="Marksman") return {items:["Swift Boots","Haas's Claws","Berserker's Fury","Demon Hunter Sword","Wind of Nature","Immortality"],note:"Drain marksman: Haas's Claws heals MORE under 40% HP — play brave when low. Wind of Nature + Immortality make sure you live to drink it all back."};
+  if(h.role==="Mage"||h.dmg.indexOf("magic")===0) return {items:["Demon Shoes","Concentrated Energy","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Spell-vamp mage: every skill pays you HP. Winter Crown freezes their burst so you survive to keep draining. Poke forever, never recall."};
+  if(h.role==="Assassin") return {items:["Rapid Boots","Endless Battle","Haas's Claws","Blade of Despair","Queen's Wings","Immortality"],note:"Drain assassin: Endless true damage + Haas heals every dive, Queen's Wings + Immortality let you survive the escape. Swap Queen's → Malefic Roar if they stack 2+ armor."};
   if(h.role==="Fighter") return {items:["Tough Boots","War Axe","Endless Battle","Oracle","Queen's Wings","Immortality"],note:"Bruiser drain: War Axe stacks + Oracle-boosted healing. You win every long fight — force them."};
   if(h.role==="Support") return {items:["Tough Boots","Fleeting Time","Oracle","Concentrated Energy","Dominance Ice","Immortality"],note:"Sustain support: bigger heals for the team (Oracle) + spell vamp keeps YOU alive too."};
   return {items:["Tough Boots","Oracle","Guardian Helmet","Cursed Helmet","Dominance Ice","Immortality"],note:"Regen wall: Oracle + Helmet refill you out of every trade. Walk at them, walk away full, repeat."};
@@ -1249,7 +1249,7 @@ function renderMatchup(myH,enH){
 }
 function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
 /* ===== AUTOMATIC VERSION CHECK: never show a stale saved copy ===== */
-const SITE_VERSION = "3.0";
+const SITE_VERSION = "3.1";
 function showUpdateBanner(auto){
   const b=$("updateBar"); if(!b) return;
   b.classList.add("show");
