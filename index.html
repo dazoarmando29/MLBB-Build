@@ -495,7 +495,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
   Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
-  <span style="font-size:12px">v2.9 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
+  <span style="font-size:12px">v3.0 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
   <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
@@ -748,7 +748,7 @@ function renderAll(){
   const q=($("globalSearch").value||"").toLowerCase();
   const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Easy"&&heroDiff(h).indexOf("Easy")>=0)||(activeRole==="Stier"&&S_TIER.includes(h.name)))&&h.name.toLowerCase().includes(q));
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
-  $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support + 🩸Lifesteal builds.";
+  $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support + 🩸Lifesteal + ⚡Unli + ❄️CDR builds.";
   renderShop();
   renderAntiAll();
   const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
@@ -946,6 +946,25 @@ function genLifesteal(h){
   if(h.role==="Support") return {items:["Tough Boots","Fleeting Time","Oracle","Concentrated Energy","Dominance Ice","Immortality"],note:"Sustain support: bigger heals for the team (Oracle) + spell vamp keeps YOU alive too."};
   return {items:["Tough Boots","Oracle","Guardian Helmet","Cursed Helmet","Dominance Ice","Immortality"],note:"Regen wall: Oracle + Helmet refill you out of every trade. Walk at them, walk away full, repeat."};
 }
+function genUnli(h){
+  const cdrNote="Cooldown reduction caps at 40% — this build stacks it so your skills basically never stop. Damage + lifesteal on top = unli skill, unli HP. 😈";
+  if(h.role==="Mage"||h.dmg.indexOf("magic")===0) return {items:["Demon Shoes","Enchanted Talisman","Concentrated Energy","Fleeting Time","Holy Crystal","Divine Glaive"],note:"Mage machine-gun: Talisman + Fleeting spam skills, Concentrated drinks HP back, kills refund your ult. "+cdrNote};
+  if(h.role==="Support") return {items:["Tough Boots","Fleeting Time","Enchanted Talisman","Oracle","Concentrated Energy","Dominance Ice"],note:"Heal/disable forever: two CDR engines + Oracle-boosted heals. Your team simply never dies. "+cdrNote};
+  if(h.role==="Assassin") return {items:["Rapid Boots","Hunter Strike","Endless Battle","Fleeting Time","Blade of Despair","Haas's Claws"],note:"Every kill refunds your ult (Fleeting) — dive, kill, ult AGAIN, repeat. Chain teamwipes. "+cdrNote};
+  if(h.role==="Fighter") return {items:["Tough Boots","Hunter Strike","War Axe","Endless Battle","Oracle","Queen's Wings"],note:"Bruiser engine: Hunter + Endless cut cooldowns, War Axe + Oracle drink HP. You never leave the fight. "+cdrNote};
+  if(h.role==="Marksman") return {items:["Swift Boots","Hunter Strike","Endless Battle","Berserker's Fury","Haas's Claws","Malefic Roar"],note:"Skill-spam marksman: Endless true damage + lifesteal on every skill, Hunter keeps dashes coming. Best on Granger/Clint/Beatrix types. "+cdrNote};
+  if(h.dmg.indexOf("magic")===0) return {items:["Tough Boots","Enchanted Talisman","Fleeting Time","Oracle","Dominance Ice","Immortality"],note:"Magic tank engine: endless CC + shields while Oracle + regen keep you full. "+cdrNote};
+  return {items:["Tough Boots","Hunter Strike","Fleeting Time","Oracle","Antique Cuirass","Immortality"],note:"Tank engine: Hunter + Fleeting = CC and shields on repeat, Oracle drinks it all back. Annoying beyond belief. "+cdrNote};
+}
+function genCdr(h){
+  const cap="Cooldowns cap at 40% — stack these + blue buff and your buttons basically never grey out.";
+  if(h.role==="Mage"||h.dmg.indexOf("magic")===0) return {items:["Demon Shoes","Enchanted Talisman","Fleeting Time","Holy Crystal","Divine Glaive","Winter Crown"],note:"Pure cooldown mage: Talisman + Fleeting + blue buff = capped. Throw skills nonstop. "+cap};
+  if(h.role==="Support") return {items:["Tough Boots","Fleeting Time","Enchanted Talisman","Oracle","Dominance Ice","Immortality"],note:"Heal, shield and CC on repeat — your team gets two of everything. "+cap};
+  if(h.role==="Assassin") return {items:["Rapid Boots","Hunter Strike","Endless Battle","Fleeting Time","Blade of Despair","Immortality"],note:"Every dive comes back faster and every kill refunds your ult. Never wait for buttons. "+cap};
+  if(h.role==="Fighter") return {items:["Tough Boots","Hunter Strike","War Axe","Endless Battle","Fleeting Time","Immortality"],note:"Skill-spam bruiser: full rotation every few seconds, ult back after every kill. "+cap};
+  if(h.role==="Marksman") return {items:["Swift Boots","Hunter Strike","Endless Battle","Fleeting Time","Berserker's Fury","Malefic Roar"],note:"Silly but real: dashes and ults on repeat. Best on skill-shooters like Granger, Clint, Beatrix. "+cap};
+  return {items:["Tough Boots","Hunter Strike","Endless Battle","Fleeting Time","Antique Cuirass","Immortality"],note:"Frontline engine: engage tools back in seconds, ult after every kill. "+cap};
+}
 function variantMeta(h,kind){
   if(kind==="tank") return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker / Revitalize"};
   if(kind==="support") return {emblem:"Support · Agility + Recovery + Pull Yourself Together",spell:"Flicker / Revitalize"};
@@ -956,6 +975,13 @@ function variantMeta(h,kind){
     if(h.role==="Fighter") return {emblem:"Fighter · Thrill + Tenacity + War Cry",spell:"Vengeance / Flicker"};
     return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize / Vengeance"};
   }
+  if(kind==="unli"||kind==="cdr"){
+    if(h.role==="Marksman") return {emblem:"Marksman · Fatal + Weapon Master + Quantum Charge",spell:"Flicker / Inspire"};
+    if(h.role==="Mage"||h.dmg.indexOf("magic")===0||h.role==="Support") return {emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker / Revitalize"};
+    if(h.role==="Assassin") return {emblem:"Assassin · Rupture + Seasoned Hunter + Killing Spree",spell:(h.lane.indexOf("Jungle")>=0?"Retribution":"Flicker")};
+    if(h.role==="Fighter") return {emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Vengeance / Flicker"};
+    return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize / Flicker"};
+  }
   if(kind==="damage"){
     if(h.role==="Marksman") return {emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Inspire"};
     if(h.role==="Mage"||h.dmg.indexOf("magic")===0||h.role==="Support") return {emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker"};
@@ -965,11 +991,11 @@ function variantMeta(h,kind){
   }
   return {emblem:h.emblem,spell:h.spell};
 }
-const VARIANT_TABS = [["best","⭐ Best"],["damage","🔥 Damage"],["tank","🛡️ Tank"],["support","💚 Support"],["lifesteal","🩸 Lifesteal"]];
+const VARIANT_TABS = [["best","⭐ Best"],["damage","🔥 Damage"],["tank","🛡️ Tank"],["support","💚 Support"],["lifesteal","🩸 Lifesteal"],["unli","⚡ Unli Skill"],["cdr","❄️ Max CDR"]];
 function heroVariants(h){
   return {
     best:{items:h.build,note:"Most-picked meta preset for "+h.name+" ("+h.role+", "+h.lane+"). "+h.tips},
-    damage:genDamage(h), tank:genTank(h), support:genSupport(h), lifesteal:genLifesteal(h)
+    damage:genDamage(h), tank:genTank(h), support:genSupport(h), lifesteal:genLifesteal(h), unli:genUnli(h), cdr:genCdr(h)
   };
 }
 function openHero(name,kind){
@@ -1223,7 +1249,7 @@ function renderMatchup(myH,enH){
 }
 function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
 /* ===== AUTOMATIC VERSION CHECK: never show a stale saved copy ===== */
-const SITE_VERSION = "2.9";
+const SITE_VERSION = "3.0";
 function showUpdateBanner(auto){
   const b=$("updateBar"); if(!b) return;
   b.classList.add("show");
