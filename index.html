@@ -166,6 +166,20 @@ footer{opacity:.9}
 .ac-item .nm{font-weight:700;font-size:14.5px}
 .ac-item .rl{font-size:11.5px;color:var(--muted)}
 .ac-empty{padding:12px;color:var(--muted);font-size:13.5px;text-align:center}
+/* popular killers + cheat-sheet with pictures */
+.quick-picks{display:grid;gap:8px;margin-top:10px}
+.quick-picks button{display:flex;align-items:center;gap:10px;justify-content:flex-start;text-align:left;width:100%;font-size:14.5px;font-weight:700}
+.quick-picks button img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);background:#0b1230;flex:0 0 auto}
+.cheat-icons{display:flex;gap:8px;margin-top:5px;flex-wrap:wrap}
+.cheat-icons img{width:36px;height:36px;border-radius:9px;object-fit:cover;background:#0006;border:1px solid var(--gold);cursor:pointer}
+/* versus header portraits */
+.vs-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 10px;text-align:center}
+.vs-side{display:flex;flex-direction:column;align-items:center;gap:4px;max-width:132px}
+.vs-side img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#0b1230;box-shadow:0 6px 18px #0008}
+.vs-side:last-child img{border-color:var(--red)}
+.vs-side b{font-size:15px}
+.vs-side small{color:var(--muted);font-size:11.5px;line-height:1.4}
+.vs-badge{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#111;font-weight:900;border-radius:12px;padding:6px 10px;font-size:14px;box-shadow:0 4px 14px #f5c51855;flex:0 0 auto}
 .hero-card h3{font-size:14px}
 .hero-card .role{font-size:11px;color:var(--gold);margin:4px 0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .hero-card .lane{font-size:11px;color:var(--muted)}
@@ -449,17 +463,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
       <button onclick="findCounter()">What should I buy? 🛡️</button>
       <div style="margin-top:10px;color:var(--muted);font-size:12px">Popular:</div>
       <div class="quick-picks" id="quickPicks"></div>
-      <div class="meta-box" style="margin-top:12px">
-        <b>Cheat-sheet (memorize this):</b><br>
-        🔴 Skill burst (Paquito, Hayabusa) → <b>Antique Cuirass</b><br>
-        🔴 Crit / basic attacks (Lesley, Miya, Bruno) → <b>Blade Armor</b> (20% crit reduction + reflect)<br>
-        🔴 Fast hitters (Wanwan, Karrie, Moskov) → <b>Dominance Ice</b> (slow attack speed)<br>
-        🔴 One-shot 500+ (Aldous, Lesley) → <b>Twilight Armor</b><br>
-        🟣 Magic burst (Eudora, Aurora, Kadita) → <b>Athena's Shield</b><br>
-        🟣 Magic DPS (Chang'e, Yve, Zhuxin, Kimmy) → <b>Radiant Armor</b><br>
-        💚 Heal/shield (Estes, Uranus, Esmeralda) → <b>Dominance Ice / Sea Halberd / Glowing Wand</b><br>
-        ⚔️ They stacked armor → <b>Malefic Roar / Divine Glaive / Demon Hunter Sword</b>
-      </div>
+      <div class="meta-box" style="margin-top:12px" id="cheatSheet"></div>
     </div>
     <div id="counterResult"><p style="color:var(--muted)">👆 Enter an enemy hero name to generate the counter build that makes their damage tickle.</p></div>
   </div>
@@ -731,7 +735,8 @@ function renderAll(){
   $("marksmanGrid").innerHTML=HEROES.filter(h=>h.role==="Marksman").map(cardHTML).join("");
   $("heroList").innerHTML=HEROES.map(h=>`<option value="${h.name}">`).join("");
   $("easyPicks").innerHTML=["Layla","Miya","Tigreal","Eudora","Balmond"].map(n=>{const e=n.replace(/'/g,"\\'");return `<button onclick="openHero('${e}')">${n} 🌱</button>`;}).join("");
-  $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>{const e=n.replace(/'/g,"\\'");return `<button onclick="setCounter('${e}')">${n}</button>`;}).join("");
+  $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>{const e=n.replace(/'/g,"\\'");return `<button onclick="setCounter('${e}')"><img src="${heroImg(n)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">${n}<span style="margin-left:auto;color:var(--gold)">→</span></button>`;}).join("");
+  renderCheat();
 }
 /* ============ SKILL COMBOS + HOW TO PLAY (per hero) ============ */
 const COMBOS = {
@@ -977,6 +982,20 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){acMy.hide();acFoe.hide();}});
 
+/* ===== CHEAT-SHEET with pictures (tap icon → location popup) ===== */
+const CHEAT=[
+["🔴 Skill burst","Paquito, Hayabusa",["Antique Cuirass"]],
+["🔴 Crit / basic attacks","Lesley, Miya, Bruno",["Blade Armor"]],
+["🔴 Fast hitters","Wanwan, Karrie, Moskov",["Dominance Ice"]],
+["🔴 One-shot 500+","Aldous, Lesley",["Twilight Armor"]],
+["🟣 Magic burst","Eudora, Aurora, Kadita",["Athena's Shield"]],
+["🟣 Magic DPS","Chang'e, Yve, Zhuxin, Kimmy",["Radiant Armor"]],
+["💚 Heal / shield","Estes, Uranus, Esmeralda",["Dominance Ice","Sea Halberd","Glowing Wand"]],
+["⚔️ They stacked armor","",["Malefic Roar","Divine Glaive","Demon Hunter Sword"]]];
+function renderCheat(){
+  const box=$("cheatSheet"); if(!box) return;
+  box.innerHTML=`<b>Cheat-sheet — tap a picture to locate it:</b>`+CHEAT.map(([t,who,items])=>`<div style="margin:9px 0"><div style="font-size:13.5px">${t}${who?` <span style="color:var(--muted)">(${who})</span>`:""}</div><div class="cheat-icons">${items.map(n=>{const e=n.replace(/'/g,"\\'");return `<img src="${itemIcon(n)}" alt="${n}" title="${n}" loading="lazy" decoding="async" onclick="event.stopPropagation();openItem('${e}')" onerror="this.remove()">`;}).join("")}</div></div>`).join("");
+}
 /* ===== SHOP GUIDE ===== */
 let activeShopCat="Attack";
 function renderShop(){
@@ -1096,8 +1115,12 @@ function renderMatchup(myH,enH){
     :`${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd. Finish it and they'll start avoiding YOU. Good — that's the point.`}`;
   const e1=myH.name.replace(/'/g,"\\'"), e2=enH.name.replace(/'/g,"\\'");
   return `
-  <h2 style="color:var(--gold)">🛡️ ${myH.name} (you) vs ${enH.name} (them)</h2>
-  <p style="color:var(--muted);font-size:13px">You: <b>${myH.role}</b> · Them: <b>${enH.role}</b> — ${style}<br>Style: <b>${styleName}</b></p>
+  <div class="vs-row">
+    <div class="vs-side"><img src="${heroImg(myH.name)}" alt="${myH.name}" loading="lazy" decoding="async" onerror="this.remove()"><b>${myH.name}</b><small>YOU · ${myH.role}</small></div>
+    <div class="vs-badge">VS</div>
+    <div class="vs-side"><img src="${heroImg(enH.name)}" alt="${enH.name}" loading="lazy" decoding="async" onerror="this.remove()"><b>${enH.name}</b><small>THEM · ${enH.role}</small></div>
+  </div>
+  <p style="color:var(--muted);font-size:13px;text-align:center">${enH.name} ${style}<br>Style: <b>${styleName}</b></p>
   <div class="counter-item danger"><b>The problem:</b><br>${styleLine}</div>
   <div class="counter-item"><b>⭐ Buy these (as ${myH.name}) — tap a picture to locate it:</b><div class="build-list">${counters.map((m,i)=>itemRow(m,i)).join("")}</div></div>
   <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><div class="build-list">${build.map((b,i)=>itemRow(b,i)).join("")}</div>
