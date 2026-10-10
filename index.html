@@ -467,6 +467,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
     </div>
     <div id="counterResult"><p style="color:var(--muted)">👆 Enter an enemy hero name to generate the counter build that makes their damage tickle.</p></div>
   </div>
+  <div class="sec-card">
+    <h2>🏆 Anti-Everyone meta builds — counter ANYONE</h2>
+    <div class="plain">🌱 <b>Don't know what's killing you? Or is it EVERYONE?</b> Copy one of these. Each covers physical + magic + heal + burst all at once — the safest 6 items your role can buy. Tap any picture to locate it.</div>
+    <div id="antiAll"></div>
+  </div>
 </section>
 </main>
 
@@ -728,6 +733,7 @@ function renderAll(){
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
   $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
   renderShop();
+  renderAntiAll();
   const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
   $("tankGrid").innerHTML=HEROES.filter(h=>["Tigreal","Atlas","Khufra","Belerick","Hylos","Gloo","Franco","Gatotkaca","Uranus","Esmeralda","Fredrinn","Akai","Baxia","Barats","Johnson","Minotaur"].includes(h.name)).map(cardHTML).join("");
   $("damageGrid").innerHTML=HEROES.filter(h=>["Hayabusa","Ling","Lancelot","Gusion","Nolan","Aamon","Karina","Saber","Fanny","Julian","Paquito","Yu Zhong","Dyrroth","Aldous","Chou","Terizla","Martis","Alice","Selena","Natalia","Balmond","Ruby","Phoveus","X.Borg"].includes(h.name)).map(cardHTML).join("");
@@ -995,6 +1001,17 @@ const CHEAT=[
 function renderCheat(){
   const box=$("cheatSheet"); if(!box) return;
   box.innerHTML=`<b>Cheat-sheet — tap a picture to locate it:</b>`+CHEAT.map(([t,who,items])=>`<div style="margin:9px 0"><div style="font-size:13.5px">${t}${who?` <span style="color:var(--muted)">(${who})</span>`:""}</div><div class="cheat-icons">${items.map(n=>{const e=n.replace(/'/g,"\\'");return `<img src="${itemIcon(n)}" alt="${n}" title="${n}" loading="lazy" decoding="async" onclick="event.stopPropagation();openItem('${e}')" onerror="this.remove()">`;}).join("")}</div></div>`).join("");
+}
+/* ===== ANTI-EVERYONE meta builds (counter anyone, per role) ===== */
+const ANTI_ALL=[
+{role:"🛡️ Tank — “The Wall”",why:"One answer to EVERYTHING: physical brake, magic shield, anti-heal aura, DPS scaler, second life. Swap Radiant → Blade Armor if they have zero mages.",items:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"]},
+{role:"⚔️ Fighter — “Bruiser Wall”",why:"Keeps your War Axe damage, then walls up against both damage types. The default when the enemy has 2+ damage dealers.",items:["Tough Boots","War Axe","Antique Cuirass","Athena's Shield","Dominance Ice","Immortality"]},
+{role:"🏹 Marksman — “Can't-Touch-Me”",why:"Wind of Nature dodges ALL physical (bye assassins), Rose Gold eats one magic combo, Immortality eats death — while you keep full damage.",items:["Swift Boots","Windtalker","Demon Hunter Sword","Wind of Nature","Rose Gold Meteor","Immortality"]},
+{role:"🔮 Mage — “Untouchable”",why:"Winter Crown freezes their combo, Athena's Shield eats the next one — while Clock + Crystal + Glaive keep YOUR one-shots lethal.",items:["Arcane Boots","Clock of Destiny","Holy Crystal","Winter Crown","Athena's Shield","Divine Glaive"]},
+{role:"💚 Support — “Guardian”",why:"You live → your team lives. Fleeting Time keeps ults coming, triple defense + revive covers every threat type at once.",items:["Tough Boots","Fleeting Time","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"]}];
+function renderAntiAll(){
+  const box=$("antiAll"); if(!box) return;
+  box.innerHTML=ANTI_ALL.map(a=>`<div class="counter-item"><b>${a.role}</b><br><span style="color:var(--muted);font-size:13px">${a.why}</span><div class="build-list">${a.items.map((b,i)=>itemRow(b,i)).join("")}</div></div>`).join("");
 }
 /* ===== SHOP GUIDE ===== */
 let activeShopCat="Attack";
