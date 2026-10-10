@@ -299,6 +299,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <div class="role-filter" id="roleFilter">
     <button data-role="All" class="active">All</button>
     <button data-role="Easy">🌱 Easy first</button>
+    <button data-role="Stier">🔥 S-tier meta</button>
     <button data-role="Tank">Tank</button>
     <button data-role="Fighter">Fighter</button>
     <button data-role="Assassin">Assassin</button>
@@ -491,7 +492,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
   Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
-  <span style="font-size:12px">v2.7 · Oct 2026 · This page updates itself — if it ever looks outdated, tap:</span>
+  <span style="font-size:12px">v2.8 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
   <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
@@ -609,6 +610,9 @@ const HEROES = [
 {name:"Diggie",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Glowing Wand","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Hard-counters all CC ults (Tigreal, Atlas, Franco). Pick him into engage comps.",counters:["Hayabusa","Ling","Karrie"],counterItems:["Athena's Shield","Blade Armor","Radiant Armor"]},
 {name:"Mathilda",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Karrie+Mathilda dash synergy is S-tier. CC her dash path.",counters:["Chou","Karrie","Diggie"],counterItems:["Dominance Ice","Athena's Shield","Blade Armor"]},
 {name:"Minotaur",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Rage bar is everything: full rage = big heal + knock-up ult. Engage when red, peel while building it.",counters:["Diggie","Karrie","Valir"],counterItems:["Purify","Radiant Armor","Sea Halberd"]},
+{name:"Masha",role:"Fighter",lane:"EXP",dmg:"phys-dps",build:["Tough Boots","War Axe","Corrosion Scythe","Demon Hunter Sword","Malefic Roar","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker",tips:"REVAMPED: three HP bars + Feral sustain. You win LONG fights now — drag them out, never burst-and-run.",counters:["Karrie","Lunox","Dyrroth"],counterItems:["Sea Halberd","Dominance Ice","Demon Hunter Sword"]},
+{name:"Aulus",role:"Fighter",lane:"Jungle / EXP",dmg:"phys-dps",build:["Tough Boots","Corrosion Scythe","Demon Hunter Sword","War Axe","Malefic Roar","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Retribution / Flicker",tips:"Strongest fighter of the patch (59.8% WR) but banned a lot. Enhanced basics heal — stay in range and keep swinging.",counters:["Chou","Phoveus","Esmeralda"],counterItems:["Sea Halberd","Blade Armor","Dominance Ice"]},
+{name:"Argus",role:"Fighter",lane:"EXP",dmg:"phys-burst",build:["Tough Boots","Berserker's Fury","Windtalker","Blade of Despair","Malefic Roar","Immortality"],emblem:"Fighter · Fatal + Weapon Master + War Cry",spell:"Flicker / Execute",tips:"Crits trigger extra Demonic Slashes now and ult alone saves you from death. Walk in with ult ready.",counters:["Eudora","Chou","Valir"],counterItems:["Twilight Armor","Blade Armor","Dominance Ice"]},
 {name:"Faramis",role:"Support",lane:"Mid / Roam",dmg:"magic-dps",build:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Support · Inspire + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Nether Realm denies death. Burst outside ult + anti-heal.",counters:["Karrie","Lunox","Esmeralda"],counterItems:["Sea Halberd","Radiant Armor","Divine Glaive"]},
 {name:"Fanny",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Blade of Despair","Hunter Strike","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Cable queen. Khufra + Antique + lock her with suppress.",counters:["Khufra","Wind of Nature","Minsitthar"],counterItems:["Wind of Nature","Antique Cuirass","Dominance Ice"]},
 {name:"Martis",role:"Fighter",lane:"Jungle / EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Antique Cuirass","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Retribution / Flicker",tips:"Anti-CC + execute. Kite his skill-immune window.",counters:["Esmeralda","Karrie","Uranus"],counterItems:["Blade Armor","Dominance Ice","Twilight Armor"]},
@@ -633,7 +637,7 @@ const HEROES = [
 ];
 
 /* Full 133 roster for search completeness (role fallback if not curated above) */
-const EXTRA_HEROES = ["Aulus","Badang","Bane","Barats","Baxia","Benedetta","Brody","Carmilla","Chip","Cici","Dyrroth","Edith","Floryn","Freya","Grock","Guinevere","Hanzo","Harley","Helcurt","Hilda","Ixia","Jawhead","Johnson","Joy","Kagura","Kaja","Kalea","Khaleed","Lapu-Lapu","Leomord","Lolita","Luo Yi","Lylia","Masha","Minsitthar","Natan","Nolan","Novaria","Obsidia","Popol and Kupa","Roger","Suyou","Thamuz","Vale","Valir","Vexana","Xavier","Yi Sun-shin","Yin","Zetian","Zhask","Akai","Argus","Aurora","Moskov","Karrie","Hylos","Zhuxin","Pharsa","Paquito","Silvanna"];
+const EXTRA_HEROES = ["Badang","Bane","Barats","Baxia","Benedetta","Brody","Carmilla","Chip","Cici","Dyrroth","Edith","Floryn","Freya","Grock","Guinevere","Hanzo","Harley","Helcurt","Hilda","Ixia","Jawhead","Johnson","Joy","Kagura","Kaja","Kalea","Khaleed","Lapu-Lapu","Leomord","Lolita","Luo Yi","Lylia","Minsitthar","Natan","Nolan","Novaria","Obsidia","Popol and Kupa","Roger","Suyou","Thamuz","Vale","Valir","Vexana","Xavier","Yi Sun-shin","Yin","Zetian","Zhask","Akai","Aurora","Moskov","Karrie","Hylos","Zhuxin","Pharsa","Paquito","Silvanna"];
 const ROLE_FALLBACK = {Tank:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"],Fighter:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Assassin:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Mage:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],Marksman:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Wind of Nature"],Support:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"]};
 
 /* merge extras as fallback entries so search finds all 133 */
@@ -739,7 +743,7 @@ function cardHTML(h){
 }
 function renderAll(){
   const q=($("globalSearch").value||"").toLowerCase();
-  const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Easy"&&heroDiff(h).indexOf("Easy")>=0))&&h.name.toLowerCase().includes(q));
+  const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Easy"&&heroDiff(h).indexOf("Easy")>=0)||(activeRole==="Stier"&&S_TIER.includes(h.name)))&&h.name.toLowerCase().includes(q));
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
   $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
   renderShop();
@@ -831,7 +835,10 @@ const COMBOS = {
 "Cyclops":"Skill 2 planets → Skill 1 beam → Ult locks them down.",
 "Gord":"Skill 1 stun → Ult laser → Skill 2 zone.",
 "Odette":"Skill 2 binds → Ult swan song (needs a teammate guarding you — any CC stops it).",
-"Nana":"Skill 2 Molina → Skill 1 boomerang → Ult on slowed targets."};
+"Nana":"Skill 2 Molina → Skill 1 boomerang → Ult on slowed targets.",
+"Masha":"Skill 1 wounds → Feral state ON → Skill 2 + attack-speed basics → Ult to outlast. Fight LONG, not burst.",
+"Aulus":"Skill 2 (first cast stuns) → enhanced basics (they heal you) → Ult → Skill 1 chase.",
+"Argus":"Skill 2 stun → basics (crits trigger extra slashes) → Ult BEFORE death → Skill 1 execute."};
 const COMBO_FALLBACK = {
 Tank:"Skill 1 poke → Ult to start the fight → Skill 2 to peel. Tanks start fights — don't chase kills.",
 Fighter:"Skill 1 + 2 trade → Ult when they're half HP → dash to chase.",
@@ -840,6 +847,28 @@ Mage:"Stay back → poke → Ult when 2+ enemies group → keep your distance.",
 Marksman:"Stay safe → always be hitting → Ult in teamfights → dash away from divers.",
 Support:"Poke and heal from the backline → save Ult for the enemy dive → peel your carry."};
 function comboFor(h){ return COMBOS[h.name] || COMBO_FALLBACK[h.role] || "Poke first → all-in → Ult → escape. Learn spacing first, combos second."; }
+/* ============ PATCH 2.2.16 META (Oct 2026, Season 42 — verified live data) ============ */
+const S_TIER = ["Aulus","Masha","Rafaela","Marcel","Argus","Minotaur","Khufra","Floryn","Gloo","Carmilla","Obsidia","Hirara"];
+const BUFFED_2216 = ["Aulus","Argus","Aldous","Lukas","Kalea","Cici","Alpha","Kagura","Edith","Karina","Kaja","Tigreal","Granger","X.Borg","Pharsa","Joy","Nolan","Harley","Uranus","Hirara","Valentina","Zhuxin","Franco","Chip","Baxia","Masha","Bruno"];
+const NERFED_2216 = ["Melissa","Miya","Hanabi","Paquito","Yi Sun-shin"];
+const PATCH_NOTES = {
+"Masha":"🆕 REVAMPED 2.2.16: split-push burst → sustained Feral berserker with three HP bars. Build attack speed + sustain and drag fights out.",
+"Bruno":"🆕 REVAMPED 2.2.16: easier powerball control, ult starts fights from range. Still crit — still hurts.",
+"Aulus":"⬆️ BUFFED 2.2.16: faster ramp, healing enhanced basics. 59.8% win rate — the strongest fighter right now (and banned constantly).",
+"Argus":"⬆️ BUFFED 2.2.16: 30% base crit triggers extra slashes, Skill 2 stuns, doubled ult damage. S-tier.",
+"Franco":"⬆️ BUFFED 2.2.16: much shorter cooldowns — hook constantly, punish nonstop.",
+"Melissa":"⬇️ NERFED 2.2.16: less attack speed + weaker Muddles. Build unchanged — play safer early.",
+"Miya":"⬇️ NERFED 2.2.16: bug fixed + weaker passive. Still fine, just no longer free wins.",
+"Hanabi":"⬇️ NERFED 2.2.16: repeat bounces now fall off 30%. Poke is intact — teamfight shred is not.",
+"Paquito":"⬇️ NERFED 2.2.16: less snowball damage. Still banned a lot — respect him.",
+"Minotaur":"🔥 S-TIER and untouched by 2.2.16. Your main is meta, man. Enrage wisely."};
+function patchNoteFor(h){
+  if(PATCH_NOTES[h.name]) return PATCH_NOTES[h.name];
+  if(S_TIER.includes(h.name)) return "🔥 S-TIER meta right now (Patch 2.2.16, Season 42).";
+  if(BUFFED_2216.includes(h.name)) return "⬆️ Buffed in Patch 2.2.16 — stronger than last season.";
+  if(NERFED_2216.includes(h.name)) return "⬇️ Nerfed in Patch 2.2.16 — still viable, play safer early.";
+  return null;
+}
 /* ============ PER-HERO BUILD VARIANTS (Damage / Tank / Support for EVERY hero) ============ */
 const VARIANT_OVERRIDES = {
 "Rafaela":{
@@ -918,8 +947,10 @@ function openHero(name,kind){
   const h=HEROES.find(x=>x.name.toLowerCase()===name.toLowerCase()); if(!h) return;
   kind=kind||"best";
   const esc=h.name.replace(/'/g,"\\'");
+  const pn=patchNoteFor(h);
   $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
-  <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b> · ${heroDiff(h)}</div></div></div>
+  <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b> · ${heroDiff(h)}${S_TIER.includes(h.name)?' · <b style="color:var(--gold)">🔥 S-TIER</b>':''}</div></div></div>
+  ${pn?`<div class="meta-box">📌 <b>Patch 2.2.16 (Oct 2026):</b> ${pn}</div>`:""}
   <div class="combo-box">🥋 <b>${h.name} combo:</b> ${comboFor(h)}${heroDiff(h).indexOf("Tricky")>=0?"<br><small>🔥 Tricky hero — practice this vs AI / Custom first, not ranked.</small>":""}</div>
   <div class="meta-box">🧠 <b>How to play:</b> ${h.tips} Play <b>${h.lane}</b>? Check the 🧭 Lane Guide tab for your job, first 3 minutes, and what NOT to do.</div>
   <div class="variant-row" id="vBtns">${VARIANT_TABS.map(([k,label])=>`<button data-k="${k}" class="${k===kind?"active":""}" onclick="showVariant('${esc}','${k}')">${label}</button>`).join("")}</div>
@@ -1160,7 +1191,7 @@ function renderMatchup(myH,enH){
 }
 function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
 /* ===== AUTOMATIC VERSION CHECK: never show a stale saved copy ===== */
-const SITE_VERSION = "2.7";
+const SITE_VERSION = "2.8";
 function showUpdateBanner(auto){
   const b=$("updateBar"); if(!b) return;
   b.classList.add("show");
