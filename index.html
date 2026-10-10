@@ -175,6 +175,9 @@ footer{opacity:.9}
 /* versus header portraits */
 .vs-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 10px;text-align:center}
 .vs-side{display:flex;flex-direction:column;align-items:center;gap:4px;max-width:132px}
+/* counter style picker: always-visible 2x2 grid */
+#styleBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+#styleBtns button{margin:0;text-align:left}
 .vs-side img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#0b1230;box-shadow:0 6px 18px #0008}
 .vs-side:last-child img{border-color:var(--red)}
 .vs-side b{font-size:15px}
@@ -482,7 +485,9 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <footer>
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
-  Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.
+  Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
+  <span style="font-size:12px">v2.6 · Oct 2026 · Not seeing something new (like 🌑 Dark System)? Your device saved an old copy —</span>
+  <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
 <script>
@@ -1148,6 +1153,7 @@ function renderMatchup(myH,enH){
     <button onclick="openHero('${e2}')" style="padding:10px 14px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:var(--text);cursor:pointer;font-weight:700">Their ${enH.name} build</button>
   </div>`;
 }
+function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
 function setMyHero(n){switchTab("counter");$("myHeroInput").value=n;if($("counterInput"))$("counterInput").focus();}
 function findCounter(){
   const box=$("counterResult");
