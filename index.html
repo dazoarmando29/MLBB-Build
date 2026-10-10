@@ -149,6 +149,23 @@ nav.tabs button.active{background:linear-gradient(180deg,var(--gold2),var(--gold
 .modal{background:linear-gradient(180deg,#141d46,#0e1430);box-shadow:0 24px 80px #000c}
 .newbie{box-shadow:0 4px 24px #16a34a33}
 footer{opacity:.9}
+/* ===== NICE SCROLLBARS (Android/Chrome/Desktop; Firefox) ===== */
+*{scrollbar-width:thin;scrollbar-color:#f5c518 #0b1230}
+::-webkit-scrollbar{width:10px;height:8px}
+::-webkit-scrollbar-track{background:#0b1230;border-radius:8px}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:8px;border:2px solid #0b1230}
+::-webkit-scrollbar-thumb:hover{background:var(--gold2)}
+/* ===== CUSTOM AUTOCOMPLETE (replaces ugly native dropdown) ===== */
+.ac-wrap{position:relative}
+.ac-list{position:absolute;top:100%;left:0;right:0;z-index:70;max-height:248px;overflow-y:auto;background:#0e1540f2;border:1px solid var(--gold);border-radius:12px;margin-top:6px;box-shadow:0 16px 40px #000c;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.ac-list[hidden]{display:none}
+.ac-item{display:flex;gap:10px;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:1px solid #ffffff0d;min-height:52px}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item:active{background:#f5c5181c}
+.ac-item img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);background:#0b1230;flex:0 0 auto}
+.ac-item .nm{font-weight:700;font-size:14.5px}
+.ac-item .rl{font-size:11.5px;color:var(--muted)}
+.ac-empty{padding:12px;color:var(--muted);font-size:13.5px;text-align:center}
 .hero-card h3{font-size:14px}
 .hero-card .role{font-size:11px;color:var(--gold);margin:4px 0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .hero-card .lane{font-size:11px;color:var(--muted)}
@@ -416,9 +433,9 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
       <h2 style="color:var(--gold)">🚫 Who keeps killing you?</h2>
       <p style="color:var(--muted);font-size:14px;margin:6px 0 12px;line-height:1.6">Tell us <b>your hero</b> + <b>their hero</b> and we'll rebuild YOUR 6 items for that exact fight. (Leave yours empty for a general answer.)</p>
       <div style="font-size:14px;margin-bottom:6px"><span class="stepnum">1</span><b>I am playing:</b></div>
-      <input id="myHeroInput" list="heroList" placeholder="e.g. Minotaur, Layla, Hayabusa…">
+      <div class="ac-wrap"><input id="myHeroInput" placeholder="e.g. Minotaur, Layla, Hayabusa…" autocomplete="off"><div class="ac-list" id="acMy" hidden></div></div>
       <div style="font-size:14px;margin:10px 0 6px"><span class="stepnum">2</span><b>Who keeps killing me:</b></div>
-      <input id="counterInput" list="heroList" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…">
+      <div class="ac-wrap"><input id="counterInput" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…" autocomplete="off"><div class="ac-list" id="acFoe" hidden></div></div>
       <datalist id="heroList"></datalist>
       <div style="font-size:14px;margin:10px 0 6px"><span class="stepnum">3</span><b>How do you want to counter them?</b></div>
       <div class="variant-row" id="styleBtns" style="margin:0 0 4px">
@@ -933,6 +950,32 @@ document.querySelectorAll("#roleFilter button").forEach(b=>b.onclick=()=>{active
 $("globalSearch").addEventListener("input",renderAll);
 $("counterInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
 $("myHeroInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
+
+/* ===== CUSTOM HERO AUTOCOMPLETE ===== */
+function heroMatches(q){
+  q=(q||"").trim().toLowerCase();
+  if(!q) return HEROES.slice(0,8);
+  return HEROES.filter(h=>h.name.toLowerCase().includes(q)).slice(0,8);
+}
+function bindAutocomplete(inputId,listId,afterPick){
+  const inp=$(inputId), box=$(listId);
+  function render(){
+    const list=heroMatches(inp.value);
+    box.innerHTML=list.length?list.map(h=>`<div class="ac-item" data-h="${h.name}"><img src="${heroImg(h.name)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"><div><div class="nm">${h.name}</div><div class="rl">${emoji(h.role)} ${h.role} · ${heroDiff(h)}</div></div></div>`).join(""):`<div class="ac-empty">No hero matches — check spelling, or tap ✕ and type the closest name.</div>`;
+    box.hidden=false;
+    box.querySelectorAll(".ac-item").forEach(el=>el.addEventListener("click",ev=>{ev.stopPropagation();inp.value=el.dataset.h;box.hidden=true;if(afterPick)afterPick(el.dataset.h);}));
+  }
+  inp.addEventListener("input",render);
+  inp.addEventListener("focus",render);
+  inp.addEventListener("keydown",e=>{if(e.key==="Escape")box.hidden=true;});
+  return {hide:()=>{box.hidden=true;},box};
+}
+const acMy=bindAutocomplete("myHeroInput","acMy",h=>{if($("counterInput"))$("counterInput").focus();});
+const acFoe=bindAutocomplete("counterInput","acFoe",()=>findCounter());
+document.addEventListener("click",e=>{
+  if(!e.target.closest||(!e.target.closest(".ac-wrap"))) {acMy.hide();acFoe.hide();}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){acMy.hide();acFoe.hide();}});
 
 /* ===== SHOP GUIDE ===== */
 let activeShopCat="Attack";
