@@ -117,6 +117,31 @@ main{max-width:1150px;margin:0 auto;padding:18px 14px 60px}
   .modal-bg.open .modal{animation:rise .22s ease}
 }
 @keyframes rise{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
+/* ===== MODERN THEME: glass, gradients, glow ===== */
+body{background-color:#070b1a;background-image:radial-gradient(600px 300px at 15% -5%,#1b2a6b55,transparent),radial-gradient(520px 260px at 85% 0%,#5b21b633,transparent),radial-gradient(700px 420px at 50% 110%,#0e3a2f44,transparent)}
+header{background:rgba(13,20,48,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+header::before{content:"";position:absolute;inset:0;background:radial-gradient(420px 130px at 50% 0%,#f5c51826,transparent);pointer-events:none}
+header h1{background:linear-gradient(92deg,#fff 15%,var(--gold2) 50%,var(--gold) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+header h1 span{color:inherit}
+.stat-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.stat-chips span{font-size:12px;font-weight:700;color:var(--gold2);background:#f5c51814;border:1px solid #f5c51844;border-radius:999px;padding:5px 12px}
+nav.tabs{background:rgba(11,18,48,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid #ffffff14}
+nav.tabs button{background:#ffffff0d;border:1px solid #ffffff1a}
+nav.tabs button.active{background:linear-gradient(180deg,var(--gold2),var(--gold));box-shadow:0 4px 18px #f5c51855}
+.hero-card{background:linear-gradient(165deg,#1b2552,#10173a);border:1px solid #ffffff14;box-shadow:0 2px 10px #0006}
+.hero-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 12px 28px #000a,0 0 0 1px var(--gold)}
+.hero-card .avatar{box-shadow:0 0 0 3px #f5c51822,0 6px 16px #0008}
+.sec-card{background:linear-gradient(180deg,#17224c,#111a3d);border:1px solid #ffffff12;box-shadow:0 4px 20px #0005}
+.searchbar button{background:linear-gradient(180deg,var(--gold2),var(--gold));box-shadow:0 4px 16px #f5c51844}
+.searchbar button:active{transform:scale(.96)}
+.gloss-btn{background:linear-gradient(180deg,#4ade80,#16a34a);box-shadow:0 4px 16px #16a34a55}
+.counter-form button{background:linear-gradient(180deg,#f87171,#dc2626);box-shadow:0 4px 16px #dc262655}
+.item{background:#ffffff08}
+.item:hover{border-color:var(--gold)}
+.shop-item{background:#ffffff08}
+.modal{background:linear-gradient(180deg,#141d46,#0e1430);box-shadow:0 24px 80px #000c}
+.newbie{box-shadow:0 4px 24px #16a34a33}
+footer{opacity:.9}
 .hero-card h3{font-size:14px}
 .hero-card .role{font-size:11px;color:var(--gold);margin:4px 0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .hero-card .lane{font-size:11px;color:var(--muted)}
@@ -195,6 +220,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
     <button onclick="jumpToHeroes()">Search</button>
   </div>
   <button class="phone-btn" onclick="openPhone()">📱 Open on phone — tap for QR & link</button>
+  <div class="stat-chips"><span>🦸 130+ heroes</span><span>🥋 Skill combos</span><span>🗺️ Shop locator</span><span>🚫 4 counter styles</span></div>
   <div id="mainChip" style="margin-top:8px;font-size:13px"></div>
 </header>
 
