@@ -239,7 +239,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
     <h2>💚 Support Builds — Heal, Peel & Vision</h2>
     <div class="plain">🌱 <b>New?</b> Your job isn't kills. Buy Fleeting Time + Oracle, stand BEHIND your damage dealers, and press heal/ult when a fight starts. Dying first = lost fight.</div>
     <p class="desc">Supports buy <b>roam boots first</b>, then counter items, never full damage. Core: Favor / Encourage roam + Tough Boots → Dominance Ice (vs heal) or Athena's Shield (vs burst) → Oracle (boosts your own heal/shield) → Radiant Armor → Immortality → Guardian Helmet. Anti-heal is on YOU if nobody else buys it. 79% of support builds finish with Immortality.</p>
-    <div class="meta-box">Emblem: <b>Support — Agility + Recovery / Bargain Hunter + Pull Yourself Together / Focusing Mark</b> &nbsp;|&nbsp; Spell: <b>Flicker / Revitalize / Purify</b>. Always keep a slot flexible for Necklace of Durance (mage support) vs heavy regen.</div>
+    <div class="meta-box">Emblem: <b>Support — Agility + Recovery / Bargain Hunter + Pull Yourself Together / Focusing Mark</b> &nbsp;|&nbsp; Spell: <b>Flicker / Revitalize / Purify</b>. Always keep a slot flexible for Glowing Wand (mage support) vs heavy regen.</div>
   </div>
   <div class="grid" id="supportGrid"></div>
 </section>
@@ -434,7 +434,7 @@ const ITEM_INFO = {
 "Winter Crown":"1910g · freeze 2s, untargetable, immune. Best vs Hayabusa, Gusion, Saber, Karina combos.",
 "Holy Crystal":"2180g · biggest magic power multiplier. Mage core.",
 "Divine Glaive":"1970g · 40% magic PEN + bonus vs their magic def. In 96% of mage builds.",
-"Glowing Wand":"2050g · burn + magic anti-heal (regen to 50%). Mage vs Esmeralda/heal tanks.",
+"Glowing Wand":"2050g · burn + magic anti-heal (regen to 50%). THE mage anti-heal — Necklace of Durance was merged into this, so buy THIS vs Esmeralda/heal tanks.",
 "Genius Wand":"2000g · shreds enemy magic def per hit. Early mage pen.",
 "Wishing Lantern":"2160g · bonus dmg vs high-HP targets. Mage vs tanks.",
 "Clock of Destiny":"1950g · scaling HP+mana+power. Burst mage starter.",
@@ -444,7 +444,6 @@ const ITEM_INFO = {
 "Calamity Reaper":"1950g · true damage after skill. Karina / Harith / magical assassins.",
 "Starlium Scythe":"2020g · movement + burst after skill.",
 "Ice Queen Wand":"2240g · skills slow enemies. Poke / kite mages.",
-"Necklace of Durance":"1980g · mage anti-heal. Support-mage vs Estes/Uranus.",
 "Concentrated Energy":"2280g · spell vamp sustain for mages."
 };
 
@@ -500,10 +499,10 @@ const HEROES = [
 {name:"Hanabi",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Wind of Nature"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Purify",tips:"Shield + bounce. Dominance + burst her shield off.",counters:["Dominance Ice","Saber","Ling"],counterItems:["Dominance Ice","Blade Armor","Sea Halberd"]},
 {name:"Clint",role:"Marksman",lane:"Gold",dmg:"phys-burst",build:["Swift Boots","Blade of the Heptaseas","Endless Battle","Berserker's Fury","Malefic Roar","Immortality"],emblem:"Marksman · Rupture + Weapon Master + Killing Spree",spell:"Flicker",tips:"Poke machine. Antique Cuirass + sustain through his poke.",counters:["Antique Cuirass","Ling","Chou"],counterItems:["Antique Cuirass","Blade Armor","Dominance Ice"]},
 {name:"Estes",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Recovery + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Heal engine. Anti-heal (Dominance/Sea Halberd/Glowing) is NON-optional + burst him first.",counters:["Sea Halberd","Glowing Wand","Karrie"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
-{name:"Angela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],emblem:"Support · Agility + Recovery + Focusing Mark",spell:"Flicker",tips:"Ult-possess the carry. CC her host + anti-heal.",counters:["Sea Halberd","Chou","Diggie"],counterItems:["Dominance Ice","Sea Halberd","Necklace of Durance"]},
+{name:"Angela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],emblem:"Support · Agility + Recovery + Focusing Mark",spell:"Flicker",tips:"Ult-possess the carry. CC her host + anti-heal.",counters:["Sea Halberd","Chou","Diggie"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
 {name:"Floryn",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Recovery + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Global heal. Same as Estes: anti-heal + dive her.",counters:["Sea Halberd","Ling","Natalia"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
-{name:"Rafaela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Necklace of Durance","Oracle","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Speed + heal + reveal vs Natalia/Aamon. Buy Durance on her.",counters:["Chou","Karrie","Ling"],counterItems:["Antique Cuirass","Athena's Shield","Dominance Ice"]},
-{name:"Diggie",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Necklace of Durance","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Hard-counters all CC ults (Tigreal, Atlas, Franco). Pick him into engage comps.",counters:["Hayabusa","Ling","Karrie"],counterItems:["Athena's Shield","Blade Armor","Radiant Armor"]},
+{name:"Rafaela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Glowing Wand","Oracle","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Speed + heal + reveal vs Natalia/Aamon. Buy Glowing Wand on her for anti-heal (it replaced the old Necklace).",counters:["Chou","Karrie","Ling"],counterItems:["Antique Cuirass","Athena's Shield","Dominance Ice"]},
+{name:"Diggie",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Glowing Wand","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Hard-counters all CC ults (Tigreal, Atlas, Franco). Pick him into engage comps.",counters:["Hayabusa","Ling","Karrie"],counterItems:["Athena's Shield","Blade Armor","Radiant Armor"]},
 {name:"Mathilda",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Karrie+Mathilda dash synergy is S-tier. CC her dash path.",counters:["Chou","Karrie","Diggie"],counterItems:["Dominance Ice","Athena's Shield","Blade Armor"]},
 {name:"Minotaur",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Rage bar is everything: full rage = big heal + knock-up ult. Engage when red, peel while building it.",counters:["Diggie","Karrie","Valir"],counterItems:["Purify","Radiant Armor","Sea Halberd"]},
 {name:"Faramis",role:"Support",lane:"Mid / Roam",dmg:"magic-dps",build:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Support · Inspire + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Nether Realm denies death. Burst outside ult + anti-heal.",counters:["Karrie","Lunox","Esmeralda"],counterItems:["Sea Halberd","Radiant Armor","Divine Glaive"]},
@@ -582,9 +581,13 @@ function heroImg(name){
 }
 /* ============ ITEM ICONS + SHOP SHELF LOCATIONS ============ */
 const ITEM_ICON_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/logo-equipment/";
-const ITEM_ICON_OVERRIDES = {"Demon Shoes":"demon_boots.png"};
+const ITEM_ICON_OVERRIDES = {"Demon Shoes":"demon_boots.png",
+"Scarlet Phantom":"https://raw.githubusercontent.com/Linconius/MLBB-Build-Analyser/main/web/public/assets/items/scarlet-phantom.png",
+"Calamity Reaper":"https://raw.githubusercontent.com/Linconius/MLBB-Build-Analyser/main/web/public/assets/items/calamity-reaper.png",
+"Twilight Armor":"https://raw.githubusercontent.com/Linconius/MLBB-Build-Analyser/main/web/public/assets/items/twilight-armor.png"};
 function itemIcon(name){
-  if(ITEM_ICON_OVERRIDES[name]) return ITEM_ICON_BASE+ITEM_ICON_OVERRIDES[name];
+  const ov=ITEM_ICON_OVERRIDES[name];
+  if(ov) return ov.indexOf("http")===0?ov:ITEM_ICON_BASE+ov;
   return ITEM_ICON_BASE + name.toLowerCase().replace(/'/g,"").replace(/\./g,"").replace(/\s+/g,"_") + ".png";
 }
 /* Which in-game shop tab each item lives under */
@@ -592,7 +595,7 @@ const ITEM_SHOP = {
 "Tough Boots":"Movement","Warrior Boots":"Movement","Swift Boots":"Movement","Arcane Boots":"Movement","Demon Shoes":"Movement","Rapid Boots":"Movement",
 "Antique Cuirass":"Defense","Blade Armor":"Defense","Dominance Ice":"Defense","Athena's Shield":"Defense","Radiant Armor":"Defense","Twilight Armor":"Defense","Immortality":"Defense","Guardian Helmet":"Defense","Oracle":"Defense","Cursed Helmet":"Defense","Thunder Belt":"Defense","Brute Force Breastplate":"Defense","Queen's Wings":"Defense",
 "Blade of Despair":"Attack","Malefic Roar":"Attack","Malefic Gun":"Attack","Blade of the Heptaseas":"Attack","Hunter Strike":"Attack","War Axe":"Attack","Endless Battle":"Attack","Demon Hunter Sword":"Attack","Windtalker":"Attack","Berserker's Fury":"Attack","Scarlet Phantom":"Attack","Haas's Claws":"Attack","Corrosion Scythe":"Attack","Golden Staff":"Attack","Sea Halberd":"Attack","Sky Piercer":"Attack","Wind of Nature":"Attack","Rose Gold Meteor":"Attack",
-"Holy Crystal":"Magic","Divine Glaive":"Magic","Glowing Wand":"Magic","Genius Wand":"Magic","Wishing Lantern":"Magic","Clock of Destiny":"Magic","Lightning Truncheon":"Magic","Blood Wings":"Magic","Enchanted Talisman":"Magic","Calamity Reaper":"Magic","Starlium Scythe":"Magic","Ice Queen Wand":"Magic","Necklace of Durance":"Magic","Concentrated Energy":"Magic","Winter Crown":"Magic","Fleeting Time":"Magic",
+"Holy Crystal":"Magic","Divine Glaive":"Magic","Glowing Wand":"Magic","Genius Wand":"Magic","Wishing Lantern":"Magic","Clock of Destiny":"Magic","Lightning Truncheon":"Magic","Blood Wings":"Magic","Enchanted Talisman":"Magic","Calamity Reaper":"Magic","Starlium Scythe":"Magic","Ice Queen Wand":"Magic","Concentrated Energy":"Magic","Winter Crown":"Magic","Fleeting Time":"Magic",
 "Purify":"Battle Spell"};
 function itemShop(name){return ITEM_SHOP[name]||"Shop";}
 function itemPrice(name){const m=(ITEM_INFO[name]||"").match(/^(\d+)g/);return m?m[1]+"g":"";}
@@ -783,7 +786,7 @@ function genTank(h){
 }
 function genSupport(h){
   const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].support; if(ov) return ov;
-  return {items:["Tough Boots","Fleeting Time","Necklace of Durance","Oracle","Athena's Shield","Immortality"],note:"Roam support "+h.name+": enable your team, hold anti-heal (Durance) so their regen means nothing, ult to save fights. Swap Oracle ↔ Dominance Ice if THEY heal a lot."};
+  return {items:["Tough Boots","Fleeting Time","Glowing Wand","Oracle","Athena's Shield","Immortality"],note:"Roam support "+h.name+": enable your team, hold anti-heal (Glowing Wand) so their regen means nothing, ult to save fights. Swap Oracle ↔ Dominance Ice if THEY heal a lot."};
 }
 function variantMeta(h,kind){
   if(kind==="tank") return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker / Revitalize"};
@@ -881,7 +884,7 @@ function counterPlan(h){
   else if(d==="phys-dps"){phys=["Blade Armor","Dominance Ice","Antique Cuirass"];explain=`<b>${h.name}</b> deals <b style="color:#f87171">PHYSICAL DPS / CRIT / BASIC ATTACKS</b>. <b>Blade Armor</b> cuts crit damage 20% + reflects basics back, <b>Dominance Ice</b> slows their attack speed, <b>Antique Cuirass</b> softens everything else.`;}
   else if(d==="magic-burst"){magic=["Athena's Shield","Tough Boots","Winter Crown"];explain=`<b>${h.name}</b> deals <b style="color:#c084fc">MAGIC BURST</b> (100-to-0 in one combo). <b>Athena's Shield</b> is the #1 antidote — it eats the burst with a regenerating magic shield. <b>Winter Crown</b> (mages/MM) or <b>Immortality</b> saves you if caught.`;}
   else if(d==="magic-dps"){magic=["Radiant Armor","Athena's Shield","Tough Boots"];explain=`<b>${h.name}</b> deals <b style="color:#c084fc">SUSTAINED MAGIC DPS</b> (damage every second). Do NOT buy only Athena — <b>Radiant Armor</b> stacks resistance on every magic hit and outscales DPS. Add Athena 2nd vs mixed teams.`;}
-  else if(d==="sustain"){util=["Dominance Ice","Sea Halberd","Glowing Wand"];explain=`<b>${h.name}</b> survives by <b style="color:#4ade80">HEAL / SHIELD / REGEN</b>. Anti-heal is MANDATORY: <b>Dominance Ice</b> (tanks/roam), <b>Sea Halberd</b> (MM/fighter), <b>Glowing Wand / Necklace of Durance</b> (mages). Without it you can never kill them.`;}
+  else if(d==="sustain"){util=["Dominance Ice","Sea Halberd","Glowing Wand"];explain=`<b>${h.name}</b> survives by <b style="color:#4ade80">HEAL / SHIELD / REGEN</b>. Anti-heal is MANDATORY: <b>Dominance Ice</b> (tanks/roam), <b>Sea Halberd</b> (MM/fighter), <b>Glowing Wand</b> (mages — it absorbed the old Necklace of Durance). Without it you can never kill them.`;}
   else{phys=["Antique Cuirass","Blade Armor"];magic=["Athena's Shield","Radiant Armor"];explain=`<b>${h.name}</b> deals <b>MIXED damage</b>. Cover both sides: <b>Antique Cuirass/Blade Armor</b> + <b>Athena's/Radiant</b>, then Immortality.`;}
   return {phys,magic,util,explain};
 }
