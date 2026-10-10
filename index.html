@@ -29,6 +29,13 @@ details.build-more summary{cursor:pointer;color:var(--gold2);font-weight:700;fon
 .gloss-term b{color:var(--gold2)}
 .stepnum{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#111;font-weight:800;font-size:14px;margin-right:8px}
 .plain{background:#052e16;border:1px solid #16a34a;border-radius:10px;padding:10px 14px;margin:0 0 10px;font-size:14.5px;color:#d1fae5;line-height:1.6}
+.lane-exp{border-left:5px solid var(--red)}
+.lane-core{border-left:5px solid var(--purple)}
+.lane-gold{border-left:5px solid var(--gold)}
+.lane-mid{border-left:5px solid var(--cyan)}
+.lane-roam{border-left:5px solid var(--green)}
+.combo-box{background:#2a1f08;border:1px solid var(--gold);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:14.5px;line-height:1.65}
+.combo-box b{color:var(--gold2)}
 header{background:linear-gradient(90deg,#0d1430,#1a2456,#0d1430);border-bottom:2px solid var(--gold);padding:18px 20px;text-align:center;position:sticky;top:0;z-index:50}
 header h1{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
 header h1 span{color:var(--gold)}
@@ -142,7 +149,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <body>
 <header>
   <h1>⚔️ MLBB <span>Build Guide</span> 2026</h1>
-  <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Shop Guide • Counter Builder</p>
+  <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Lane Guide • Shop Guide • Counter Builder</p>
   <div class="searchbar">
     <input id="globalSearch" placeholder="🔍 Search hero… e.g. Hayabusa, Miya, Tigreal, Eudora">
     <button onclick="jumpToHeroes()">Search</button>
@@ -157,6 +164,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button data-tab="damage">🔥 Damage Build</button>
   <button data-tab="support">💚 Support Build</button>
   <button data-tab="marksman">🏹 Marksman Build</button>
+  <button data-tab="lanes">🧭 Lane Guide</button>
   <button data-tab="shop">🗺️ Shop Guide</button>
   <button data-tab="counter">🚫 Counter Build</button>
 </nav>
@@ -240,6 +248,67 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
     <div class="meta-box">Emblem: <b>Marksman — Fatal + Weapon Master + Weakness Finder</b> (kite) or <b>Quantum Charge</b> (vs dive). Spell: <b>Flicker / Inspire / Purify</b>.</div>
   </div>
   <div class="grid" id="marksmanGrid"></div>
+</section>
+
+<!-- SHOP GUIDE -->
+<section class="panel" id="panel-lanes">
+  <div class="sec-card">
+    <h2>🧭 Lane Guide — what is my job?</h2>
+    <div class="plain">🌱 <b>New?</b> Pick ONE lane and learn it first. Your job is: win your lane quietly, then help at Turtle. Dying less matters more than killing more.</div>
+  </div>
+  <div class="sec-card lane-exp">
+    <h2>⚔️ EXP Lane (top) — the 1v1 island</h2>
+    <div class="plain">🌱 <b>Your job:</b> survive and out-level the enemy fighter. You are on your own — nobody will help you early.</div>
+    <div class="steps">
+      <div class="step"><b>First 3 minutes:</b> last-hit minions, hit level 2 and 4 BEFORE them (that's when you can fight). Don't chase under their tower.</div>
+      <div class="step"><b>Your big moment:</b> walk down to the Turtle fight when it spawns — a level ahead wins it. Then go back to your lane.</div>
+      <div class="step"><b>Win condition:</b> you become the teamfight frontline. Build 2 damage items, then full defense.</div>
+      <div class="step"><b>⛔ Don't:</b> push to their tower with no vision — that's where junglers wait to kill you.</div>
+    </div>
+    <div class="meta-box">Easy starters: <b>Balmond, Zilong, Alucard, Belerick</b> · Spells: <b>Flicker / Vengeance</b> · <a href="#" onclick="event.preventDefault();switchTab('heroes')" style="color:var(--gold)">Find EXP heroes →</a></div>
+  </div>
+  <div class="sec-card lane-core">
+    <h2>🔪 Core / Jungle — the hunter</h2>
+    <div class="plain">🌱 <b>Your job:</b> farm monsters fast, hit level 4 first, then gank (surprise-attack) a lane. You decide who wins early.</div>
+    <div class="steps">
+      <div class="step"><b>First 3 minutes:</b> take blue buff → red buff → little monsters, in that flow. Take <b>Retribution</b> spell — it's required. Hit level 4, then visit the weakest enemy lane.</div>
+      <div class="step"><b>Your big moment:</b> Turtle and Lord. You + Retribution secure them. Never start one when the enemy jungler is alive and near.</div>
+      <div class="step"><b>Win condition:</b> get fed (ahead in gold), delete their damage dealers before fights start. One full damage item before 4 minutes = snowball.</div>
+      <div class="step"><b>⛔ Don't:</b> keep farming while your team fights 4v5 next to you. Come first, farm later.</div>
+    </div>
+    <div class="meta-box">Easy starters: <b>Saber, Balmond, Alucard, Martis</b> (skip Fanny/Ling/Hayabusa until later — 🔥 Tricky) · Spell: <b>Retribution, always</b></div>
+  </div>
+  <div class="sec-card lane-gold">
+    <h2>🏹 Gold Lane (bottom) — the late-game cannon</h2>
+    <div class="plain">🌱 <b>Your job:</b> farm safely and DON'T die. You are the weakest early and the strongest late — every death delays that.</div>
+    <div class="steps">
+      <div class="step"><b>First 3 minutes:</b> last-hit every minion, stay near your tower. The gold-siege minion is worth extra — don't miss it.</div>
+      <div class="step"><b>Your big moment:</b> after 2 full items you shred everything. Push your tower only right after winning a fight, with teammates.</div>
+      <div class="step"><b>Win condition:</b> stay alive in teamfights behind your tank and hit nonstop. Positioning beats damage.</div>
+      <div class="step"><b>⛔ Don't:</b> trade hits early with fighters, or push alone with no vision — assassins live for that.</div>
+    </div>
+    <div class="meta-box">Easy starters: <b>Layla, Miya, Clint, Hanabi</b> · Spells: <b>Flicker / Inspire</b> · Buy <b>Wind of Nature 3rd</b> if assassins dive you</div>
+  </div>
+  <div class="sec-card lane-mid">
+    <h2>🔮 Mid Lane (bonus) — the helper</h2>
+    <div class="plain">🌱 <b>Your job:</b> clear your wave FAST, then walk to help gold lane or turtle. Mid players who never leave mid lose games.</div>
+    <div class="steps">
+      <div class="step"><b>First 3 minutes:</b> clear wave → check turtle/gold lane → go back. Repeat. Buy Demon Shoes if you run out of mana.</div>
+      <div class="step"><b>⛔ Don't:</b> stand still in the open — mages get assassinated first. Move with your roamer.</div>
+    </div>
+    <div class="meta-box">Easy starters: <b>Eudora, Nana, Gord, Cyclops, Aurora</b> · Spell: <b>Flicker</b></div>
+  </div>
+  <div class="sec-card lane-roam">
+    <h2>💚 Roam — the bodyguard (your Minotaur lives here!)</h2>
+    <div class="plain">🌱 <b>Your job:</b> protect your damage dealers, start good fights, and give vision (stand in bushes so enemies can't hide). You don't take minions — your gold comes from the roam boots.</div>
+    <div class="steps">
+      <div class="step"><b>First 3 minutes:</b> buy roam boots FIRST, help mid clear, then guard your jungler at buffs or babysit gold lane. Check bushes before your carry walks in.</div>
+      <div class="step"><b>Your big moment:</b> every Turtle/Lord — arrive FIRST, hide in the bush, start the fight when your team is ready.</div>
+      <div class="step"><b>Win condition:</b> your carry survives because of you. Engage when grouped, peel (push divers off) when they dive.</div>
+      <div class="step"><b>⛔ Don't:</b> take your carry's minions, face-check bushes alone late game, or ult 1 enemy while their team kills your 4 teammates.</div>
+    </div>
+    <div class="meta-box">Easy starters: <b>Minotaur, Tigreal, Franco, Rafaela</b> · Spells: <b>Flicker / Revitalize</b> · As Minotaur: fight when rage is FULL, wait when it's not</div>
+  </div>
 </section>
 
 <!-- SHOP GUIDE -->
@@ -542,6 +611,92 @@ function renderAll(){
   $("easyPicks").innerHTML=["Layla","Miya","Tigreal","Eudora","Balmond"].map(n=>`<button onclick="openHero('${n}')">${n} 🌱</button>`).join("");
   $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>`<button onclick="setCounter('${n}')">${n}</button>`).join("");
 }
+/* ============ SKILL COMBOS + HOW TO PLAY (per hero) ============ */
+const COMBOS = {
+"Tigreal":"Hide in bush → Flicker + Ult together → Skill 2 push them back → Skill 1. Practice the Flicker-Ult in Custom first.",
+"Atlas":"Hide in bush → Ult grabs everyone → Flicker-drag them to your team → Skill 1 + 2.",
+"Khufra":"Ball form (Skill 2) to block their dashes → Skill 1 jump in → Ult knocks them into a wall.",
+"Belerick":"Skill 1 poke → Ult roots the group → Skill 2 heal → let your passive punish their basics.",
+"Hylos":"Skill 2 ring ON → walk into them → Skill 1 stuns the carry → Ult speeds your team in.",
+"Gloo":"Skill 1 + 2 to stack marks → Ult rides their carry → Skill 1 again while riding.",
+"Franco":"From bush: Skill 1 hook → Ult (they can't move) → Skill 2 → your team bursts them.",
+"Gatotkaca":"Skill 2 charge-taunt → Ult slam → Skill 1. Jump from a bush for surprise.",
+"Uranus":"No real combo — keep stacks up, Skill 1 poke, Ult to cleanse + heal when they burst you.",
+"Esmeralda":"Skill 1 (grab shields) → Skill 2 poke (almost no cooldown while hitting shields) → Ult to finish.",
+"Minotaur":"Hit minions to build rage → FULL-rage Ult (heal + knock-up) → Skill 1 → Skill 2 heal.",
+"Hayabusa":"Skill 2 lands 4 shadows on them → Ult teleports between shadows → Skill 1 → return to a shadow.",
+"Ling":"Stay on a wall → Skill 1 crit hit → Ult (flies + swords fall) → Skill 2 chase.",
+"Lancelot":"Skill 1 through minions (no cooldown on marked targets) → Skill 2 pokes → Ult executes.",
+"Gusion":"Skill 2 throw daggers → Skill 1 dash in → Ult resets → Skill 2 + 1 again → Skill 3 burst.",
+"Nolan":"Skill 2 cuts a rift → Skill 1 dash-slash through it → Ult.",
+"Aamon":"Go invisible → Skill 2 shurikens → Ult executes low enemies.",
+"Karina":"Skill 1 (immune + fast) runs in → Skill 3 spin → Ult on low HP → Skill 2 true damage.",
+"Saber":"Hide in bush → Ult the carry (triple slash) → Skill 1 + 2. They die before moving.",
+"Julian":"Charge up to an enhanced skill → enhanced Skill 3 (CC chain) → enhanced Skill 2 → Skill 1.",
+"Paquito":"Punch to 2 stacks → enhanced Skill 1 or 2 → Ult knock-up → keep punching.",
+"Yu Zhong":"Skill 1 poke → Skill 3 jumps on them → Ult dragon form → Skill 2 lifesteals through the team.",
+"Dyrroth":"Skill 2 twice (destroys armor) → Ult on half-HP enemies → Skill 1 to chase.",
+"Aldous":"Farm stacks all game → Ult flies across the map → Skill 1 one-punch → Skill 2 shield.",
+"Chou":"Skill 1 three times (knock-up) → Ult kicks them INTO your team → Skill 2 dodges out.",
+"Terizla":"Skill 2 three slams → Ult penalty zone → Skill 1. Flicker-Ult for surprise.",
+"Eudora":"From bush: Skill 2 stun → Ult → Skill 1. One combo, one kill.",
+"Aurora":"Fill the freeze bar → Skill 2 freezes → Ult → Skill 1.",
+"Kadita":"Skill 1 wave-dash in → Ult → Skill 2 → Skill 1 dashes out.",
+"Chang'e":"Skill 2 shield on → Ult meteor shower → Skill 1 poke.",
+"Yve":"Ult: tap tiles to slow, swipe to blast. Skill 2 + 1 to poke outside ult.",
+"Zhuxin":"Skill 2 tosses them up → Skill 1 burns → Ult grabs and tosses repeatedly.",
+"Valentina":"Steal the enemy's best Ult → Skill 1 poke → stolen Ult in the fight.",
+"Lylia":"Skill 2 stacks 5 glooms → Skill 1 detonates all → Ult resets, do it again.",
+"Cecilion":"Stack passive all game → Skill 1 long poke → Skill 2 root → Ult.",
+"Miya":"Ult (invisible + fast) → Skill 1 rain → Inspire → hold basics.",
+"Layla":"Stay max range → Skill 1 poke → Skill 3 cannon → Skill 2 slows chasers.",
+"Lesley":"Camouflage → Skill 1 true-damage crit → Ult snipes runners.",
+"Bruno":"Skill 1 ball → Skill 3 (bounces the whole team) → Skill 2 slide → basics.",
+"Melissa":"Skill 2 doll → fight INSIDE doll range → Ult shoves divers away.",
+"Moskov":"Skill 1 attack-speed on → Skill 2 knocks them into a wall (stuns!) → Ult spear → basics.",
+"Wanwan":"Hit ALL weak spots → Ult crossbow fires itself → Purify if they CC you first.",
+"Karrie":"Skill 2 spins in → Ult dual-wield → hold basics (true damage melts tanks).",
+"Beatrix":"Shotgun up close, sniper far → Ult per weapon. Reload (Skill 2) between fights.",
+"Granger":"Skill 1 poke → Skill 2 dash → Ult 3 aimed bullets.",
+"Claude":"Skill 2 brings the monkey together → Ult + Demon Hunter shred → Skill 1 slow.",
+"Irithel":"Ult (shoot while moving) → Skill 1 slow → run-and-shoot basics.",
+"Hanabi":"Skill 2 poke → Ult roots them → Skill 1 + bouncing basics.",
+"Clint":"Dash (passive shot) → Skill 2 → Skill 1 → Ult grenades.",
+"Estes":"Skill 2 slow → Skill 1 heal-link → Ult team-wide heal in fights.",
+"Angela":"Skill 1 poke → Skill 2 root → Ult possesses your carry.",
+"Floryn":"Skill 1 heal fruit → Skill 2 stun → Ult GLOBAL heal.",
+"Rafaela":"Skill 1 poke → Skill 2 speed + heal → Ult stuns divers.",
+"Diggie":"Skill 1 bombs in bushes → Skill 2 pull → Ult cleanses ALL team CC (save it!).",
+"Mathilda":"Skill 1 wisps → Skill 2 dash + shields an ally → Ult dives the carry.",
+"Faramis":"Skill 1 + 2 poke → Ult revive-zone BEFORE teammates die, not after.",
+"Fanny":"Throw 2 cables → fly + Skill 1 spin → Ult → cable out. Needs blue buff + lots of practice.",
+"Martis":"Skill 2 (immune + CC) → Skill 1 pull → Ult executes and resets on kill.",
+"Balmond":"Skill 2 spin → Ult on LOW enemies (it executes by missing HP).",
+"Ruby":"Skill 1 + 2 CC chain → Ult pulls them in → lifesteal everything back.",
+"Phoveus":"Wait for an enemy dash → Ult jumps to them → Skill 1 + 2.",
+"X.Borg":"Skill 1 spray (breaks armor) → Ult explosion → Skill 2 pulls back in.",
+"Fredrinn":"Skill 1 + 2 stack crystals → Skill 3 combo → Ult executes low HP.",
+"Kimmy":"Aim + spray → Skill 1 slow field → Ult cannon from far.",
+"Harith":"Ult time-zone → dash in and out with Skill 2 → Skill 1.",
+"Lunox":"Dark Ult to burst → Light Ult to escape/heal. Never go dark without an exit.",
+"Alice":"Ult blood-flood ON → Skill 2 dashes in → Skill 1 anchor → drain them dry.",
+"Selena":"Human Skill 1 arrow (stun) → demon form → Skill 1 + 2 burst.",
+"Natalia":"Sneak behind → Skill 2 silence → Ult → basics. Run if they group up.",
+"Zilong":"Skill 1 flips them → Skill 2 + basics → Ult to chase or escape.",
+"Alucard":"Skill 1 jumps → Skill 2 spin → Ult wave + lifesteal. Don't start 1v5.",
+"Sun":"Ult clones → Skill 1 slow → Skill 2 dash → push while they fight clones.",
+"Cyclops":"Skill 2 planets → Skill 1 beam → Ult locks them down.",
+"Gord":"Skill 1 stun → Ult laser → Skill 2 zone.",
+"Odette":"Skill 2 binds → Ult swan song (needs a teammate guarding you — any CC stops it).",
+"Nana":"Skill 2 Molina → Skill 1 boomerang → Ult on slowed targets."};
+const COMBO_FALLBACK = {
+Tank:"Skill 1 poke → Ult to start the fight → Skill 2 to peel. Tanks start fights — don't chase kills.",
+Fighter:"Skill 1 + 2 trade → Ult when they're half HP → dash to chase.",
+Assassin:"Poke first → all-in combo → Ult executes → escape skill out. Never run head-first into 5 enemies.",
+Mage:"Stay back → poke → Ult when 2+ enemies group → keep your distance.",
+Marksman:"Stay safe → always be hitting → Ult in teamfights → dash away from divers.",
+Support:"Poke and heal from the backline → save Ult for the enemy dive → peel your carry."};
+function comboFor(h){ return COMBOS[h.name] || COMBO_FALLBACK[h.role] || "Poke first → all-in → Ult → escape. Learn spacing first, combos second."; }
 /* ============ PER-HERO BUILD VARIANTS (Damage / Tank / Support for EVERY hero) ============ */
 const VARIANT_OVERRIDES = {
 "Rafaela":{
@@ -621,7 +776,9 @@ function openHero(name,kind){
   kind=kind||"best";
   const esc=h.name.replace(/'/g,"\\'");
   $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
-  <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b></div></div></div>
+  <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b> · ${heroDiff(h)}</div></div></div>
+  <div class="combo-box">🥋 <b>${h.name} combo:</b> ${comboFor(h)}${heroDiff(h).indexOf("Tricky")>=0?"<br><small>🔥 Tricky hero — practice this vs AI / Custom first, not ranked.</small>":""}</div>
+  <div class="meta-box">🧠 <b>How to play:</b> ${h.tips} Play <b>${h.lane}</b>? Check the 🧭 Lane Guide tab for your job, first 3 minutes, and what NOT to do.</div>
   <div class="variant-row" id="vBtns">${VARIANT_TABS.map(([k,label])=>`<button data-k="${k}" class="${k===kind?"active":""}" onclick="showVariant('${esc}','${k}')">${label}</button>`).join("")}</div>
   <div id="vBody"></div>
   <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${esc}')" style="color:var(--gold)">Open in Counter tab →</a> · <a href="#" onclick="event.preventDefault();closeModal();switchTab('shop')" style="color:var(--cyan)">Where are these items in the shop? →</a><br><a href="#" onclick="event.preventDefault();closeModal();setMyHero('${esc}')" style="color:var(--green)">🛡️ I play ${h.name} — someone kills me, help me survive →</a></div>
