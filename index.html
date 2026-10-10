@@ -11,7 +11,24 @@
   --green:#22c55e; --red:#ef4444; --purple:#a855f7; --cyan:#06b6d4;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:linear-gradient(180deg,#070b18,#0a0e1a 30%,#0d1430);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh}
+body{background:linear-gradient(180deg,#0a0f22,#0d1330 40%,#101a3d);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;font-size:16px;line-height:1.6}
+/* 🌱 beginner starter card */
+.newbie{background:linear-gradient(180deg,#123324,#16402c);border:2px solid var(--green);border-radius:16px;padding:20px;margin:4px 0 14px}
+.newbie h2{color:#86efac;font-size:19px;margin-bottom:8px}
+.newbie p{font-size:14.5px;color:#d1fae5}
+.newbie .steps{display:grid;gap:8px;margin:12px 0}
+.newbie .step{background:#0b1f16;border-color:#16a34a}
+.newbie .quick-picks button{border-color:#16a34a}
+.gloss-btn{margin-top:6px;padding:10px 18px;border-radius:10px;border:none;background:var(--green);color:#04140a;font-weight:800;cursor:pointer;font-size:14px}
+.diff{display:inline-block;font-size:11px;margin-top:6px;padding:2px 10px;border-radius:999px;background:#0b1230;border:1px solid #2b3a72;color:var(--muted)}
+/* friendlier expandable full build */
+details.build-more{margin-top:8px;background:#0b1230;border:1px solid #2b3a72;border-radius:10px;padding:10px 12px}
+details.build-more summary{cursor:pointer;color:var(--gold2);font-weight:700;font-size:14px}
+.first3-label{color:#86efac;font-weight:800;font-size:14px;margin:8px 0 2px}
+.gloss-term{background:#0b1230;border:1px solid #2b3a72;border-radius:10px;padding:9px 12px;margin:7px 0;font-size:14px}
+.gloss-term b{color:var(--gold2)}
+.stepnum{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#111;font-weight:800;font-size:14px;margin-right:8px}
+.plain{background:#052e16;border:1px solid #16a34a;border-radius:10px;padding:10px 14px;margin:0 0 10px;font-size:14.5px;color:#d1fae5;line-height:1.6}
 header{background:linear-gradient(90deg,#0d1430,#1a2456,#0d1430);border-bottom:2px solid var(--gold);padding:18px 20px;text-align:center;position:sticky;top:0;z-index:50}
 header h1{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
 header h1 span{color:var(--gold)}
@@ -147,8 +164,21 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <main>
 <!-- ALL HEROES -->
 <section class="panel active" id="panel-heroes">
+  <div class="newbie">
+    <h2>🌱 New to Mobile Legends? Start here (30 seconds)</h2>
+    <p>No need to learn everything. Just do this:</p>
+    <div class="steps">
+      <div class="step"><b><span class="stepnum">1</span>Pick an EASY hero</b> — the green 🌱 ones below. Forgiving, strong, simple buttons.</div>
+      <div class="step"><b><span class="stepnum">2</span>Buy items top-to-bottom</b> — open a hero, follow the ⭐ Best list. Only the first 3 matter most; the rest can wait.</div>
+      <div class="step"><b><span class="stepnum">3</span>Dying to one enemy?</b> — open the 🚫 Counter tab, type their name, buy the 2 ⭐ items it shows.</div>
+    </div>
+    <div style="font-size:13px;color:#a7f3d0">Try one of these first:</div>
+    <div class="quick-picks" id="easyPicks"></div>
+    <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button>
+  </div>
   <div class="role-filter" id="roleFilter">
     <button data-role="All" class="active">All</button>
+    <button data-role="Easy">🌱 Easy first</button>
     <button data-role="Tank">Tank</button>
     <button data-role="Fighter">Fighter</button>
     <button data-role="Assassin">Assassin</button>
@@ -164,6 +194,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <section class="panel" id="panel-tank">
   <div class="sec-card">
     <h2>🛡️ Universal Tank Build (Roam / EXP — Patch 2.2.16 meta)</h2>
+    <div class="plain">🌱 <b>New?</b> Boots first. Then buy the armor that matches what kills you — sword/physical damage → Antique Cuirass, purple magic damage → Athena's Shield. Immortality last. That's 90% of tanking.</div>
     <p class="desc">Rule from pro guides: <b>stack HP first, then counter the main enemy damage</b>. Tough Boots (vs CC/magic) or Warrior Boots (vs physical). Antique Cuirass vs skill/physical burst, Athena's Shield vs magic burst, Radiant Armor vs magic DPS, Dominance Ice vs heal + attack speed, Blade Armor vs crit MM, Immortality last. Click any tank below for its personal best build.</p>
     <ol class="build-ol">
       <li><b>1. Tough Boots / Warrior Boots</b> — pick by enemy main damage. Tough Boots in 61% of tank builds (30% CC reduction).</li>
@@ -182,6 +213,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <section class="panel" id="panel-damage">
   <div class="sec-card">
     <h2>🔥 Damage Builds — Assassin / Fighter / Burst Mage</h2>
+    <div class="plain">🌱 <b>New?</b> Finish ONE damage item fully before starting the next — half-built items do nothing. If you play assassin, you must get kills early or you'll feel useless late. That's normal.</div>
     <p class="desc"><b>Physical Assassin (Jungle):</b> Rapid Boots → Blade of Heptaseas → Hunter Strike → Blade of Despair → Malefic Roar → Immortality. Rush first core before 4 min to snowball. If behind after 8 min, swap BOD for Malefic Roar + Immortality.<br><b>Fighter (EXP):</b> Tough Boots → War Axe (63% of fighter builds, avg slot 2.3 — stacks true damage) → Hunter Strike / Endless Battle → Blade of Despair → Malefic Roar (vs 2+ armor) → Immortality / Queen's Wings.<br><b>Burst Mage:</b> Arcane Boots → Glowing Wand / Clock of Destiny → Holy Crystal → Divine Glaive (96% of mage builds — mandatory vs Athena) → Blood Wings → Winter Crown.</p>
     <div class="meta-box">Emblem: <b>Assassin — Rupture + Master Assassin + Killing Spree</b> (physical) / <b>Mage — Inspire + Master Assassin + Lethal Ignition</b> (burst) / <b>Fighter — Thrill + Weapon Master + War Cry</b>. Spells: Retribution (jungle), Flicker / Execute (lane).</div>
   </div>
@@ -192,6 +224,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <section class="panel" id="panel-support">
   <div class="sec-card">
     <h2>💚 Support Builds — Heal, Peel & Vision</h2>
+    <div class="plain">🌱 <b>New?</b> Your job isn't kills. Buy Fleeting Time + Oracle, stand BEHIND your damage dealers, and press heal/ult when a fight starts. Dying first = lost fight.</div>
     <p class="desc">Supports buy <b>roam boots first</b>, then counter items, never full damage. Core: Favor / Encourage roam + Tough Boots → Dominance Ice (vs heal) or Athena's Shield (vs burst) → Oracle (boosts your own heal/shield) → Radiant Armor → Immortality → Guardian Helmet. Anti-heal is on YOU if nobody else buys it. 79% of support builds finish with Immortality.</p>
     <div class="meta-box">Emblem: <b>Support — Agility + Recovery / Bargain Hunter + Pull Yourself Together / Focusing Mark</b> &nbsp;|&nbsp; Spell: <b>Flicker / Revitalize / Purify</b>. Always keep a slot flexible for Necklace of Durance (mage support) vs heavy regen.</div>
   </div>
@@ -202,6 +235,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <section class="panel" id="panel-marksman">
   <div class="sec-card">
     <h2>🏹 Marksman Builds — Crit vs Attack-Speed</h2>
+    <div class="plain">🌱 <b>New?</b> Stay far away, keep hitting, never stand still. Buy Windtalker first almost always. If an assassin jumps you, that's what Wind of Nature is for — press it, then run to your tank.</div>
     <p class="desc"><b>Crit route</b> (Melissa, Beatrix, Bruno, Lesley, Clint): Swift Boots → Windtalker → Berserker's Fury → Scarlet Phantom → Malefic Roar (mandatory vs 2 armor items) → Blade of Despair / Immortality.<br><b>Attack-speed / shred route</b> (Karrie, Claude, Moskov, Hanabi, Kimmy): Swift Boots → Windtalker → Golden Staff / Corrosion Scythe → Demon Hunter Sword ( shreds high-HP tanks — 8% current HP per hit) → Wind of Nature (vs assassin dive, buy 3rd if Hayabusa/Ling) → Immortality.<br>Vs heal: <b>Sea Halberd</b> 4th slot. Never buy BOD while behind — buy 2 cheap items instead.</p>
     <div class="meta-box">Emblem: <b>Marksman — Fatal + Weapon Master + Weakness Finder</b> (kite) or <b>Quantum Charge</b> (vs dive). Spell: <b>Flicker / Inspire / Purify</b>.</div>
   </div>
@@ -237,10 +271,12 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 <section class="panel" id="panel-counter">
   <div class="counter-wrap">
     <div class="counter-form">
-      <h2 style="color:var(--gold)">🚫 Counter Build Finder</h2>
-      <p style="color:var(--muted);font-size:13px;margin:6px 0 12px;line-height:1.6">Type the <b>enemy hero</b> you are afraid of. We show what damage they deal, which <b>defense items shut them down</b> so they barely hurt you, plus a full counter build for your role.</p>
+      <h2 style="color:var(--gold)">🚫 Who keeps killing you?</h2>
+      <p style="color:var(--muted);font-size:14px;margin:6px 0 12px;line-height:1.6">3 steps, that's all: <b>1️⃣</b> type their hero name · <b>2️⃣</b> tap the button · <b>3️⃣</b> buy the ⭐ items it shows. They'll suddenly hit like a wet noodle.</p>
+      <div style="font-size:14px;margin-bottom:6px"><span class="stepnum">1</span><b>Enemy hero name:</b></div>
       <input id="counterInput" list="heroList" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…">
       <datalist id="heroList"></datalist>
+      <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">2</span><b>Tap:</b></div>
       <button onclick="findCounter()">Show My Counter Build 🛡️</button>
       <div style="margin-top:10px;color:var(--muted);font-size:12px">Popular:</div>
       <div class="quick-picks" id="quickPicks"></div>
@@ -266,8 +302,9 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 </div>
 
 <footer>
-  Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture (62 items / 399 builds / 133 heroes), LootBar counter guide, MLBBHub, ONE Esports, VCGamers.<br>
-  Rule of thumb: <span class="kbd">2 core items fixed + 2–4 slots adapt to enemy</span> — no preset works every game. Buy anti-heal by 3rd item vs 2+ regen heroes.
+  <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
+  Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
+  Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.
 </footer>
 
 <script>
@@ -425,6 +462,34 @@ EXTRA_HEROES.forEach(n=>{
 });
 
 const $ = id=>document.getElementById(id);
+/* 🌱 difficulty: keep beginners on forgiving heroes */
+const EASY_HEROES = ["Layla","Miya","Tigreal","Eudora","Balmond","Zilong","Saber","Rafaela","Nana","Clint","Alucard","Franco","Minotaur","Hanabi","Gord","Cyclops","Odette","Belerick","Hylos","Irithel"];
+const HARD_HEROES = ["Fanny","Ling","Hayabusa","Gusion","Lancelot","Benedetta","Nolan","Joy","Aamon","Selena","Helcurt","Hanzo","Kadita","Benedetta","Harith","Yve","Zhuxin","Kagura"];
+function heroDiff(h){
+  if(EASY_HEROES.includes(h.name)) return "🌱 Easy";
+  if(HARD_HEROES.includes(h.name)||h.role==="Assassin") return "🔥 Tricky";
+  return "⭐ Normal";
+}
+/* 📖 plain-words glossary for beginners */
+const GLOSSARY = [
+["Ult","Your strongest skill (the big button). Games are won and lost on ults — save counters for them."],
+["Burst","Huge damage all at once (Eudora, Gusion). Counter with shields: Athena's Shield, Winter Crown."],
+["DPS","Damage every second, little hits over time (Miya, Chang'e). Counter with Radiant Armor, Blade Armor, Dominance Ice."],
+["CC (crowd control)","Stuns, knock-ups, freezes — anything that stops a hero moving. Tough Boots shortens it."],
+["Penetration","Items that punch through armor (Malefic Roar, Divine Glaive). Buy when enemies stack defense."],
+["Anti-heal","Cuts enemy healing in half (Dominance Ice, Sea Halberd, Glowing Wand). Mandatory vs Estes, Uranus, Esmeralda."],
+["Kite","Hit while walking backwards to stay out of reach. Marksmen live by this."],
+["Peel","Your tank/support pushing divers OFF you. Stick near them."],
+["Snowball","Getting fed early and rolling it into a win. Assassins must snowball or they fade."],
+["CD (cooldown)","Waiting time before a skill can be used again. Fleeting Time and blue buff shorten it."],
+["Roam","The support/tank player who walks the map helping lanes (no fixed lane)."],
+["Farm","Killing minions/jungle for gold. More gold = items faster = stronger."]];
+function openGlossary(){
+  $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
+  <h2>📖 Words players use</h2><div class="sub">Tap nothing — just read. You'll hear all of these in-game.</div>
+  ${GLOSSARY.map(([t,d])=>`<div class="gloss-term"><b>${t}</b> — ${d}</div>`).join("")}`;
+  $("modalBg").classList.add("open");
+}
 const IMG_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/";
 function heroImg(name){
   if(name==="Chang'e") return IMG_BASE+"chang27e.png";
@@ -457,11 +522,11 @@ function cardHTML(h){
   return `<div class="hero-card" onclick="openHero('${h.name.replace(/'/g,"\\'")}')">
     <div class="avatar"><span>${h.name[0]}</span><img src="${heroImg(h.name)}" alt="${h.name}" loading="lazy" onerror="this.remove()"></div><h3>${h.name}</h3>
     <div class="role">${emoji(h.role)} ${h.role}</div>
-    <div class="lane">${h.lane} · ${h.dmg}</div></div>`;
+    <div class="lane">${h.lane} · ${h.dmg}</div><br><span class="diff">${heroDiff(h)}</span></div>`;
 }
 function renderAll(){
   const q=($("globalSearch").value||"").toLowerCase();
-  const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Marksman"&&h.role==="Marksman"))&&h.name.toLowerCase().includes(q));
+  const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Easy"&&heroDiff(h).indexOf("Easy")>=0))&&h.name.toLowerCase().includes(q));
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
   $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
   renderShop();
@@ -471,6 +536,7 @@ function renderAll(){
   $("supportGrid").innerHTML=HEROES.filter(h=>["Tank","Support"].includes(h.role)).slice(0,20).map(cardHTML).join("")||by("Support");
   $("marksmanGrid").innerHTML=HEROES.filter(h=>h.role==="Marksman").map(cardHTML).join("");
   $("heroList").innerHTML=HEROES.map(h=>`<option value="${h.name}">`).join("");
+  $("easyPicks").innerHTML=["Layla","Miya","Tigreal","Eudora","Balmond"].map(n=>`<button onclick="openHero('${n}')">${n} 🌱</button>`).join("");
   $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>`<button onclick="setCounter('${n}')">${n}</button>`).join("");
 }
 /* ============ PER-HERO BUILD VARIANTS (Damage / Tank / Support for EVERY hero) ============ */
@@ -566,9 +632,12 @@ function showVariant(name,kind){
   const m=variantMeta(h,kind);
   document.querySelectorAll("#vBtns button").forEach(b=>b.classList.toggle("active",b.dataset.k===kind));
   const label=(VARIANT_TABS.find(t=>t[0]===kind)||["","Build"])[1];
+  const first3=v.items.slice(0,3), rest=v.items.slice(3);
   $("vBody").innerHTML=`<div class="meta-box">✨ Emblem: <b>${m.emblem}</b><br>🌀 Battle spell: <b>${m.spell}</b><br>💡 ${v.note}</div>
   <h3 style="margin:8px 0">${label} build — ${h.name}:</h3>
-  <div class="build-list">${v.items.map((it,i)=>itemRow(it,i)).join("")}</div>`;
+  <div class="first3-label">✅ New? Just buy these 3 first, in order:</div>
+  <div class="build-list">${first3.map((it,i)=>itemRow(it,i)).join("")}</div>
+  <details class="build-more"><summary>➕ Show the other 3 (for later in the match)</summary><div class="build-list">${rest.map((it,i)=>itemRow(it,i+3)).join("")}</div></details>`;
 }
 function closeModal(){$("modalBg").classList.remove("open");}
 function setMain(name){try{localStorage.setItem("mlbb_main",name);}catch(e){}renderMainChip();closeModal();}
