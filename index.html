@@ -945,11 +945,9 @@ function renderMatchup(myH,enH){
   <h2 style="color:var(--gold)">🛡️ ${myH.name} (you) vs ${enH.name} (them)</h2>
   <p style="color:var(--muted);font-size:13px">You: <b>${myH.role}</b> · Them: <b>${enH.role}</b> — ${style}</p>
   <div class="counter-item danger"><b>The problem:</b><br>${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd.`}</div>
-  <div class="counter-item"><b>⭐ Buy these (as ${myH.name}):</b><br>
-    ${counters.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab</span>`).join("<br><br>")}</div>
-  <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order — tap an item to locate it):</b><br>
-    ${build.map((b,i)=>{const e=b.replace(/'/g,"\\'");return `<span onclick="openItem('${e}')" style="cursor:pointer">${i+1}. <b>${b}</b> <span style="color:var(--cyan)">(Shop → ${itemShop(b)} 👆)</span></span>`;}).join("<br>")}
-    <br><small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
+  <div class="counter-item"><b>⭐ Buy these (as ${myH.name}) — tap a picture to locate it:</b><div class="build-list">${counters.map((m,i)=>itemRow(m,i)).join("")}</div></div>
+  <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><div class="build-list">${build.map((b,i)=>itemRow(b,i)).join("")}</div>
+    <small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
   <div class="tips">🧠 <b>How to play it:</b><br>${matchupTips(myH,enH,counters).map(t=>"• "+t).join("<br>")}</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
     <button onclick="openHero('${e1}')" style="padding:10px 14px;border-radius:10px;border:1px solid var(--gold);background:#0b1230;color:var(--gold);cursor:pointer;font-weight:700">My other ${myH.name} builds</button>
@@ -973,8 +971,7 @@ function findCounter(){
   <h2 style="color:var(--gold)">🛡️ How to counter ${h.name}</h2>
   <p style="color:var(--muted);font-size:13px">${h.role} · ${h.lane} · threat: <b>${h.dmg}</b></p>
   <div class="counter-item danger"><b>Why they hurt you:</b><br>${plan.explain}</div>
-  <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} (tap one to see where it is):</b><br>
-    ${must.map((m,i)=>{const e=m.replace(/'/g,"\\'");return `<span onclick="openItem('${e}')" style="cursor:pointer;display:block">${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab 👆</span></span>`;}).join("<br>")}</div>
+  <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} — tap a picture to locate it:</b><div class="build-list">${must.map((m,i)=>itemRow(m,i)).join("")}</div></div>
   <div class="counter-item magic"><b>📦 Full counter build if YOU are:</b><br><br>
     🛡️ <b>Tank/Roam:</b> Tough Boots → ${must[0]||"Antique Cuirass"} → ${must[1]||"Athena's Shield"} → Dominance Ice → Guardian Helmet → Immortality<br><br>
     ⚔️ <b>Fighter/Assassin:</b> Tough Boots → War Axe/Hunter Strike → ${must[0]||"Antique Cuirass"} → Blade of Despair → ${must[1]||"Athena's Shield"} → Immortality<br><br>
