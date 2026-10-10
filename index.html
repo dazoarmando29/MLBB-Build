@@ -172,6 +172,9 @@ footer{opacity:.9}
 .quick-picks button img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);background:#0b1230;flex:0 0 auto}
 .cheat-icons{display:flex;gap:8px;margin-top:5px;flex-wrap:wrap}
 .cheat-icons img{width:36px;height:36px;border-radius:9px;object-fit:cover;background:#0006;border:1px solid var(--gold);cursor:pointer}
+/* power-mix icon strips */
+.mix-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mix-strip img{width:40px;height:40px;border-radius:10px;object-fit:cover;background:#0006;border:1px solid var(--gold);cursor:pointer}
 /* versus header portraits */
 .vs-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 10px;text-align:center}
 .vs-side{display:flex;flex-direction:column;align-items:center;gap:4px;max-width:132px}
@@ -492,7 +495,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
   Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
-  <span style="font-size:12px">v2.8 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
+  <span style="font-size:12px">v2.9 · Patch 2.2.16 meta (Oct 2026) · This page updates itself — if it ever looks outdated, tap:</span>
   <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
@@ -745,7 +748,7 @@ function renderAll(){
   const q=($("globalSearch").value||"").toLowerCase();
   const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Easy"&&heroDiff(h).indexOf("Easy")>=0)||(activeRole==="Stier"&&S_TIER.includes(h.name)))&&h.name.toLowerCase().includes(q));
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
-  $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
+  $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support + 🩸Lifesteal builds.";
   renderShop();
   renderAntiAll();
   const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
@@ -891,7 +894,17 @@ const VARIANT_OVERRIDES = {
 "Mathilda":{
   damage:{items:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Damage Mathilda: assassin-style roam — dive, poke, dash out."}},
 "Faramis":{
-  tank:{items:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],note:"Tank Faramis: stay alive to cast Nether Realm — dead Faramis casts nothing."}}
+  tank:{items:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],note:"Tank Faramis: stay alive to cast Nether Realm — dead Faramis casts nothing."}},
+"Alice":{
+  lifesteal:{items:["Demon Shoes","Clock of Destiny","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive"],note:"Maximum drain Alice: ult + Concentrated + Oracle out-heals whole teams. Enemy anti-heal is your ONLY fear — kill their holder first."}},
+"Ruby":{
+  lifesteal:{items:["Tough Boots","War Axe","Endless Battle","Oracle","Haas's Claws","Immortality"],note:"Unkillable Ruby: every CC skill pays you HP. Chain S1+S2 nonstop and watch bars refill."}},
+"Alucard":{
+  lifesteal:{items:["Tough Boots","War Axe","Endless Battle","Haas's Claws","Blade of Despair","Queen's Wings"],note:"Classic Alucard fantasy: jump in at half HP, spin, walk out full. Dies to hard CC + anti-heal — track both."}},
+"Yu Zhong":{
+  lifesteal:{items:["Tough Boots","War Axe","Oracle","Endless Battle","Dominance Ice","Immortality"],note:"Dragon drain: ult + Oracle + War Axe stacks. Without enemy anti-heal you are immortal."}},
+"Esmeralda":{
+  lifesteal:{items:["Arcane Boots","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive","Blood Wings"],note:"Shield-steal + spell vamp Esmeralda: every S2 both shields AND heals you."}}
 };
 const AS_MM = ["Karrie","Claude","Moskov","Hanabi","Kimmy","Wanwan","Natan","Ixia","Sun","Zilong","Obsidia","Popol and Kupa","Irithel"];
 function genDamage(h){
@@ -924,9 +937,25 @@ function genSupport(h){
   const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].support; if(ov) return ov;
   return {items:["Tough Boots","Fleeting Time","Glowing Wand","Oracle","Athena's Shield","Immortality"],note:"Roam support "+h.name+": enable your team, hold anti-heal (Glowing Wand) so their regen means nothing, ult to save fights. Swap Oracle ↔ Dominance Ice if THEY heal a lot."};
 }
+function genLifesteal(h){
+  const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].lifesteal; if(ov) return ov;
+  if(h.role==="Marksman") return {items:["Swift Boots","Haas's Claws","Berserker's Fury","Scarlet Phantom","Demon Hunter Sword","Wind of Nature"],note:"Drain marksman: Haas's Claws heals MORE under 40% HP — play brave when low, that's when you're strongest."};
+  if(h.role==="Mage"||h.dmg.indexOf("magic")===0) return {items:["Demon Shoes","Concentrated Energy","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],note:"Spell-vamp mage: every skill pays you HP. Poke forever, never recall. Dies to burst — keep distance."};
+  if(h.role==="Assassin") return {items:["Rapid Boots","Endless Battle","Haas's Claws","Blade of Despair","Malefic Roar","Queen's Wings"],note:"Drain assassin: Endless true damage + Haas heals every dive. Queen's Wings saves the escape."};
+  if(h.role==="Fighter") return {items:["Tough Boots","War Axe","Endless Battle","Oracle","Queen's Wings","Immortality"],note:"Bruiser drain: War Axe stacks + Oracle-boosted healing. You win every long fight — force them."};
+  if(h.role==="Support") return {items:["Tough Boots","Fleeting Time","Oracle","Concentrated Energy","Dominance Ice","Immortality"],note:"Sustain support: bigger heals for the team (Oracle) + spell vamp keeps YOU alive too."};
+  return {items:["Tough Boots","Oracle","Guardian Helmet","Cursed Helmet","Dominance Ice","Immortality"],note:"Regen wall: Oracle + Helmet refill you out of every trade. Walk at them, walk away full, repeat."};
+}
 function variantMeta(h,kind){
   if(kind==="tank") return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker / Revitalize"};
   if(kind==="support") return {emblem:"Support · Agility + Recovery + Pull Yourself Together",spell:"Flicker / Revitalize"};
+  if(kind==="lifesteal"){
+    if(h.role==="Marksman") return {emblem:"Marksman · Swift + Weapon Master + Quantum Charge",spell:"Inspire / Flicker"};
+    if(h.role==="Mage"||h.dmg.indexOf("magic")===0||h.role==="Support") return {emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker / Revitalize"};
+    if(h.role==="Assassin") return {emblem:"Assassin · Rupture + Seasoned Hunter + Killing Spree",spell:(h.lane.indexOf("Jungle")>=0?"Retribution":"Flicker")};
+    if(h.role==="Fighter") return {emblem:"Fighter · Thrill + Tenacity + War Cry",spell:"Vengeance / Flicker"};
+    return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize / Vengeance"};
+  }
   if(kind==="damage"){
     if(h.role==="Marksman") return {emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Inspire"};
     if(h.role==="Mage"||h.dmg.indexOf("magic")===0||h.role==="Support") return {emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker"};
@@ -936,11 +965,11 @@ function variantMeta(h,kind){
   }
   return {emblem:h.emblem,spell:h.spell};
 }
-const VARIANT_TABS = [["best","⭐ Best"],["damage","🔥 Damage"],["tank","🛡️ Tank"],["support","💚 Support"]];
+const VARIANT_TABS = [["best","⭐ Best"],["damage","🔥 Damage"],["tank","🛡️ Tank"],["support","💚 Support"],["lifesteal","🩸 Lifesteal"]];
 function heroVariants(h){
   return {
     best:{items:h.build,note:"Most-picked meta preset for "+h.name+" ("+h.role+", "+h.lane+"). "+h.tips},
-    damage:genDamage(h), tank:genTank(h), support:genSupport(h)
+    damage:genDamage(h), tank:genTank(h), support:genSupport(h), lifesteal:genLifesteal(h)
   };
 }
 function openHero(name,kind){
@@ -1183,6 +1212,9 @@ function renderMatchup(myH,enH){
   <div class="counter-item"><b>⭐ Buy these (as ${myH.name}) — tap a picture to locate it:</b><div class="build-list">${counters.map((m,i)=>itemRow(m,i)).join("")}</div></div>
   <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><div class="build-list">${build.map((b,i)=>itemRow(b,i)).join("")}</div>
     <small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
+  <div class="counter-item"><b>💪 Power mixes for ${myH.name} — pick your terror (tap any picture):</b>
+    ${["damage","lifesteal"].map(k=>{const v=heroVariants(myH)[k];const lbl=(k==="damage"?"🔥 Damage mix":"🩸 Lifesteal mix");return `<div style="margin:8px 0"><b>${lbl}:</b> <span style="color:var(--muted);font-size:12.5px">${v.note}</span><div class="mix-strip">${v.items.map(n=>{const e=n.replace(/'/g,"\\'");return `<img src="${itemIcon(n)}" alt="${n}" title="${n}" loading="lazy" decoding="async" onclick="event.stopPropagation();openItem('${e}')" onerror="this.remove()">`;}).join("")}</div></div>`;}).join("")}
+  </div>
   <div class="tips">🧠 <b>How to play it:</b><br>${matchupTips(myH,enH,counters).map(t=>"• "+t).join("<br>")}</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
     <button onclick="openHero('${e1}')" style="padding:10px 14px;border-radius:10px;border:1px solid var(--gold);background:#0b1230;color:var(--gold);cursor:pointer;font-weight:700">My other ${myH.name} builds</button>
@@ -1191,7 +1223,7 @@ function renderMatchup(myH,enH){
 }
 function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
 /* ===== AUTOMATIC VERSION CHECK: never show a stale saved copy ===== */
-const SITE_VERSION = "2.8";
+const SITE_VERSION = "2.9";
 function showUpdateBanner(auto){
   const b=$("updateBar"); if(!b) return;
   b.classList.add("show");
