@@ -178,6 +178,10 @@ footer{opacity:.9}
 /* counter style picker: always-visible 2x2 grid */
 #styleBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
 #styleBtns button{margin:0;text-align:left}
+/* auto-update banner */
+#updateBar{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#16a34a,#22c55e);color:#04140a;font-weight:800;text-align:center;padding:10px 12px;font-size:14px;box-shadow:0 4px 20px #000a}
+#updateBar.show{display:block}
+#updateBar button{margin-left:10px;padding:6px 14px;border-radius:999px;border:none;background:#04140a;color:#fff;font-weight:800;cursor:pointer}
 .vs-side img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#0b1230;box-shadow:0 6px 18px #0008}
 .vs-side:last-child img{border-color:var(--red)}
 .vs-side b{font-size:15px}
@@ -253,6 +257,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 </style>
 </head>
 <body>
+<div id="updateBar">✨ New version found — updating… <button onclick="forceRefresh()">Update now</button></div>
 <header>
   <h1>⚔️ MLBB <span>Build Guide</span> 2026</h1>
   <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Lane Guide • Shop Guide • Counter Builder</p>
@@ -486,7 +491,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button class="gloss-btn" onclick="openGlossary()">📖 Words players use — 1-minute glossary</button><br><br>
   Simple rule that wins games: <span class="kbd">buy the first 3 items in order, then adapt</span> — no list works every match. Dying to healing? Buy anti-heal 3rd.<br>
   Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture, LootBar, MLBBHub, ONE Esports, VCGamers.<br>
-  <span style="font-size:12px">v2.6 · Oct 2026 · Not seeing something new (like 🌑 Dark System)? Your device saved an old copy —</span>
+  <span style="font-size:12px">v2.7 · Oct 2026 · This page updates itself — if it ever looks outdated, tap:</span>
   <button class="phone-btn" style="margin-top:6px" onclick="forceRefresh()">⟳ Get latest version</button>
 </footer>
 
@@ -1154,6 +1159,31 @@ function renderMatchup(myH,enH){
   </div>`;
 }
 function forceRefresh(){ location.href = location.pathname + "?v=" + Date.now(); }
+/* ===== AUTOMATIC VERSION CHECK: never show a stale saved copy ===== */
+const SITE_VERSION = "2.7";
+function showUpdateBanner(auto){
+  const b=$("updateBar"); if(!b) return;
+  b.classList.add("show");
+  if(auto) setTimeout(forceRefresh, 2500);
+}
+async function autoUpdateCheck(){
+  try{
+    let seen=null;
+    try{ seen=sessionStorage.getItem("mlbb_vseen"); }catch(e){}
+    if(seen===SITE_VERSION) return;
+    const url=location.href.split("?")[0]+"?_vcheck="+Date.now();
+    const r=await fetch(url,{cache:"no-store"});
+    if(!r.ok) return;
+    const t=await r.text();
+    const m=t.match(/const SITE_VERSION = "([^"]+)"/);
+    if(m&&m[1]!==SITE_VERSION){
+      try{ sessionStorage.setItem("mlbb_vseen",m[1]); }catch(e){}
+      showUpdateBanner(true); // auto-reloads to the fresh copy
+    }else{
+      try{ sessionStorage.setItem("mlbb_vseen",SITE_VERSION); }catch(e){}
+    }
+  }catch(e){/* offline or file:// — stay on current copy */}
+}
 function setMyHero(n){switchTab("counter");$("myHeroInput").value=n;if($("counterInput"))$("counterInput").focus();}
 function findCounter(){
   const box=$("counterResult");
@@ -1183,6 +1213,15 @@ function findCounter(){
 }
 renderAll();
 renderMainChip();
+autoUpdateCheck(); // on load: silently refresh if this copy is stale
+setInterval(async()=>{ // every 30 min mid-session: only show banner, never yank the page
+  try{
+    const r=await fetch(location.href.split("?")[0]+"?_vcheck="+Date.now(),{cache:"no-store"});
+    if(!r.ok) return;
+    const m=(await r.text()).match(/const SITE_VERSION = "([^"]+)"/);
+    if(m&&m[1]!==SITE_VERSION) showUpdateBanner(false);
+  }catch(e){}
+},30*60*1000);
 </script>
 </body>
 </html>
