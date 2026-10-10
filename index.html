@@ -36,6 +36,11 @@ details.build-more summary{cursor:pointer;color:var(--gold2);font-weight:700;fon
 .lane-roam{border-left:5px solid var(--green)}
 .combo-box{background:#2a1f08;border:1px solid var(--gold);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:14.5px;line-height:1.65}
 .combo-box b{color:var(--gold2)}
+.item{cursor:pointer}
+.item:hover{border-color:var(--gold)}
+.shop-item{cursor:pointer}
+.shop-item:hover{border-color:var(--gold)}
+.tap-hint{color:var(--muted);font-size:12.5px;margin:2px 0 4px}
 header{background:linear-gradient(90deg,#0d1430,#1a2456,#0d1430);border-bottom:2px solid var(--gold);padding:18px 20px;text-align:center;position:sticky;top:0;z-index:50}
 header h1{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
 header h1 span{color:var(--gold)}
@@ -584,7 +589,27 @@ const ITEM_SHOP = {
 function itemShop(name){return ITEM_SHOP[name]||"Shop";}
 function itemPrice(name){const m=(ITEM_INFO[name]||"").match(/^(\d+)g/);return m?m[1]+"g":"";}
 function itemRow(it,i){
-  return `<div class="item"><div class="n">${i+1}</div><img class="ic" src="${itemIcon(it)}" alt="" loading="lazy" onerror="this.remove()"><div><b>${it}</b><span class="loc">📍 Shop → ${itemShop(it)} tab</span><small>${itemDesc(it)}</small></div></div>`;
+  const e=it.replace(/'/g,"\\'");
+  return `<div class="item" onclick="openItem('${e}')" title="Tap to see where this is in the shop"><div class="n">${i+1}</div><img class="ic" src="${itemIcon(it)}" alt="" loading="lazy" onerror="this.remove()"><div><b>${it}</b><span class="loc">📍 Shop → ${itemShop(it)} tab · 👆 tap to find it</span><small>${itemDesc(it)}</small></div></div>`;
+}
+/* 🔍 tap any item picture → popup showing exactly where it lives in the shop */
+function openItem(name){
+  const cat=itemShop(name);
+  const esc=name.replace(/'/g,"\\'");
+  $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
+  <div class="modal-hero"><img src="${itemIcon(name)}" alt="" onerror="this.style.display='none'"><div><h2 style="font-size:20px">${name}</h2><div class="sub">💰 ${itemPrice(name)||"—"} · 📍 lives under the <b>${cat}</b> tab</div></div></div>
+  <div class="meta-box">${itemDesc(name)}</div>
+  <div class="steps"><div class="step"><b>How to find it in a match:</b> tap the 💰 shop button → tap the <b>${cat}</b> tab → ${cat==="Battle Spell"?"this one isn't in the shop — equip it on the hero screen BEFORE the match starts.":"type its name in the shop search, or scroll the shelf → buy its cheap parts first."}</div></div>
+  <button onclick="closeModal();goToShopItem('${esc}')" style="padding:11px 18px;border-radius:10px;border:none;background:var(--gold);color:#111;cursor:pointer;font-weight:800">📍 Show me on the shop shelf →</button>`;
+  $("modalBg").classList.add("open");
+}
+function goToShopItem(name){
+  switchTab("shop");
+  const cat=itemShop(name);
+  if(cat&&cat!=="Battle Spell") activeShopCat=cat;
+  if($("shopSearch")) $("shopSearch").value=name;
+  renderShop();
+  setTimeout(()=>{const g=$("shopGrid"); if(g) g.scrollIntoView({behavior:"smooth",block:"center"});},150);
 }
 const emoji = r=>({Tank:"🛡️",Fighter:"⚔️",Assassin:"🔪",Mage:"🔮",Marksman:"🏹",Support:"💚"}[r]||"🦸");
 let activeRole="All";
@@ -795,6 +820,7 @@ function showVariant(name,kind){
   const first3=v.items.slice(0,3), rest=v.items.slice(3);
   $("vBody").innerHTML=`<div class="meta-box">✨ Emblem: <b>${m.emblem}</b><br>🌀 Battle spell: <b>${m.spell}</b><br>💡 ${v.note}</div>
   <h3 style="margin:8px 0">${label} build — ${h.name}:</h3>
+  <div class="tap-hint">👆 Tap any item picture to see exactly where it is in the shop.</div>
   <div class="first3-label">✅ New? Just buy these 3 first, in order:</div>
   <div class="build-list">${first3.map((it,i)=>itemRow(it,i)).join("")}</div>
   <details class="build-more"><summary>➕ Show the other 3 (for later in the match)</summary><div class="build-list">${rest.map((it,i)=>itemRow(it,i+3)).join("")}</div></details>`;
@@ -834,7 +860,7 @@ function renderShop(){
   const q=(($("shopSearch")&&$("shopSearch").value)||"").toLowerCase();
   const names=Object.keys(ITEM_INFO).filter(n=>(ITEM_SHOP[n]===activeShopCat)&&n.toLowerCase().includes(q)).sort();
   document.querySelectorAll("#shopTabs button").forEach(b=>b.classList.toggle("active",b.dataset.cat===activeShopCat));
-  $("shopGrid").innerHTML=names.map(n=>`<div class="shop-item"><img src="${itemIcon(n)}" alt="" loading="lazy" onerror="this.remove()"><b>${n}</b><div class="price">💰 ${itemPrice(n)||"?"} · 📍 ${activeShopCat}</div><small>${ITEM_INFO[n]}</small></div>`).join("")||"<p style='color:var(--muted);padding:12px'>No item found — try another tab or spelling.</p>";
+  $("shopGrid").innerHTML=names.map(n=>{const e=n.replace(/'/g,"\\'");return `<div class="shop-item" onclick="openItem('${e}')" title="Tap for location details"><img src="${itemIcon(n)}" alt="" loading="lazy" onerror="this.remove()"><b>${n}</b><div class="price">💰 ${itemPrice(n)||"?"} · 📍 ${activeShopCat}</div><small>${ITEM_INFO[n]}</small></div>`;}).join("")||"<p style='color:var(--muted);padding:12px'>No item found — try another tab or spelling.</p>";
 }
 document.querySelectorAll("#shopTabs button").forEach(b=>b.onclick=()=>{activeShopCat=b.dataset.cat;renderShop();});
 $("shopSearch").addEventListener("input",renderShop);
@@ -921,8 +947,8 @@ function renderMatchup(myH,enH){
   <div class="counter-item danger"><b>The problem:</b><br>${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd.`}</div>
   <div class="counter-item"><b>⭐ Buy these (as ${myH.name}):</b><br>
     ${counters.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab</span>`).join("<br><br>")}</div>
-  <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><br>
-    ${build.map((b,i)=>`${i+1}. <b>${b}</b> <span style="color:var(--cyan)">(Shop → ${itemShop(b)})</span>`).join("<br>")}
+  <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order — tap an item to locate it):</b><br>
+    ${build.map((b,i)=>{const e=b.replace(/'/g,"\\'");return `<span onclick="openItem('${e}')" style="cursor:pointer">${i+1}. <b>${b}</b> <span style="color:var(--cyan)">(Shop → ${itemShop(b)} 👆)</span></span>`;}).join("<br>")}
     <br><small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
   <div class="tips">🧠 <b>How to play it:</b><br>${matchupTips(myH,enH,counters).map(t=>"• "+t).join("<br>")}</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -947,8 +973,8 @@ function findCounter(){
   <h2 style="color:var(--gold)">🛡️ How to counter ${h.name}</h2>
   <p style="color:var(--muted);font-size:13px">${h.role} · ${h.lane} · threat: <b>${h.dmg}</b></p>
   <div class="counter-item danger"><b>Why they hurt you:</b><br>${plan.explain}</div>
-  <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} (so they barely damage you):</b><br>
-    ${must.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab</span>`).join("<br><br>")}</div>
+  <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} (tap one to see where it is):</b><br>
+    ${must.map((m,i)=>{const e=m.replace(/'/g,"\\'");return `<span onclick="openItem('${e}')" style="cursor:pointer;display:block">${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab 👆</span></span>`;}).join("<br>")}</div>
   <div class="counter-item magic"><b>📦 Full counter build if YOU are:</b><br><br>
     🛡️ <b>Tank/Roam:</b> Tough Boots → ${must[0]||"Antique Cuirass"} → ${must[1]||"Athena's Shield"} → Dominance Ice → Guardian Helmet → Immortality<br><br>
     ⚔️ <b>Fighter/Assassin:</b> Tough Boots → War Axe/Hunter Strike → ${must[0]||"Antique Cuirass"} → Blade of Despair → ${must[1]||"Athena's Shield"} → Immortality<br><br>
