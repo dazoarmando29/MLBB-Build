@@ -2,7 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d1430">
+<meta name="description" content="MLBB Build Guide 2026 — Tank, Damage, Support, Marksman, Lane, Shop and Counter builds for Mobile Legends. Works on Android and iPhone.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MLBB Builds">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <title>MLBB Build Guide — Tank, Damage, Support, Marksman & Counter Builds</title>
 <style>
 :root{
@@ -10,8 +17,16 @@
   --gold:#f5c518; --gold2:#ffe27a; --blue:#3b82f6; --text:#e8ecf8; --muted:#9aa5c7;
   --green:#22c55e; --red:#ef4444; --purple:#a855f7; --cyan:#06b6d4;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:linear-gradient(180deg,#0a0f22,#0d1330 40%,#101a3d);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;font-size:16px;line-height:1.6}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#0a0f22,#0d1330 40%,#101a3d);color:var(--text);font-family:'Segoe UI',-apple-system,Roboto,Arial,sans-serif;min-height:100vh;min-height:100dvh;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-x:clip;padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input{font-family:inherit;touch-action:manipulation}
+header{padding-top:calc(18px + env(safe-area-inset-top,0px))}
+header{position:-webkit-sticky;position:sticky}
+nav.tabs{position:-webkit-sticky;position:sticky}
+.modal{max-height:88vh;max-height:88dvh;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.hero-card,.shop-item{content-visibility:auto;contain-intrinsic-size:auto 140px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 /* 🌱 beginner starter card */
 .newbie{background:linear-gradient(180deg,#123324,#16402c);border:2px solid var(--green);border-radius:16px;padding:20px;margin:4px 0 14px}
 .newbie h2{color:#86efac;font-size:19px;margin-bottom:8px}
@@ -41,12 +56,24 @@ details.build-more summary{cursor:pointer;color:var(--gold2);font-weight:700;fon
 .shop-item{cursor:pointer}
 .shop-item:hover{border-color:var(--gold)}
 .tap-hint{color:var(--muted);font-size:12.5px;margin:2px 0 4px}
+/* polish: touch targets, press feedback, focus, rhythm */
+nav.tabs button{padding:12px 18px;min-height:44px}
+.role-filter button,.quick-picks button{padding:10px 16px;min-height:44px;font-size:13px}
+.variant-row button{min-height:44px}
+.shop-tabs button{padding:14px 4px}
+button{transition:transform .08s ease}
+button:active{transform:scale(.96)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+section.panel{scroll-margin-top:130px}
+.modal-bg.open .modal{animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.hero-card h3{font-size:15px}
 header{background:linear-gradient(90deg,#0d1430,#1a2456,#0d1430);border-bottom:2px solid var(--gold);padding:18px 20px;text-align:center;position:sticky;top:0;z-index:50}
 header h1{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
 header h1 span{color:var(--gold)}
 header p{color:var(--muted);font-size:13px;margin-top:6px}
 .searchbar{max-width:640px;margin:14px auto 0;display:flex;gap:8px}
-.searchbar input{flex:1;padding:12px 16px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:15px;outline:none}
+.searchbar input{flex:1;padding:12px 16px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:16px;outline:none}
 .searchbar input:focus{border-color:var(--gold)}
 .searchbar button{padding:12px 18px;border-radius:10px;border:none;background:var(--gold);font-weight:700;cursor:pointer}
 nav.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:14px 12px;background:#0b1230aa;position:sticky;top:0;z-index:40}
@@ -78,7 +105,7 @@ main{max-width:1150px;margin:0 auto;padding:18px 14px 60px}
   .hero-card .avatar{width:54px;height:54px;font-size:22px}
   .searchbar{flex-direction:column}
   .searchbar button{width:100%}
-  nav.tabs button{padding:9px 12px;font-size:12px}
+  nav.tabs button{padding:11px 12px;font-size:12.5px;min-height:44px}
   .modal{padding:16px}
   .counter-wrap{grid-template-columns:1fr}
 }
@@ -112,7 +139,7 @@ ol.build-ol{margin:8px 0 8px 20px;font-size:13.5px;line-height:1.9}
 .counter-wrap{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:860px){.counter-wrap{grid-template-columns:360px 1fr}}
 .counter-form{background:var(--card);border:1px solid #2b3a72;border-radius:14px;padding:18px}
-.counter-form input{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:15px}
+.counter-form input{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:16px}
 .counter-form button{width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--red);color:#fff;font-weight:800;cursor:pointer;font-size:15px}
 .quick-picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .quick-picks button{padding:6px 11px;font-size:12px;border-radius:999px;border:1px solid #2b3a72;background:#0b1230;color:var(--text);cursor:pointer}
@@ -145,7 +172,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
 .shop-item b{display:block;font-size:12.5px;margin:6px 0 2px}
 .shop-item .price{color:var(--gold);font-size:12px;font-weight:700}
 .shop-item small{color:var(--muted);font-size:11px;display:block;margin-top:3px;line-height:1.45}
-.shop-search{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:14px;margin-top:10px}
+.shop-search{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:16px;margin-top:10px}
 .steps{display:grid;gap:8px;margin:10px 0}
 .step{background:#0b1230;border:1px solid #2b3a72;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.6}
 .step b{color:var(--gold2)}
@@ -546,9 +573,10 @@ EXTRA_HEROES.forEach(n=>{
 });
 
 const $ = id=>document.getElementById(id);
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 /* 🌱 difficulty: keep beginners on forgiving heroes */
 const EASY_HEROES = ["Layla","Miya","Tigreal","Eudora","Balmond","Zilong","Saber","Rafaela","Nana","Clint","Alucard","Franco","Minotaur","Hanabi","Gord","Cyclops","Odette","Belerick","Hylos","Irithel"];
-const HARD_HEROES = ["Fanny","Ling","Hayabusa","Gusion","Lancelot","Benedetta","Nolan","Joy","Aamon","Selena","Helcurt","Hanzo","Kadita","Benedetta","Harith","Yve","Zhuxin","Kagura"];
+const HARD_HEROES = ["Fanny","Ling","Hayabusa","Gusion","Lancelot","Benedetta","Nolan","Joy","Aamon","Selena","Helcurt","Hanzo","Kadita","Harith","Yve","Zhuxin","Kagura"];
 function heroDiff(h){
   if(EASY_HEROES.includes(h.name)) return "🌱 Easy";
   if(HARD_HEROES.includes(h.name)||h.role==="Assassin") return "🔥 Tricky";
@@ -601,7 +629,7 @@ function itemShop(name){return ITEM_SHOP[name]||"Shop";}
 function itemPrice(name){const m=(ITEM_INFO[name]||"").match(/^(\d+)g/);return m?m[1]+"g":"";}
 function itemRow(it,i){
   const e=it.replace(/'/g,"\\'");
-  return `<div class="item" onclick="openItem('${e}')" title="Tap to see where this is in the shop"><div class="n">${i+1}</div><img class="ic" src="${itemIcon(it)}" alt="" loading="lazy" onerror="this.remove()"><div><b>${it}</b><span class="loc">📍 Shop → ${itemShop(it)} tab · 👆 tap to find it</span><small>${itemDesc(it)}</small></div></div>`;
+  return `<div class="item" onclick="openItem('${e}')" title="Tap to see where this is in the shop"><div class="n">${i+1}</div><img class="ic" src="${itemIcon(it)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"><div><b>${it}</b><span class="loc">📍 Shop → ${itemShop(it)} tab · 👆 tap to find it</span><small>${itemDesc(it)}</small></div></div>`;
 }
 /* 🔍 tap any item picture → popup showing exactly where it lives in the shop */
 function openItem(name){
@@ -628,7 +656,7 @@ let activeRole="All";
 function itemDesc(name){return ITEM_INFO[name]||"Meta item — see in-game shop for full stats.";}
 function cardHTML(h){
   return `<div class="hero-card" onclick="openHero('${h.name.replace(/'/g,"\\'")}')">
-    <div class="avatar"><span>${h.name[0]}</span><img src="${heroImg(h.name)}" alt="${h.name}" loading="lazy" onerror="this.remove()"></div><h3>${h.name}</h3>
+    <div class="avatar"><span>${h.name[0]}</span><img src="${heroImg(h.name)}" alt="${h.name}" loading="lazy" decoding="async" onerror="this.remove()"></div><h3>${h.name}</h3>
     <div class="role">${emoji(h.role)} ${h.role}</div>
     <div class="lane">${h.lane} · ${h.dmg}</div><br><span class="diff">${heroDiff(h)}</span></div>`;
 }
@@ -644,8 +672,8 @@ function renderAll(){
   $("supportGrid").innerHTML=HEROES.filter(h=>["Tank","Support"].includes(h.role)).slice(0,20).map(cardHTML).join("")||by("Support");
   $("marksmanGrid").innerHTML=HEROES.filter(h=>h.role==="Marksman").map(cardHTML).join("");
   $("heroList").innerHTML=HEROES.map(h=>`<option value="${h.name}">`).join("");
-  $("easyPicks").innerHTML=["Layla","Miya","Tigreal","Eudora","Balmond"].map(n=>`<button onclick="openHero('${n}')">${n} 🌱</button>`).join("");
-  $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>`<button onclick="setCounter('${n}')">${n}</button>`).join("");
+  $("easyPicks").innerHTML=["Layla","Miya","Tigreal","Eudora","Balmond"].map(n=>{const e=n.replace(/'/g,"\\'");return `<button onclick="openHero('${e}')">${n} 🌱</button>`;}).join("");
+  $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>{const e=n.replace(/'/g,"\\'");return `<button onclick="setCounter('${e}')">${n}</button>`;}).join("");
 }
 /* ============ SKILL COMBOS + HOW TO PLAY (per hero) ============ */
 const COMBOS = {
@@ -871,7 +899,7 @@ function renderShop(){
   const q=(($("shopSearch")&&$("shopSearch").value)||"").toLowerCase();
   const names=Object.keys(ITEM_INFO).filter(n=>(ITEM_SHOP[n]===activeShopCat)&&n.toLowerCase().includes(q)).sort();
   document.querySelectorAll("#shopTabs button").forEach(b=>b.classList.toggle("active",b.dataset.cat===activeShopCat));
-  $("shopGrid").innerHTML=names.map(n=>{const e=n.replace(/'/g,"\\'");return `<div class="shop-item" onclick="openItem('${e}')" title="Tap for location details"><img src="${itemIcon(n)}" alt="" loading="lazy" onerror="this.remove()"><b>${n}</b><div class="price">💰 ${itemPrice(n)||"?"} · 📍 ${activeShopCat}</div><small>${ITEM_INFO[n]}</small></div>`;}).join("")||"<p style='color:var(--muted);padding:12px'>No item found — try another tab or spelling.</p>";
+  $("shopGrid").innerHTML=names.map(n=>{const e=n.replace(/'/g,"\\'");return `<div class="shop-item" onclick="openItem('${e}')" title="Tap for location details"><img src="${itemIcon(n)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"><b>${n}</b><div class="price">💰 ${itemPrice(n)||"?"} · 📍 ${activeShopCat}</div><small>${ITEM_INFO[n]}</small></div>`;}).join("")||"<p style='color:var(--muted);padding:12px'>No item found — try another tab or spelling.</p>";
 }
 document.querySelectorAll("#shopTabs button").forEach(b=>b.onclick=()=>{activeShopCat=b.dataset.cat;renderShop();});
 $("shopSearch").addEventListener("input",renderShop);
@@ -1003,9 +1031,9 @@ function findCounter(){
   const q=($("counterInput").value||"").trim().toLowerCase();
   if(!q){box.innerHTML="<p style='color:var(--muted)'>Type the enemy hero first (step 2).</p>";return;}
   let h=HEROES.find(x=>x.name.toLowerCase()===q)||HEROES.find(x=>x.name.toLowerCase().includes(q));
-  if(!h){box.innerHTML=`<p>❌ Hero "<b>${q}</b>" not found. Try: Hayabusa, Eudora, Lesley, Wanwan, Estes…</p>`;return;}
+  if(!h){box.innerHTML=`<p>❌ Hero "<b>${escHtml(q)}</b>" not found. Try: Hayabusa, Eudora, Lesley, Wanwan, Estes…</p>`;return;}
   const myH=mq?(HEROES.find(x=>x.name.toLowerCase()===mq)||HEROES.find(x=>x.name.toLowerCase().includes(mq))):null;
-  if(mq&&!myH){box.innerHTML=`<p>❌ Your hero "<b>${mq}</b>" not found — check the spelling, or leave step 1 empty for a general answer.</p>`;return;}
+  if(mq&&!myH){box.innerHTML=`<p>❌ Your hero "<b>${escHtml(mq)}</b>" not found — check the spelling, or leave step 1 empty for a general answer.</p>`;return;}
   if(myH){box.innerHTML=renderMatchup(myH,h);return;}
   const plan=counterPlan(h);
   const must=[...plan.phys.slice(0,2),...plan.magic.slice(0,2),...plan.util.slice(0,1),...h.counterItems].filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
