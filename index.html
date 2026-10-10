@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLBB Build Guide — Tank, Damage, Support, Marksman & Counter Builds</title>
+<style>
+:root{
+  --bg:#0a0e1a; --bg2:#111832; --card:#162044; --card2:#1c2a55;
+  --gold:#f5c518; --gold2:#ffe27a; --blue:#3b82f6; --text:#e8ecf8; --muted:#9aa5c7;
+  --green:#22c55e; --red:#ef4444; --purple:#a855f7; --cyan:#06b6d4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#070b18,#0a0e1a 30%,#0d1430);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh}
+header{background:linear-gradient(90deg,#0d1430,#1a2456,#0d1430);border-bottom:2px solid var(--gold);padding:18px 20px;text-align:center;position:sticky;top:0;z-index:50}
+header h1{font-size:clamp(20px,3.5vw,32px);letter-spacing:.5px}
+header h1 span{color:var(--gold)}
+header p{color:var(--muted);font-size:13px;margin-top:6px}
+.searchbar{max-width:640px;margin:14px auto 0;display:flex;gap:8px}
+.searchbar input{flex:1;padding:12px 16px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:15px;outline:none}
+.searchbar input:focus{border-color:var(--gold)}
+.searchbar button{padding:12px 18px;border-radius:10px;border:none;background:var(--gold);font-weight:700;cursor:pointer}
+nav.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:14px 12px;background:#0b1230aa;position:sticky;top:0;z-index:40}
+nav.tabs button{padding:10px 16px;border-radius:999px;border:1px solid #2b3a72;background:#141d42;color:var(--text);cursor:pointer;font-weight:600;font-size:13px}
+nav.tabs button.active{background:var(--gold);color:#111;border-color:var(--gold)}
+nav.tabs button:hover{border-color:var(--gold)}
+main{max-width:1150px;margin:0 auto;padding:18px 14px 60px}
+.panel{display:none}
+.panel.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.role-filter{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.role-filter button{padding:7px 13px;border-radius:999px;border:1px solid #2b3a72;background:#141d42;color:var(--muted);cursor:pointer;font-size:12px}
+.role-filter button.active{background:#24346e;color:#fff;border-color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px}
+.hero-card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid #2b3a72;border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:.15s}
+.hero-card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 24px #0008}
+.hero-card .avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;background:#0b1230;border:2px solid var(--gold);position:relative;overflow:hidden}
+.hero-card .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-card .avatar span{position:relative;z-index:0}
+.modal-hero{display:flex;gap:14px;align-items:center;margin:6px 0 4px}
+.modal-hero img{width:84px;height:84px;border-radius:16px;object-fit:cover;border:2px solid var(--gold);background:#0b1230}
+.phone-btn{margin-top:10px;padding:9px 18px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;font-weight:700;font-size:13px}
+.phone-btn:hover{background:var(--gold);color:#111}
+.qr-box{text-align:center;padding:8px}
+.qr-box img{border:6px solid #fff;border-radius:12px;width:200px;height:200px;background:#fff}
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px}
+  .hero-card{padding:10px 6px}
+  .hero-card .avatar{width:54px;height:54px;font-size:22px}
+  .searchbar{flex-direction:column}
+  .searchbar button{width:100%}
+  nav.tabs button{padding:9px 12px;font-size:12px}
+  .modal{padding:16px}
+  .counter-wrap{grid-template-columns:1fr}
+}
+.hero-card h3{font-size:14px}
+.hero-card .role{font-size:11px;color:var(--gold);margin:4px 0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.hero-card .lane{font-size:11px;color:var(--muted)}
+.hero-card .dmg{font-size:11px;margin-top:6px;display:inline-block;padding:3px 9px;border-radius:999px;background:#0b1230;border:1px solid #2b3a72}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.modal-bg.open{display:flex}
+.modal{background:#10173a;border:1px solid var(--gold);border-radius:16px;max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:22px}
+.modal h2{color:var(--gold)}
+.modal .sub{color:var(--muted);font-size:13px;margin:4px 0 12px}
+.build-list{display:grid;gap:8px;margin:10px 0}
+.item{background:#0b1230;border:1px solid #2b3a72;border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start}
+.item .n{background:var(--gold);color:#111;font-weight:800;border-radius:8px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.item b{font-size:13.5px}
+.item small{color:var(--muted);display:block;margin-top:2px;line-height:1.45}
+.tag{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;font-weight:700}
+.tag.core{background:#052e16;color:#4ade80;border:1px solid #16a34a}
+.tag.sit{background:#451a03;color:#fdba74;border:1px solid #ea580c}
+.tag.def{background:#1e1b4b;color:#a5b4fc;border:1px solid #6366f1}
+.meta-box{background:#0b1230;border:1px dashed #2b3a72;border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13px;line-height:1.6}
+.close-btn{float:right;background:#ef4444;color:#fff;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700}
+/* section cards */
+.sec-card{background:linear-gradient(180deg,var(--card),#131c44);border:1px solid #2b3a72;border-radius:14px;padding:18px;margin:12px 0}
+.sec-card h2{color:var(--gold2);margin-bottom:6px;font-size:19px}
+.sec-card p.desc{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:10px}
+ol.build-ol{margin:8px 0 8px 20px;font-size:13.5px;line-height:1.9}
+/* counter */
+.counter-wrap{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:860px){.counter-wrap{grid-template-columns:360px 1fr}}
+.counter-form{background:var(--card);border:1px solid #2b3a72;border-radius:14px;padding:18px}
+.counter-form input{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:15px}
+.counter-form button{width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--red);color:#fff;font-weight:800;cursor:pointer;font-size:15px}
+.quick-picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.quick-picks button{padding:6px 11px;font-size:12px;border-radius:999px;border:1px solid #2b3a72;background:#0b1230;color:var(--text);cursor:pointer}
+.quick-picks button:hover{border-color:var(--gold)}
+#counterResult{background:var(--card);border:1px solid #2b3a72;border-radius:14px;padding:18px;min-height:200px}
+.counter-item{border-left:4px solid var(--green);background:#0b1230;border-radius:0 10px 10px 0;padding:10px 12px;margin:8px 0}
+.counter-item.danger{border-color:var(--red)}
+.counter-item.magic{border-color:var(--purple)}
+.counter-item b{color:var(--gold2)}
+.tips{background:#052e16;border:1px solid #16a34a;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13px;line-height:1.65}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-height:1.7}
+.count{color:var(--muted);font-size:12px;margin-top:8px}
+.kbd{background:#0b1230;border:1px solid #2b3a72;border-radius:6px;padding:1px 7px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚔️ MLBB <span>Build Guide</span> 2026</h1>
+  <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Counter Builder</p>
+  <div class="searchbar">
+    <input id="globalSearch" placeholder="🔍 Search hero… e.g. Hayabusa, Miya, Tigreal, Eudora">
+    <button onclick="jumpToHeroes()">Search</button>
+  </div>
+  <button class="phone-btn" onclick="openPhone()">📱 Open on phone — tap for QR & link</button>
+  <div id="mainChip" style="margin-top:8px;font-size:13px"></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="heroes" class="active">🦸 All Heroes</button>
+  <button data-tab="tank">🛡️ Tank Build</button>
+  <button data-tab="damage">🔥 Damage Build</button>
+  <button data-tab="support">💚 Support Build</button>
+  <button data-tab="marksman">🏹 Marksman Build</button>
+  <button data-tab="counter">🚫 Counter Build</button>
+</nav>
+
+<main>
+<!-- ALL HEROES -->
+<section class="panel active" id="panel-heroes">
+  <div class="role-filter" id="roleFilter">
+    <button data-role="All" class="active">All</button>
+    <button data-role="Tank">Tank</button>
+    <button data-role="Fighter">Fighter</button>
+    <button data-role="Assassin">Assassin</button>
+    <button data-role="Mage">Mage</button>
+    <button data-role="Marksman">Marksman</button>
+    <button data-role="Support">Support</button>
+  </div>
+  <div class="count" id="heroCount"></div>
+  <div class="grid" id="heroGrid"></div>
+</section>
+
+<!-- TANK -->
+<section class="panel" id="panel-tank">
+  <div class="sec-card">
+    <h2>🛡️ Universal Tank Build (Roam / EXP — Patch 2.2.16 meta)</h2>
+    <p class="desc">Rule from pro guides: <b>stack HP first, then counter the main enemy damage</b>. Tough Boots (vs CC/magic) or Warrior Boots (vs physical). Antique Cuirass vs skill/physical burst, Athena's Shield vs magic burst, Radiant Armor vs magic DPS, Dominance Ice vs heal + attack speed, Blade Armor vs crit MM, Immortality last. Click any tank below for its personal best build.</p>
+    <ol class="build-ol">
+      <li><b>1. Tough Boots / Warrior Boots</b> — pick by enemy main damage. Tough Boots in 61% of tank builds (30% CC reduction).</li>
+      <li><b>2. Antique Cuirass</b> <span class="tag core">CORE</span> — +920 HP, reduces physical skill damage. Buy first vs MM/Fighter.</li>
+      <li><b>3. Athena's Shield</b> <span class="tag core">CORE</span> — magic shield, mandatory vs burst mage (Eudora, Aurora, Kadita).</li>
+      <li><b>4. Dominance Ice</b> <span class="tag sit">SITUATIONAL</span> — anti-heal aura + hybrid defense vs Estes, Uranus, Esmeralda.</li>
+      <li><b>5. Radiant Armor / Blade Armor</b> — Radiant vs sustained magic (Chang'e, Yve, Zhuxin), Blade vs crit (Lesley, Bruno, Melissa).</li>
+      <li><b>6. Immortality</b> <span class="tag def">LATE</span> — in 85% of tank builds, always 5th–6th slot. Turns engages into winning trades.</li>
+    </ol>
+    <div class="meta-box">🛡️ Emblem: <b>Tank — Vitality + Tenacity + Concussive Blast</b> &nbsp;|&nbsp; Spell: <b>Flicker / Revitalize</b> &nbsp;|&nbsp; Order: Boots → counter-item-1 → opposite-resist → Immortality → situational.</div>
+  </div>
+  <div class="grid" id="tankGrid"></div>
+</section>
+
+<!-- DAMAGE -->
+<section class="panel" id="panel-damage">
+  <div class="sec-card">
+    <h2>🔥 Damage Builds — Assassin / Fighter / Burst Mage</h2>
+    <p class="desc"><b>Physical Assassin (Jungle):</b> Rapid Boots → Blade of Heptaseas → Hunter Strike → Blade of Despair → Malefic Roar → Immortality. Rush first core before 4 min to snowball. If behind after 8 min, swap BOD for Malefic Roar + Immortality.<br><b>Fighter (EXP):</b> Tough Boots → War Axe (63% of fighter builds, avg slot 2.3 — stacks true damage) → Hunter Strike / Endless Battle → Blade of Despair → Malefic Roar (vs 2+ armor) → Immortality / Queen's Wings.<br><b>Burst Mage:</b> Arcane Boots → Glowing Wand / Clock of Destiny → Holy Crystal → Divine Glaive (96% of mage builds — mandatory vs Athena) → Blood Wings → Winter Crown.</p>
+    <div class="meta-box">Emblem: <b>Assassin — Rupture + Master Assassin + Killing Spree</b> (physical) / <b>Mage — Inspire + Master Assassin + Lethal Ignition</b> (burst) / <b>Fighter — Thrill + Weapon Master + War Cry</b>. Spells: Retribution (jungle), Flicker / Execute (lane).</div>
+  </div>
+  <div class="grid" id="damageGrid"></div>
+</section>
+
+<!-- SUPPORT -->
+<section class="panel" id="panel-support">
+  <div class="sec-card">
+    <h2>💚 Support Builds — Heal, Peel & Vision</h2>
+    <p class="desc">Supports buy <b>roam boots first</b>, then counter items, never full damage. Core: Favor / Encourage roam + Tough Boots → Dominance Ice (vs heal) or Athena's Shield (vs burst) → Oracle (boosts your own heal/shield) → Radiant Armor → Immortality → Guardian Helmet. Anti-heal is on YOU if nobody else buys it. 79% of support builds finish with Immortality.</p>
+    <div class="meta-box">Emblem: <b>Support — Agility + Recovery / Bargain Hunter + Pull Yourself Together / Focusing Mark</b> &nbsp;|&nbsp; Spell: <b>Flicker / Revitalize / Purify</b>. Always keep a slot flexible for Necklace of Durance (mage support) vs heavy regen.</div>
+  </div>
+  <div class="grid" id="supportGrid"></div>
+</section>
+
+<!-- MARKSMAN -->
+<section class="panel" id="panel-marksman">
+  <div class="sec-card">
+    <h2>🏹 Marksman Builds — Crit vs Attack-Speed</h2>
+    <p class="desc"><b>Crit route</b> (Melissa, Beatrix, Bruno, Lesley, Clint): Swift Boots → Windtalker → Berserker's Fury → Scarlet Phantom → Malefic Roar (mandatory vs 2 armor items) → Blade of Despair / Immortality.<br><b>Attack-speed / shred route</b> (Karrie, Claude, Moskov, Hanabi, Kimmy): Swift Boots → Windtalker → Golden Staff / Corrosion Scythe → Demon Hunter Sword ( shreds high-HP tanks — 8% current HP per hit) → Wind of Nature (vs assassin dive, buy 3rd if Hayabusa/Ling) → Immortality.<br>Vs heal: <b>Sea Halberd</b> 4th slot. Never buy BOD while behind — buy 2 cheap items instead.</p>
+    <div class="meta-box">Emblem: <b>Marksman — Fatal + Weapon Master + Weakness Finder</b> (kite) or <b>Quantum Charge</b> (vs dive). Spell: <b>Flicker / Inspire / Purify</b>.</div>
+  </div>
+  <div class="grid" id="marksmanGrid"></div>
+</section>
+
+<!-- COUNTER -->
+<section class="panel" id="panel-counter">
+  <div class="counter-wrap">
+    <div class="counter-form">
+      <h2 style="color:var(--gold)">🚫 Counter Build Finder</h2>
+      <p style="color:var(--muted);font-size:13px;margin:6px 0 12px;line-height:1.6">Type the <b>enemy hero</b> you are afraid of. We show what damage they deal, which <b>defense items shut them down</b> so they barely hurt you, plus a full counter build for your role.</p>
+      <input id="counterInput" list="heroList" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…">
+      <datalist id="heroList"></datalist>
+      <button onclick="findCounter()">Show My Counter Build 🛡️</button>
+      <div style="margin-top:10px;color:var(--muted);font-size:12px">Popular:</div>
+      <div class="quick-picks" id="quickPicks"></div>
+      <div class="meta-box" style="margin-top:12px">
+        <b>Cheat-sheet (memorize this):</b><br>
+        🔴 Skill burst (Paquito, Hayabusa) → <b>Antique Cuirass</b><br>
+        🔴 Crit / basic attacks (Lesley, Miya, Bruno) → <b>Blade Armor</b> (20% crit reduction + reflect)<br>
+        🔴 Fast hitters (Wanwan, Karrie, Moskov) → <b>Dominance Ice</b> (slow attack speed)<br>
+        🔴 One-shot 500+ (Aldous, Lesley) → <b>Twilight Armor</b><br>
+        🟣 Magic burst (Eudora, Aurora, Kadita) → <b>Athena's Shield</b><br>
+        🟣 Magic DPS (Chang'e, Yve, Zhuxin, Kimmy) → <b>Radiant Armor</b><br>
+        💚 Heal/shield (Estes, Uranus, Esmeralda) → <b>Dominance Ice / Sea Halberd / Glowing Wand</b><br>
+        ⚔️ They stacked armor → <b>Malefic Roar / Divine Glaive / Demon Hunter Sword</b>
+      </div>
+    </div>
+    <div id="counterResult"><p style="color:var(--muted)">👆 Enter an enemy hero name to generate the counter build that makes their damage tickle.</p></div>
+  </div>
+</section>
+</main>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<footer>
+  Builds researched from July–Oct 2026 meta guides (Patch 2.1.90 / 2.2.16): Playnews, Hotspawn, InsertFuture (62 items / 399 builds / 133 heroes), LootBar counter guide, MLBBHub, ONE Esports, VCGamers.<br>
+  Rule of thumb: <span class="kbd">2 core items fixed + 2–4 slots adapt to enemy</span> — no preset works every game. Buy anti-heal by 3rd item vs 2+ regen heroes.
+</footer>
+
+<script>
+/* ============ ITEM DESCRIPTIONS (short, meta-accurate) ============ */
+const ITEM_INFO = {
+"Tough Boots":"700g · +18 magic def + 30% less CC time. Default boots in 61% tank / 67% fighter builds.",
+"Warrior Boots":"760g · physical defense boots. Buy when enemy is mostly physical.",
+"Swift Boots":"710g · attack speed boots. Standard for every marksman (53% pick).",
+"Arcane Boots":"690g · flat magic pen. Burst mages start here.",
+"Demon Shoes":"640g · mana regen. For spammy mages (Cecilion, Chang'e).",
+"Rapid Boots":"850g · big out-of-combat speed for assassin rotations.",
+"Antique Cuirass":"2170g · +920 HP + phys def. Reduces enemy PHYSICAL skill damage (up to ~18%). Core vs Hayabusa, Paquito, Clint, MM.",
+"Blade Armor":"1910g · highest phys def + 20% CRIT damage reduction + reflects basic-attack damage. Core vs Lesley, Bruno, Miya, Melissa.",
+"Dominance Ice":"2010g · hybrid defense + slows enemy attack speed + cuts heal/shield to 60%. Core vs Wanwan, Karrie, Estes, Uranus.",
+"Athena's Shield":"2150g · +900 HP + magic shield that cuts BURST magic. Core vs Eudora, Aurora, Kadita, Gusion.",
+"Radiant Armor":"1880g · stacks magic resist on every magic hit. Core vs SUSTAINED magic: Chang'e, Yve, Zhuxin, Harith.",
+"Twilight Armor":"2100g · caps any single hit over 500 dmg. Core vs Aldous, Lesley one-shots, Novaria.",
+"Immortality":"2120g · revive 2.5s after death with HP+shield. In 85% tank / 79% support builds. Always late slot.",
+"Guardian Helmet":"2500g · huge HP + out-of-combat regen + resists hits over 500. For split-push / long sieges.",
+"Oracle":"1860g · boosts your heals/shields + magic defense. Great on supports & sustain fighters.",
+"Cursed Helmet":"1970g · +950 HP + burns nearby enemies for %HP. Underrated wave-clear for tanks.",
+"Thunder Belt":"2290g · HP + true-damage slow on basic after skill. For stick-to-enemy fighters/tanks.",
+"Brute Force Breastplate":"1870g · stacking def + movement when hitting skills. Anti-kite fighter item.",
+"Queen's Wings":"2250g · damage reduction when low HP. Fighter anti-burst.",
+"Blade of Despair":"3010g · +170 attack, most expensive item. +25% dmg vs targets above 50% HP. Only when ahead.",
+"Malefic Roar":"2060g · 35% physical PEN, scales with enemy armor. Mandatory once enemy has 2 armor items.",
+"Malefic Gun":"1940g · pen + range for marksmen vs tanks.",
+"Blade of the Heptaseas":"1950g · flat pen + first-hit burst. Assassin early snowball (Hayabusa, Saber).",
+"Hunter Strike":"2010g · CDR + speed burst on hits. Assassin mid-game spike.",
+"War Axe":"2100g · stacks attack + true damage at full stacks. 63% of fighter builds, avg slot 2.3.",
+"Endless Battle":"2470g · true damage after skill + lifesteal + CDR. For skill-spam fighters (Hayabusa, Ling).",
+"Sky Piercer":"1870g · executes enemies under ~40% HP. Snowball assassin item.",
+"Demon Hunter Sword":"2180g · +8% target current HP per hit. MELTS Hylos/tanks. 50% of MM builds slot 2.",
+"Windtalker":"2050g · attack speed + move speed + chain lightning. Core first/second MM item.",
+"Berserker's Fury":"2500g · +25% crit chance, crits +40% dmg. Crit MM spike.",
+"Scarlet Phantom":"2070g · crits grant +30% attack speed. Pairs with Berserker's.",
+"Haas's Claws":"1970g · +70 attack + lifesteal (jumps to 40% under 40% HP). MM sustain.",
+"Corrosion Scythe":"2050g · on-hit damage + slow. Kiting.",
+"Golden Staff":"2100g · attack effects trigger extra times. Kimmy / Karrie / Sun core.",
+"Sea Halberd":"2050g · physical anti-heal (cuts regen to 60%). MM/fighter vs Estes, Ruby, Yu Zhong.",
+"Wind of Nature":"1910g · 2s PHYSICAL immunity (1s if not MM). Panic button vs Ling, Fanny, Lancelot. Buy 3rd vs assassins.",
+"Rose Gold Meteor":"2270g · magic shield when low + lifesteal. MM/mage anti-burst.",
+"Winter Crown":"1910g · freeze 2s, untargetable, immune. Best vs Hayabusa, Gusion, Saber, Karina combos.",
+"Holy Crystal":"2180g · biggest magic power multiplier. Mage core.",
+"Divine Glaive":"1970g · 40% magic PEN + bonus vs their magic def. In 96% of mage builds.",
+"Glowing Wand":"2050g · burn + magic anti-heal (regen to 50%). Mage vs Esmeralda/heal tanks.",
+"Genius Wand":"2000g · shreds enemy magic def per hit. Early mage pen.",
+"Wishing Lantern":"2160g · bonus dmg vs high-HP targets. Mage vs tanks.",
+"Clock of Destiny":"1950g · scaling HP+mana+power. Burst mage starter.",
+"Lightning Truncheon":"2250g · mana-based burst. Cecilion / bursty mages.",
+"Blood Wings":"3000g · huge power + shield. Late hyper-carry mage.",
+"Enchanted Talisman":"1870g · CDR + mana regen. Spammy mages.",
+"Calamity Reaper":"1950g · true damage after skill. Karina / Harith / magical assassins.",
+"Starlium Scythe":"2020g · movement + burst after skill.",
+"Ice Queen Wand":"2240g · skills slow enemies. Poke / kite mages.",
+"Necklace of Durance":"1980g · mage anti-heal. Support-mage vs Estes/Uranus.",
+"Concentrated Energy":"2280g · spell vamp sustain for mages."
+};
+
+/* ============ HERO DATABASE (curated best builds from 2026 meta) ============ */
+/* dmg: phys-burst | phys-dps | magic-burst | magic-dps | sustain | mixed */
+const HEROES = [
+{name:"Tigreal",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Flicker-ult engage wins Lords. Rush Antique vs MM, Athena first vs 2 mages.",counters:["Diggie","Karrie","Valir"],counterItems:["Purify","Athena's Shield","Dominance Ice"]},
+{name:"Atlas",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Radiant Armor","Dominance Ice","Athena's Shield","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Hide in bush for Fatal Links. Dominance 3rd if enemy has Estes/heal.",counters:["Diggie","Karrie","Lunox"],counterItems:["Purify","Radiant Armor","Sea Halberd"]},
+{name:"Khufra",role:"Tank",lane:"Roam",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Blade Armor","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Ball-form stops all dashes (Ling, Fanny, Hayabusa). Blade Armor vs crit MM.",counters:["Valir","Karrie","Diggie"],counterItems:["Athena's Shield","Blade Armor","Purify"]},
+{name:"Belerick",role:"Tank",lane:"Roam / EXP",dmg:"magic-dps",build:["Tough Boots","Cursed Helmet","Radiant Armor","Blade Armor","Dominance Ice","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize",tips:"Passive punishes fast basic attackers. Cursed Helmet clears waves fast.",counters:["Karrie","Lunox","Valir"],counterItems:["Demon Hunter Sword","Radiant Armor","Sea Halberd"]},
+{name:"Hylos",role:"Tank",lane:"Roam",dmg:"magic-dps",build:["Tough Boots","Cursed Helmet","Radiant Armor","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize",tips:"Huge HP pool — Demon Hunter Sword is your nightmare, end games fast.",counters:["Karrie","Demon Hunter Sword","Lunox"],counterItems:["Demon Hunter Sword","Wishing Lantern","Sea Halberd"]},
+{name:"Gloo",role:"Tank",lane:"Roam / EXP",dmg:"magic-dps",build:["Tough Boots","Cursed Helmet","Radiant Armor","Oracle","Dominance Ice","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize",tips:"Split-split onto their carry in teamfights. Oracle boosts your regen.",counters:["Valir","Karrie","Diggie"],counterItems:["Radiant Armor","Sea Halberd","Purify"]},
+{name:"Franco",role:"Tank",lane:"Roam",dmg:"phys-burst",build:["Tough Boots","Antique Cuirass","Athena's Shield","Blade Armor","Dominance Ice","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker",tips:"Flicker-hook is the win condition. Antique first vs physical lane.",counters:["Diggie","Chou","Karrie"],counterItems:["Purify","Athena's Shield","Blade Armor"]},
+{name:"Gatotkaca",role:"Tank",lane:"Roam / EXP",dmg:"mixed",build:["Tough Boots","Antique Cuirass","Athena's Shield","Oracle","Dominance Ice","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker / Revitalize",tips:"Rage-powered taunt + ult. Oracle boosts passive heal.",counters:["Karrie","Esmeralda","Diggie"],counterItems:["Sea Halberd","Radiant Armor","Purify"]},
+{name:"Uranus",role:"Tank",lane:"EXP",dmg:"sustain",build:["Tough Boots","Oracle","Radiant Armor","Dominance Ice","Guardian Helmet","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Revitalize",tips:"Unkillable without anti-heal. Enemy MUST buy Dominance/Sea Halberd/Glowing.",counters:["Esmeralda","Karrie","Lunox"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Esmeralda",role:"Tank",lane:"EXP",dmg:"sustain",build:["Tough Boots","Enchanted Talisman","Oracle","Radiant Armor","Dominance Ice","Immortality"],emblem:"Tank · Vitality + Bargain Hunter + Concussive Blast",spell:"Flicker / Revitalize",tips:"Steals shields. Dies to anti-heal + burst. Ban-worthy if enemy has no counter.",counters:["Karrie","Lunox","Dyrroth"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Hayabusa",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Core before 4 min = snowball. Ult dodges with Winter Crown timing.",counters:["Saber","Khufra","Winter Crown"],counterItems:["Winter Crown","Antique Cuirass","Wind of Nature"]},
+{name:"Ling",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Endless Battle","Blade of Despair","Hunter Strike","Malefic Roar","Wind of Nature"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Blue buff = life. Khufra ball and Wind of Nature ruin him.",counters:["Khufra","Wind of Nature","Helcurt"],counterItems:["Wind of Nature","Antique Cuirass","Dominance Ice"]},
+{name:"Lancelot",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Endless Battle","Blade of Despair","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Iframe dashes dodge everything. Antique Cuirass softens his combo.",counters:["Khufra","Saber","Antique Cuirass"],counterItems:["Antique Cuirass","Winter Crown","Dominance Ice"]},
+{name:"Gusion",role:"Assassin",lane:"Jungle / Mid",dmg:"magic-burst",build:["Arcane Boots","Genius Wand","Calamity Reaper","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Retribution / Flicker",tips:"One-shot combo. Athena's Shield timing beats him.",counters:["Athena's Shield","Saber","Chou"],counterItems:["Athena's Shield","Winter Crown","Radiant Armor"]},
+{name:"Nolan",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Sky Piercer"],emblem:"Assassin · Rupture + Seasoned Hunter + Killing Spree",spell:"Retribution",tips:"S-tier pick patch 2.1.90. Delete squishy before first turtle.",counters:["Saber","Khufra","Antique Cuirass"],counterItems:["Antique Cuirass","Winter Crown","Immortality"]},
+{name:"Aamon",role:"Assassin",lane:"Jungle",dmg:"magic-burst",build:["Arcane Boots","Calamity Reaper","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Retribution",tips:"Invisible burst. Athena + vision (roam) counters.",counters:["Athena's Shield","Saber","Rafaela"],counterItems:["Athena's Shield","Radiant Armor","Winter Crown"]},
+{name:"Karina",role:"Assassin",lane:"Jungle",dmg:"magic-dps",build:["Arcane Boots","Calamity Reaper","Holy Crystal","Divine Glaive","Blood Wings","Immortality"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Retribution",tips:"True damage + reset. Athena + burst her first.",counters:["Athena's Shield","Karrie","Diggie"],counterItems:["Athena's Shield","Radiant Armor","Twilight Armor"]},
+{name:"Saber",role:"Assassin",lane:"Jungle / Roam",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution / Flicker",tips:"Point-click delete vs Hayabusa/Ling/Gusion. Cheap and brutal.",counters:["Winter Crown","Immortality","Minsitthar"],counterItems:["Winter Crown","Antique Cuirass","Immortality"]},
+{name:"Julian",role:"Fighter",lane:"Jungle / EXP",dmg:"mixed",build:["Arcane Boots","Enchanted Talisman","Holy Crystal","Divine Glaive","Calamity Reaper","Winter Crown"],emblem:"Mage · Inspire + Seasoned Hunter + Lethal Ignition",spell:"Retribution",tips:"Zhuxin+Julian is the most lethal mid-jungle combo this patch.",counters:["Athena's Shield","Chou","Phoveus"],counterItems:["Athena's Shield","Radiant Armor","Dominance Ice"]},
+{name:"Paquito",role:"Fighter",lane:"EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker / Execute",tips:"Skill-spam boxer. Antique Cuirass directly cuts his combo damage.",counters:["Antique Cuirass","Chou","Minsitthar"],counterItems:["Antique Cuirass","Dominance Ice","Twilight Armor"]},
+{name:"Yu Zhong",role:"Fighter",lane:"EXP",dmg:"sustain",build:["Tough Boots","War Axe","Oracle","Dominance Ice","Antique Cuirass","Immortality"],emblem:"Fighter · Thrill + Tenacity + War Cry",spell:"Flicker / Vengeance",tips:"Dragon sustain monster. Anti-heal + kite him, never 1v1 in his ult.",counters:["Esmeralda","Karrie","Sea Halberd"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Dyrroth",role:"Fighter",lane:"EXP / Jungle",dmg:"phys-burst",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Queen's Wings"],emblem:"Fighter · Rupture + Weapon Master + War Cry",spell:"Flicker / Retribution",tips:"Armor-shred king — tanks melt. Twilight + Antique slow him.",counters:["Antique Cuirass","Uranus","Esmeralda"],counterItems:["Antique Cuirass","Twilight Armor","Dominance Ice"]},
+{name:"Aldous",role:"Fighter",lane:"EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Endless Battle","Blade of Despair","Malefic Roar","Twilight Armor"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker",tips:"500-stack one punch. Twilight Armor caps the punch; never wander alone late.",counters:["Twilight Armor","Chou","Minsitthar"],counterItems:["Twilight Armor","Antique Cuirass","Wind of Nature"]},
+{name:"Chou",role:"Fighter",lane:"EXP / Roam",dmg:"phys-burst",build:["Rapid Boots","War Axe","Blade of the Heptaseas","Blade of Despair","Malefic Roar","Immortality"],emblem:"Fighter · Rupture + Weapon Master + Concussive Blast",spell:"Flicker",tips:"Best CC/peel in game. Stops Hayabusa, Ling, Aldous, Franco.",counters:["Esmeralda","Uranus","Karrie"],counterItems:["Antique Cuirass","Dominance Ice","Blade Armor"]},
+{name:"Terizla",role:"Fighter",lane:"EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Antique Cuirass","Blade of Despair","Dominance Ice","Immortality"],emblem:"Fighter · Vitality + Tenacity + War Cry",spell:"Flicker",tips:"Massive AoE ult. Purify or dash out of the penalty zone.",counters:["Karrie","Valir","Purify"],counterItems:["Blade Armor","Purify","Dominance Ice"]},
+{name:"Eudora",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Flicker",tips:"Classic one-shot. Athena's Shield makes her combo tickle.",counters:["Athena's Shield","Saber","Ling"],counterItems:["Athena's Shield","Tough Boots","Radiant Armor"]},
+{name:"Aurora",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Flicker",tips:"Freeze + delete. Same antidote as Eudora: Athena first.",counters:["Athena's Shield","Purify","Ling"],counterItems:["Athena's Shield","Winter Crown","Tough Boots"]},
+{name:"Kadita",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Flicker / Purify",tips:"Wave-dive burst. Athena + spread out so she can't multi-hit.",counters:["Athena's Shield","Purify","Hayabusa"],counterItems:["Athena's Shield","Radiant Armor","Winter Crown"]},
+{name:"Chang'e",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Demon Shoes","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Ult shreds teams. Radiant Armor (NOT Athena) is the answer to DPS.",counters:["Radiant Armor","Ling","Chou"],counterItems:["Radiant Armor","Tough Boots","Winter Crown"]},
+{name:"Yve",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Zone-control ult. Radiant + dive her with assassins.",counters:["Radiant Armor","Ling","Hayabusa"],counterItems:["Radiant Armor","Winter Crown","Tough Boots"]},
+{name:"Zhuxin",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Demon Shoes","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker",tips:"Meta queen. Purify her toss + Radiant Armor + burst her.",counters:["Radiant Armor","Purify","Ling"],counterItems:["Radiant Armor","Tough Boots","Athena's Shield"]},
+{name:"Valentina",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker",tips:"Steals your ult. Spread picks with weak ults vs her.",counters:["Athena's Shield","Hayabusa","Ling"],counterItems:["Athena's Shield","Radiant Armor","Winter Crown"]},
+{name:"Lylia",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Demon Shoes","Clock of Destiny","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Bomb spam. Radiant + step out of glooms.",counters:["Radiant Armor","Hayabusa","Kadita"],counterItems:["Radiant Armor","Tough Boots","Athena's Shield"]},
+{name:"Cecilion",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Demon Shoes","Lightning Truncheon","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Late-game cannon. End early or Radiant + dive.",counters:["Radiant Armor","Ling","Hayabusa"],counterItems:["Radiant Armor","Tough Boots","Winter Crown"]},
+{name:"Miya",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Wind of Nature"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Inspire / Flicker",tips:"Late-game shredder. Blade Armor + Dominance stop her ult all-in.",counters:["Blade Armor","Saber","Ling"],counterItems:["Blade Armor","Dominance Ice","Wind of Nature"]},
+{name:"Layla",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Immortality"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker",tips:"Longest range, no escape. Any diver deletes her.",counters:["Ling","Hayabusa","Saber"],counterItems:["Blade Armor","Wind of Nature","Dominance Ice"]},
+{name:"Lesley",role:"Marksman",lane:"Gold",dmg:"phys-burst",build:["Swift Boots","Blade of the Heptaseas","Berserker's Fury","Endless Battle","Malefic Roar","Wind of Nature"],emblem:"Assassin · Rupture + Weapon Master + Killing Spree",spell:"Flicker",tips:"True-damage crit sniper. Blade Armor + Twilight Armor cap her shots.",counters:["Blade Armor","Twilight Armor","Saber"],counterItems:["Blade Armor","Twilight Armor","Wind of Nature"]},
+{name:"Bruno",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Berserker's Fury","Scarlet Phantom","Windtalker","Malefic Roar","Wind of Nature"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker",tips:"Crit monster. Blade Armor is mandatory vs him.",counters:["Blade Armor","Saber","Ling"],counterItems:["Blade Armor","Dominance Ice","Antique Cuirass"]},
+{name:"Melissa",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Immortality"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Purify",tips:"Doll zones divers. Outrange the doll or CC her.",counters:["Blade Armor","Ling","Chou"],counterItems:["Blade Armor","Dominance Ice","Antique Cuirass"]},
+{name:"Moskov",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Golden Staff","Demon Hunter Sword","Corrosion Scythe","Wind of Nature"],emblem:"Marksman · Swift + Weapon Master + Quantum Charge",spell:"Flicker / Inspire",tips:"Attack-speed demon. Dominance Ice cuts his DPS massively.",counters:["Dominance Ice","Saber","Chou"],counterItems:["Dominance Ice","Blade Armor","Wind of Nature"]},
+{name:"Wanwan",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Roar","Wind of Nature"],emblem:"Marksman · Swift + Weapon Master + Weakness Finder",spell:"Flicker / Purify",tips:"Break her weakness marks, CC chain her ult. Dominance Ice core.",counters:["Dominance Ice","Khufra","Saber"],counterItems:["Dominance Ice","Blade Armor","Antique Cuirass"]},
+{name:"Karrie",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Golden Staff","Demon Hunter Sword","Corrosion Scythe","Malefic Roar"],emblem:"Marksman · Swift + Weapon Master + Quantum Charge",spell:"Flicker / Purify",tips:"True-damage tank killer + Mathilda synergy is S-tier. Twilight + Blade Armor help.",counters:["Blade Armor","Twilight Armor","Ling"],counterItems:["Blade Armor","Twilight Armor","Dominance Ice"]},
+{name:"Beatrix",role:"Marksman",lane:"Gold",dmg:"phys-burst",build:["Swift Boots","Blade of Despair","Hunter Strike","Malefic Roar","Blade of the Heptaseas","Immortality"],emblem:"Marksman · Rupture + Weapon Master + Killing Spree",spell:"Flicker",tips:"Cheap early route wins more than full BOD. Dive her — she has no escape.",counters:["Antique Cuirass","Ling","Hayabusa"],counterItems:["Antique Cuirass","Blade Armor","Wind of Nature"]},
+{name:"Granger",role:"Marksman",lane:"Gold",dmg:"phys-burst",build:["Swift Boots","Blade of the Heptaseas","Endless Battle","Blade of Despair","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Weapon Master + Killing Spree",spell:"Flicker",tips:"Skill-based MM. Antique Cuirass + dodge his ult range.",counters:["Antique Cuirass","Ling","Saber"],counterItems:["Antique Cuirass","Twilight Armor","Dominance Ice"]},
+{name:"Claude",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Demon Hunter Sword","Golden Staff","Windtalker","Malefic Roar","Wind of Nature"],emblem:"Marksman · Swift + Weapon Master + Quantum Charge",spell:"Purify / Flicker",tips:"Ult + DHS melts teams. Blade Armor reflects his ult back.",counters:["Blade Armor","Dominance Ice","Khufra"],counterItems:["Blade Armor","Dominance Ice","Radiant Armor"]},
+{name:"Irithel",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Immortality"],emblem:"Marksman · Fatal + Weapon Master + Quantum Charge",spell:"Flicker",tips:"Mobile ult. Slow her (Corrosion/Ice Queen) + Blade Armor.",counters:["Blade Armor","Saber","Ling"],counterItems:["Blade Armor","Dominance Ice","Antique Cuirass"]},
+{name:"Hanabi",role:"Marksman",lane:"Gold",dmg:"phys-dps",build:["Swift Boots","Windtalker","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Wind of Nature"],emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Purify",tips:"Shield + bounce. Dominance + burst her shield off.",counters:["Dominance Ice","Saber","Ling"],counterItems:["Dominance Ice","Blade Armor","Sea Halberd"]},
+{name:"Clint",role:"Marksman",lane:"Gold",dmg:"phys-burst",build:["Swift Boots","Blade of the Heptaseas","Endless Battle","Berserker's Fury","Malefic Roar","Immortality"],emblem:"Marksman · Rupture + Weapon Master + Killing Spree",spell:"Flicker",tips:"Poke machine. Antique Cuirass + sustain through his poke.",counters:["Antique Cuirass","Ling","Chou"],counterItems:["Antique Cuirass","Blade Armor","Dominance Ice"]},
+{name:"Estes",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Recovery + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Heal engine. Anti-heal (Dominance/Sea Halberd/Glowing) is NON-optional + burst him first.",counters:["Sea Halberd","Glowing Wand","Karrie"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Angela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],emblem:"Support · Agility + Recovery + Focusing Mark",spell:"Flicker",tips:"Ult-possess the carry. CC her host + anti-heal.",counters:["Sea Halberd","Chou","Diggie"],counterItems:["Dominance Ice","Sea Halberd","Necklace of Durance"]},
+{name:"Floryn",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Oracle","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Recovery + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Global heal. Same as Estes: anti-heal + dive her.",counters:["Sea Halberd","Ling","Natalia"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Rafaela",role:"Support",lane:"Roam",dmg:"sustain",build:["Tough Boots","Fleeting Time","Necklace of Durance","Oracle","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker / Revitalize",tips:"Speed + heal + reveal vs Natalia/Aamon. Buy Durance on her.",counters:["Chou","Karrie","Ling"],counterItems:["Antique Cuirass","Athena's Shield","Dominance Ice"]},
+{name:"Diggie",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Necklace of Durance","Athena's Shield","Dominance Ice","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Hard-counters all CC ults (Tigreal, Atlas, Franco). Pick him into engage comps.",counters:["Hayabusa","Ling","Karrie"],counterItems:["Athena's Shield","Blade Armor","Radiant Armor"]},
+{name:"Mathilda",role:"Support",lane:"Roam",dmg:"mixed",build:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Support · Agility + Bargain Hunter + Pull Yourself Together",spell:"Flicker",tips:"Karrie+Mathilda dash synergy is S-tier. CC her dash path.",counters:["Chou","Karrie","Diggie"],counterItems:["Dominance Ice","Athena's Shield","Blade Armor"]},
+{name:"Faramis",role:"Support",lane:"Mid / Roam",dmg:"magic-dps",build:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Support · Inspire + Bargain Hunter + Focusing Mark",spell:"Flicker",tips:"Nether Realm denies death. Burst outside ult + anti-heal.",counters:["Karrie","Lunox","Esmeralda"],counterItems:["Sea Halberd","Radiant Armor","Divine Glaive"]},
+{name:"Fanny",role:"Assassin",lane:"Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Blade of Despair","Hunter Strike","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution",tips:"Cable queen. Khufra + Antique + lock her with suppress.",counters:["Khufra","Wind of Nature","Minsitthar"],counterItems:["Wind of Nature","Antique Cuirass","Dominance Ice"]},
+{name:"Martis",role:"Fighter",lane:"Jungle / EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Antique Cuirass","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Retribution / Flicker",tips:"Anti-CC + execute. Kite his skill-immune window.",counters:["Esmeralda","Karrie","Uranus"],counterItems:["Blade Armor","Dominance Ice","Twilight Armor"]},
+{name:"Balmond",role:"Fighter",lane:"Jungle / EXP",dmg:"phys-burst",build:["Tough Boots","War Axe","Brute Force Breastplate","Blade of Despair","Antique Cuirass","Immortality"],emblem:"Fighter · Vitality + Tenacity + War Cry",spell:"Retribution",tips:"Beginner-friendly spinner. Anti-heal + kite.",counters:["Karrie","Esmeralda","Dyrroth"],counterItems:["Blade Armor","Sea Halberd","Dominance Ice"]},
+{name:"Ruby",role:"Fighter",lane:"EXP",dmg:"sustain",build:["Tough Boots","War Axe","Oracle","Endless Battle","Dominance Ice","Immortality"],emblem:"Fighter · Thrill + Tenacity + War Cry",spell:"Flicker",tips:"Lifesteal CC chain. Anti-heal shuts her off completely.",counters:["Sea Halberd","Esmeralda","Karrie"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Phoveus",role:"Fighter",lane:"EXP",dmg:"magic-dps",build:["Tough Boots","War Axe","Oracle","Radiant Armor","Dominance Ice","Immortality"],emblem:"Fighter · Thrill + Tenacity + War Cry",spell:"Flicker / Vengeance",tips:"Punishes dashes (Ling, Fanny, Hayabusa). Pick him into mobility.",counters:["Esmeralda","Karrie","Lunox"],counterItems:["Radiant Armor","Sea Halberd","Dominance Ice"]},
+{name:"X.Borg",role:"Fighter",lane:"EXP",dmg:"mixed",build:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Oracle","Immortality"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker",tips:"Armor-break true damage. Break his armor bar, then burst.",counters:["Esmeralda","Karrie","Lunox"],counterItems:["Radiant Armor","Demon Hunter Sword","Sea Halberd"]},
+{name:"Fredrinn",role:"Fighter",lane:"Jungle",dmg:"mixed",build:["Tough Boots","Cursed Helmet","War Axe","Antique Cuirass","Oracle","Immortality"],emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Retribution",tips:"Nerfed tank-jungler but still strong. Anti-heal + shred.",counters:["Esmeralda","Karrie","Lunox"],counterItems:["Sea Halberd","Demon Hunter Sword","Glowing Wand"]},
+{name:"Kimmy",role:"Marksman",lane:"Mid / Gold",dmg:"magic-dps",build:["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Swift + Bargain Hunter + Impure Rage",spell:"Flicker / Purify",tips:"Hybrid spray. Radiant Armor + Dominance (she uses attack speed too).",counters:["Radiant Armor","Ling","Chou"],counterItems:["Radiant Armor","Dominance Ice","Athena's Shield"]},
+{name:"Harith",role:"Mage",lane:"Gold",dmg:"magic-dps",build:["Arcane Boots","Calamity Reaper","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Quantum Charge",spell:"Flicker / Purify",tips:"Dash-spam shield. Radiant + CC lock.",counters:["Radiant Armor","Phoveus","Esmeralda"],counterItems:["Radiant Armor","Sea Halberd","Athena's Shield"]},
+{name:"Lunox",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Demon Shoes","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker",tips:"Tank-melter. Radiant + dive her during light-ult downtime.",counters:["Radiant Armor","Ling","Hayabusa"],counterItems:["Radiant Armor","Tough Boots","Athena's Shield"]},
+{name:"Alice",role:"Mage",lane:"EXP / Jungle",dmg:"sustain",build:["Demon Shoes","Clock of Destiny","Concentrated Energy","Oracle","Holy Crystal","Divine Glaive"],emblem:"Mage · Vitality + Bargain Hunter + Impure Rage",spell:"Flicker / Revitalize",tips:"Sustain queen. Anti-heal + burst, never long-fight her ult.",counters:["Esmeralda","Karrie","Lunox"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Selena",role:"Assassin",lane:"Roam / Mid",dmg:"magic-burst",build:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Master Assassin + Lethal Ignition",spell:"Flicker",tips:"Stun-arrow pick machine. Athena + stay behind minions.",counters:["Athena's Shield","Purify","Ling"],counterItems:["Athena's Shield","Tough Boots","Radiant Armor"]},
+{name:"Natalia",role:"Assassin",lane:"Roam / Jungle",dmg:"phys-burst",build:["Rapid Boots","Blade of the Heptaseas","Endless Battle","Berserker's Fury","Malefic Roar","Immortality"],emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:"Retribution / Inspire",tips:"Invisible silencer. Vision (Rafaela/Flare) + Blade Armor.",counters:["Rafaela","Blade Armor","Saber"],counterItems:["Blade Armor","Antique Cuirass","Immortality"]},
+{name:"Zilong",role:"Fighter",lane:"EXP",dmg:"phys-dps",build:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Wind of Nature"],emblem:"Fighter · Swift + Weapon Master + War Cry",spell:"Inspire / Flicker",tips:"Beginner split-pusher. Dominance + CC lock his ult run.",counters:["Dominance Ice","Chou","Khufra"],counterItems:["Dominance Ice","Blade Armor","Antique Cuirass"]},
+{name:"Alucard",role:"Fighter",lane:"Jungle",dmg:"sustain",build:["Tough Boots","War Axe","Endless Battle","Blade of Despair","Malefic Roar","Queen's Wings"],emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Retribution",tips:"Lifesteal monster if fed, useless if CC'd. Anti-heal + CC chain.",counters:["Sea Halberd","Chou","Phoveus"],counterItems:["Dominance Ice","Sea Halberd","Glowing Wand"]},
+{name:"Sun",role:"Fighter",lane:"EXP",dmg:"phys-dps",build:["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Roar","Immortality"],emblem:"Fighter · Swift + Weapon Master + War Cry",spell:"Flicker / Inspire",tips:"Clone pusher. Dominance slows clones + AoE clears them.",counters:["Dominance Ice","Baxia","X.Borg"],counterItems:["Dominance Ice","Blade Armor","Cursed Helmet"]},
+{name:"Cyclops",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Point-click lock. Athena + sidestep planets.",counters:["Athena's Shield","Ling","Hayabusa"],counterItems:["Athena's Shield","Radiant Armor","Tough Boots"]},
+{name:"Gord",role:"Mage",lane:"Mid",dmg:"magic-dps",build:["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Impure Rage",spell:"Flicker",tips:"Laser beam. Radiant + dive/flank him.",counters:["Radiant Armor","Ling","Saber"],counterItems:["Radiant Armor","Tough Boots","Winter Crown"]},
+{name:"Odette",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Enchanted Talisman","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker",tips:"Ult needs Johnson/combo. Any CC cancels her swan song.",counters:["Chou","Saber","Athena's Shield"],counterItems:["Athena's Shield","Radiant Armor","Tough Boots"]},
+{name:"Nana",role:"Mage",lane:"Mid",dmg:"magic-burst",build:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker",tips:"Molina + revive passive. Athena + save burst for after passive pops.",counters:["Athena's Shield","Ling","Hayabusa"],counterItems:["Athena's Shield","Radiant Armor","Tough Boots"]}
+];
+
+/* Full 133 roster for search completeness (role fallback if not curated above) */
+const EXTRA_HEROES = ["Aulus","Badang","Bane","Barats","Baxia","Benedetta","Brody","Carmilla","Chip","Cici","Dyrroth","Edith","Floryn","Freya","Grock","Guinevere","Hanzo","Harley","Helcurt","Hilda","Ixia","Jawhead","Johnson","Joy","Kagura","Kaja","Kalea","Khaleed","Lapu-Lapu","Leomord","Lolita","Luo Yi","Lylia","Masha","Minsitthar","Natan","Nolan","Novaria","Obsidia","Popol and Kupa","Roger","Suyou","Thamuz","Vale","Valir","Vexana","Xavier","Yi Sun-shin","Yin","Zetian","Zhask","Akai","Argus","Aurora","Minotaur","Moskov","Karrie","Hylos","Zhuxin","Pharsa","Paquito","Silvanna"];
+const ROLE_FALLBACK = {Tank:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"],Fighter:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Assassin:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],Mage:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],Marksman:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Wind of Nature"],Support:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Athena's Shield","Immortality"]};
+
+/* merge extras as fallback entries so search finds all 133 */
+const curated = new Set(HEROES.map(h=>h.name.toLowerCase()));
+EXTRA_HEROES.forEach(n=>{
+  if(curated.has(n.toLowerCase())) return;
+  let role="Fighter";
+  if(/akai|baxia|barats|minotaur|johnson|grock|edith|chip|lolita|hilda|jawhead/i.test(n)) role="Tank";
+  else if(/kagura|valir|vexana|pharsa|novaria|luo|lylia|harley|xavier|zetian|zhask|vale/i.test(n)) role="Mage";
+  else if(/brody|ixia|natan|popol|roger|yi/i.test(n)) role="Marksman";
+  else if(/natalia|helcurt|hanzo|joy|suyou|yin|nolan/i.test(n)) role="Assassin";
+  else if(/carmilla|kaja|kalea|chip/i.test(n)) role="Support";
+  HEROES.push({name:n,role,lane:"—",dmg:"mixed",build:ROLE_FALLBACK[role]||ROLE_FALLBACK.Fighter,emblem:role+" emblem (standard)",spell:"Flicker",tips:"Standard "+role+" meta build (Patch 2.2.16). Adapt last 2 slots to enemy — see Counter tab.",counters:["Karrie","Chou","Saber"],counterItems:["Antique Cuirass","Athena's Shield","Dominance Ice"]});
+});
+
+const $ = id=>document.getElementById(id);
+const IMG_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/";
+function heroImg(name){
+  if(name==="Chang'e") return IMG_BASE+"chang27e.png";
+  return IMG_BASE + name.toLowerCase().replace(/\./g,"").replace(/'/g,"").replace(/\s+/g,"_") + ".png";
+}
+const emoji = r=>({Tank:"🛡️",Fighter:"⚔️",Assassin:"🔪",Mage:"🔮",Marksman:"🏹",Support:"💚"}[r]||"🦸");
+let activeRole="All";
+
+function itemDesc(name){return ITEM_INFO[name]||"Meta item — see in-game shop for full stats.";}
+function cardHTML(h){
+  return `<div class="hero-card" onclick="openHero('${h.name.replace(/'/g,"\\'")}')">
+    <div class="avatar"><span>${h.name[0]}</span><img src="${heroImg(h.name)}" alt="${h.name}" loading="lazy" onerror="this.remove()"></div><h3>${h.name}</h3>
+    <div class="role">${emoji(h.role)} ${h.role}</div>
+    <div class="lane">${h.lane} · ${h.dmg}</div></div>`;
+}
+function renderAll(){
+  const q=($("globalSearch").value||"").toLowerCase();
+  const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Marksman"&&h.role==="Marksman"))&&h.name.toLowerCase().includes(q));
+  $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
+  $("heroCount").textContent=list.length+" heroes shown — click a card for full build (items, emblem, spell, tips).";
+  const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
+  $("tankGrid").innerHTML=HEROES.filter(h=>["Tigreal","Atlas","Khufra","Belerick","Hylos","Gloo","Franco","Gatotkaca","Uranus","Esmeralda","Fredrinn","Akai","Baxia","Barats","Johnson"].includes(h.name)).map(cardHTML).join("");
+  $("damageGrid").innerHTML=HEROES.filter(h=>["Hayabusa","Ling","Lancelot","Gusion","Nolan","Aamon","Karina","Saber","Fanny","Julian","Paquito","Yu Zhong","Dyrroth","Aldous","Chou","Terizla","Martis","Alice","Selena","Natalia","Balmond","Ruby","Phoveus","X.Borg"].includes(h.name)).map(cardHTML).join("");
+  $("supportGrid").innerHTML=HEROES.filter(h=>["Tank","Support"].includes(h.role)).slice(0,20).map(cardHTML).join("")||by("Support");
+  $("marksmanGrid").innerHTML=HEROES.filter(h=>h.role==="Marksman").map(cardHTML).join("");
+  $("heroList").innerHTML=HEROES.map(h=>`<option value="${h.name}">`).join("");
+  $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>`<button onclick="setCounter('${n}')">${n}</button>`).join("");
+}
+function openHero(name){
+  const h=HEROES.find(x=>x.name.toLowerCase()===name.toLowerCase()); if(!h) return;
+  $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
+  <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b></div></div></div>
+  <div class="meta-box">✨ Emblem: <b>${h.emblem}</b><br>🌀 Battle spell: <b>${h.spell}</b><br>💡 ${h.tips}</div>
+  <h3 style="margin:8px 0">Best build (researched meta):</h3>
+  <div class="build-list">${h.build.map((it,i)=>`<div class="item"><div class="n">${i+1}</div><div><b>${it}</b><small>${itemDesc(it)}</small></div></div>`).join("")}</div>
+  <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${h.name.replace(/'/g,"\\'")}')" style="color:var(--gold)">Open in Counter tab →</a></div>
+  <button onclick="setMain('${h.name.replace(/'/g,"\\'")}')" style="margin-top:10px;padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:#111;cursor:pointer;font-weight:700">⭐ Set ${h.name} as my main</button>`;
+  $("modalBg").classList.add("open");
+}
+function closeModal(){$("modalBg").classList.remove("open");}
+function setMain(name){try{localStorage.setItem("mlbb_main",name);}catch(e){}renderMainChip();closeModal();}
+function renderMainChip(){
+  let m=null;try{m=localStorage.getItem("mlbb_main");}catch(e){}
+  $("mainChip").innerHTML=m?`⭐ My main: <b style="color:var(--gold)">${m}</b> — <a href="#" onclick="event.preventDefault();openHero('${m.replace(/'/g,"\\'")}')" style="color:var(--gold)">view perfect build →</a>`:"";
+}
+function openPhone(){
+  const url=location.href;
+  const qr="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+encodeURIComponent(url);
+  $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
+  <h2>📱 Open on your phone</h2>
+  <div class="sub">Scan with your phone camera (same WiFi, or use the public link below)</div>
+  <div class="qr-box"><img src="${qr}" alt="QR code" onerror="this.parentNode.innerHTML='<p style=color:var(--muted)>QR needs internet once. Type the link below manually.</p>'"><p style="margin-top:10px;font-size:13px;word-break:break-all;color:var(--gold2)">${url}</p></div>
+  <div class="meta-box"><b>3 ways:</b><br>① <b>Same computer:</b> just keep this file — double-click to open.<br>② <b>Same WiFi:</b> on this PC run <span class="kbd">python -m http.server 8901 --directory mlbb-builds</span>, then on phone open <span class="kbd">http://YOUR-PC-IP:8901</span> (find IP with <span class="kbd">ipconfig</span>).<br>③ <b>Anywhere:</b> run your <span class="kbd">start.bat</span> tunnel, then open <span class="kbd">YOUR-LINK/mlbb</span> on the phone.</div>`;
+  $("modalBg").classList.add("open");
+}
+function jumpToHeroes(){switchTab("heroes");renderAll();$("heroGrid").scrollIntoView({behavior:"smooth"});}
+function setCounter(n){switchTab("counter");$("counterInput").value=n;findCounter();}
+function switchTab(t){
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+t));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+document.querySelectorAll("#roleFilter button").forEach(b=>b.onclick=()=>{activeRole=b.dataset.role;document.querySelectorAll("#roleFilter button").forEach(x=>x.classList.toggle("active",x===b));renderAll();});
+$("globalSearch").addEventListener("input",renderAll);
+$("counterInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
+
+/* ===== COUNTER ENGINE ===== */
+function counterPlan(h){
+  const d=h.dmg;
+  let phys=[],magic=[],util=[],explain="";
+  if(d==="phys-burst"){phys=["Antique Cuirass","Twilight Armor","Dominance Ice"];explain=`<b>${h.name}</b> deals <b style="color:#f87171">PHYSICAL SKILL BURST</b> (one combo deletes you). <b>Antique Cuirass</b> cuts their skill damage on every hit, <b>Twilight Armor</b> caps any single hit over 500, <b>Dominance Ice</b> keeps them close-range and weak.`;}
+  else if(d==="phys-dps"){phys=["Blade Armor","Dominance Ice","Antique Cuirass"];explain=`<b>${h.name}</b> deals <b style="color:#f87171">PHYSICAL DPS / CRIT / BASIC ATTACKS</b>. <b>Blade Armor</b> cuts crit damage 20% + reflects basics back, <b>Dominance Ice</b> slows their attack speed, <b>Antique Cuirass</b> softens everything else.`;}
+  else if(d==="magic-burst"){magic=["Athena's Shield","Tough Boots","Winter Crown"];explain=`<b>${h.name}</b> deals <b style="color:#c084fc">MAGIC BURST</b> (100-to-0 in one combo). <b>Athena's Shield</b> is the #1 antidote — it eats the burst with a regenerating magic shield. <b>Winter Crown</b> (mages/MM) or <b>Immortality</b> saves you if caught.`;}
+  else if(d==="magic-dps"){magic=["Radiant Armor","Athena's Shield","Tough Boots"];explain=`<b>${h.name}</b> deals <b style="color:#c084fc">SUSTAINED MAGIC DPS</b> (damage every second). Do NOT buy only Athena — <b>Radiant Armor</b> stacks resistance on every magic hit and outscales DPS. Add Athena 2nd vs mixed teams.`;}
+  else if(d==="sustain"){util=["Dominance Ice","Sea Halberd","Glowing Wand"];explain=`<b>${h.name}</b> survives by <b style="color:#4ade80">HEAL / SHIELD / REGEN</b>. Anti-heal is MANDATORY: <b>Dominance Ice</b> (tanks/roam), <b>Sea Halberd</b> (MM/fighter), <b>Glowing Wand / Necklace of Durance</b> (mages). Without it you can never kill them.`;}
+  else{phys=["Antique Cuirass","Blade Armor"];magic=["Athena's Shield","Radiant Armor"];explain=`<b>${h.name}</b> deals <b>MIXED damage</b>. Cover both sides: <b>Antique Cuirass/Blade Armor</b> + <b>Athena's/Radiant</b>, then Immortality.`;}
+  return {phys,magic,util,explain};
+}
+function findCounter(){
+  const q=($("counterInput").value||"").trim().toLowerCase();
+  const box=$("counterResult");
+  if(!q){box.innerHTML="<p style='color:var(--muted)'>Type an enemy hero first.</p>";return;}
+  let h=HEROES.find(x=>x.name.toLowerCase()===q)||HEROES.find(x=>x.name.toLowerCase().includes(q));
+  if(!h){box.innerHTML=`<p>❌ Hero "<b>${q}</b>" not found. Try: Hayabusa, Eudora, Lesley, Wanwan, Estes…</p>`;return;}
+  const plan=counterPlan(h);
+  const must=[...plan.phys.slice(0,2),...plan.magic.slice(0,2),...plan.util.slice(0,1),...h.counterItems].filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
+  box.innerHTML=`
+  <h2 style="color:var(--gold)">🛡️ How to counter ${h.name}</h2>
+  <p style="color:var(--muted);font-size:13px">${h.role} · ${h.lane} · threat: <b>${h.dmg}</b></p>
+  <div class="counter-item danger"><b>Why they hurt you:</b><br>${plan.explain}</div>
+  <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} (so they barely damage you):</b><br>
+    ${must.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}`).join("<br><br>")}</div>
+  <div class="counter-item magic"><b>📦 Full counter build if YOU are:</b><br><br>
+    🛡️ <b>Tank/Roam:</b> Tough Boots → ${must[0]||"Antique Cuirass"} → ${must[1]||"Athena's Shield"} → Dominance Ice → Guardian Helmet → Immortality<br><br>
+    ⚔️ <b>Fighter/Assassin:</b> Tough Boots → War Axe/Hunter Strike → ${must[0]||"Antique Cuirass"} → Blade of Despair → ${must[1]||"Athena's Shield"} → Immortality<br><br>
+    🏹 <b>Marksman:</b> Swift Boots → Windtalker → Berserker's Fury/DHS → <b>Wind of Nature</b> (3rd vs divers!) → ${must[0]||"Blade Armor"} → Immortality<br><br>
+    🔮 <b>Mage/Support:</b> Arcane/Demon Shoes → Clock/Glowing → Holy Crystal → <b>Winter Crown</b> (panic button) → ${must[1]||"Athena's Shield"} → Divine Glaive/Blood Wings</div>
+  <div class="counter-item"><b>🦸 Best hero picks vs ${h.name}:</b> ${h.counters.join(", ")}<br><small style="color:var(--muted)">Pick CC (Chou, Khufra, Diggie, Saber) vs divers • pick Karrie/Lunox/DHS vs tanks • pick dive vs backline.</small></div>
+  <div class="tips">💡 <b>How to take almost no damage:</b> ① Buy the counter item by <b>slot 2–3</b>, not last. ② Never 1v1 their power spike (Aldous late, Hayabusa lvl 4, Cecilion late). ③ Save <b>Wind of Nature / Winter Crown / Purify</b> for their ult, don't waste it. ④ If they heal, <b>someone</b> on your team must hold anti-heal all game. ⑤ Check the <b>All Heroes tab → ${h.name}</b> to see their own build and punish its weak timing.</div>
+  <button onclick="openHero('${h.name.replace(/'/g,"\\'")}')" style="margin-top:10px;padding:10px 16px;border-radius:10px;border:1px solid var(--gold);background:#0b1230;color:var(--gold);cursor:pointer;font-weight:700">See ${h.name}'s own best build →</button>`;
+}
+renderAll();
+renderMainChip();
+</script>
+</body>
+</html>
