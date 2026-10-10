@@ -97,12 +97,35 @@ ol.build-ol{margin:8px 0 8px 20px;font-size:13.5px;line-height:1.9}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-height:1.7}
 .count{color:var(--muted);font-size:12px;margin-top:8px}
 .kbd{background:#0b1230;border:1px solid #2b3a72;border-radius:6px;padding:1px 7px;font-size:12px}
+/* build variants */
+.variant-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.variant-row button{padding:9px 14px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:var(--text);cursor:pointer;font-weight:700;font-size:13px}
+.variant-row button.active{background:var(--gold);color:#111;border-color:var(--gold)}
+/* item icons + shop location */
+.item .ic{width:44px;height:44px;border-radius:10px;background:#0006;border:1px solid #2b3a72;object-fit:cover;flex:0 0 auto}
+.item .loc{color:var(--cyan);display:block;margin-top:3px;font-size:12px}
+/* shop guide */
+.shop-phone{border:2px solid #2b3a72;border-radius:18px;overflow:hidden;margin:12px 0;background:#0b1230}
+.shop-topbar{background:#1a2456;padding:10px 12px;font-size:13px;color:var(--gold2);font-weight:700}
+.shop-tabs{display:flex;background:#141d42}
+.shop-tabs button{flex:1;padding:12px 4px;background:transparent;border:none;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;font-size:12px;cursor:pointer}
+.shop-tabs button.active{color:var(--gold);border-bottom-color:var(--gold);background:#1c2a55}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:12px}
+.shop-item{background:#141d42;border:1px solid #2b3a72;border-radius:10px;padding:10px;text-align:center}
+.shop-item img{width:46px;height:46px;border-radius:10px;background:#0006;border:1px solid #2b3a72;object-fit:cover}
+.shop-item b{display:block;font-size:12.5px;margin:6px 0 2px}
+.shop-item .price{color:var(--gold);font-size:12px;font-weight:700}
+.shop-item small{color:var(--muted);font-size:11px;display:block;margin-top:3px;line-height:1.45}
+.shop-search{width:100%;padding:12px;border-radius:10px;border:1px solid #2b3a72;background:#0b1230;color:#fff;font-size:14px;margin-top:10px}
+.steps{display:grid;gap:8px;margin:10px 0}
+.step{background:#0b1230;border:1px solid #2b3a72;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.6}
+.step b{color:var(--gold2)}
 </style>
 </head>
 <body>
 <header>
   <h1>⚔️ MLBB <span>Build Guide</span> 2026</h1>
-  <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Counter Builder</p>
+  <p>Best meta builds researched online (Patch 2.1.90 / 2.2.16) — Tank • Damage • Support • Marksman • Shop Guide • Counter Builder</p>
   <div class="searchbar">
     <input id="globalSearch" placeholder="🔍 Search hero… e.g. Hayabusa, Miya, Tigreal, Eudora">
     <button onclick="jumpToHeroes()">Search</button>
@@ -117,6 +140,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
   <button data-tab="damage">🔥 Damage Build</button>
   <button data-tab="support">💚 Support Build</button>
   <button data-tab="marksman">🏹 Marksman Build</button>
+  <button data-tab="shop">🗺️ Shop Guide</button>
   <button data-tab="counter">🚫 Counter Build</button>
 </nav>
 
@@ -182,6 +206,31 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
     <div class="meta-box">Emblem: <b>Marksman — Fatal + Weapon Master + Weakness Finder</b> (kite) or <b>Quantum Charge</b> (vs dive). Spell: <b>Flicker / Inspire / Purify</b>.</div>
   </div>
   <div class="grid" id="marksmanGrid"></div>
+</section>
+
+<!-- SHOP GUIDE -->
+<section class="panel" id="panel-shop">
+  <div class="sec-card">
+    <h2>🗺️ Where to find every item (in-game shop map)</h2>
+    <p class="desc">During a match, tap the <b>shop button (gold coin icon, bottom-left of your screen)</b> to open the store. Items are grouped under 6 tabs on the left. Pick the tab below — it mirrors the real shop — to see exactly which tab each build item lives under, what it costs, and what to buy first.</p>
+    <div class="steps">
+      <div class="step"><b>Step 1 — Open the shop:</b> tap the 💰 gold/shop button while in base (or anywhere — you can buy anywhere, but leaving lane costs farm).</div>
+      <div class="step"><b>Step 2 — Pick the category tab:</b> ⚔️ Attack (physical) · 🔮 Magic · 🛡️ Defense · 👟 Movement. Tap a tab below to preview that shelf.</div>
+      <div class="step"><b>Step 3 — Buy parts early:</b> tap any item to see its recipe. Buy the cheap components first (e.g. Dreadnought Armor → Antique Cuirass) — you get stats while saving.</div>
+      <div class="step"><b>Step 4 — Use search:</b> type any item name in the box below to jump straight to its shelf location.</div>
+    </div>
+    <input class="shop-search" id="shopSearch" placeholder="🔍 Search an item… e.g. Dominance Ice, Blade of Despair">
+    <div class="shop-phone">
+      <div class="shop-topbar">🏪 SHOP — tap a shelf tab (mirrors the real in-game store)</div>
+      <div class="shop-tabs" id="shopTabs">
+        <button data-cat="Attack" class="active">⚔️ Attack</button>
+        <button data-cat="Magic">🔮 Magic</button>
+        <button data-cat="Defense">🛡️ Defense</button>
+        <button data-cat="Movement">👟 Movement</button>
+      </div>
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+  </div>
 </section>
 
 <!-- COUNTER -->
@@ -381,6 +430,25 @@ function heroImg(name){
   if(name==="Chang'e") return IMG_BASE+"chang27e.png";
   return IMG_BASE + name.toLowerCase().replace(/\./g,"").replace(/'/g,"").replace(/\s+/g,"_") + ".png";
 }
+/* ============ ITEM ICONS + SHOP SHELF LOCATIONS ============ */
+const ITEM_ICON_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/logo-equipment/";
+const ITEM_ICON_OVERRIDES = {"Demon Shoes":"demon_boots.png"};
+function itemIcon(name){
+  if(ITEM_ICON_OVERRIDES[name]) return ITEM_ICON_BASE+ITEM_ICON_OVERRIDES[name];
+  return ITEM_ICON_BASE + name.toLowerCase().replace(/'/g,"").replace(/\./g,"").replace(/\s+/g,"_") + ".png";
+}
+/* Which in-game shop tab each item lives under */
+const ITEM_SHOP = {
+"Tough Boots":"Movement","Warrior Boots":"Movement","Swift Boots":"Movement","Arcane Boots":"Movement","Demon Shoes":"Movement","Rapid Boots":"Movement",
+"Antique Cuirass":"Defense","Blade Armor":"Defense","Dominance Ice":"Defense","Athena's Shield":"Defense","Radiant Armor":"Defense","Twilight Armor":"Defense","Immortality":"Defense","Guardian Helmet":"Defense","Oracle":"Defense","Cursed Helmet":"Defense","Thunder Belt":"Defense","Brute Force Breastplate":"Defense","Queen's Wings":"Defense",
+"Blade of Despair":"Attack","Malefic Roar":"Attack","Malefic Gun":"Attack","Blade of the Heptaseas":"Attack","Hunter Strike":"Attack","War Axe":"Attack","Endless Battle":"Attack","Demon Hunter Sword":"Attack","Windtalker":"Attack","Berserker's Fury":"Attack","Scarlet Phantom":"Attack","Haas's Claws":"Attack","Corrosion Scythe":"Attack","Golden Staff":"Attack","Sea Halberd":"Attack","Sky Piercer":"Attack","Wind of Nature":"Attack","Rose Gold Meteor":"Attack",
+"Holy Crystal":"Magic","Divine Glaive":"Magic","Glowing Wand":"Magic","Genius Wand":"Magic","Wishing Lantern":"Magic","Clock of Destiny":"Magic","Lightning Truncheon":"Magic","Blood Wings":"Magic","Enchanted Talisman":"Magic","Calamity Reaper":"Magic","Starlium Scythe":"Magic","Ice Queen Wand":"Magic","Necklace of Durance":"Magic","Concentrated Energy":"Magic","Winter Crown":"Magic","Fleeting Time":"Magic",
+"Purify":"Battle Spell"};
+function itemShop(name){return ITEM_SHOP[name]||"Shop";}
+function itemPrice(name){const m=(ITEM_INFO[name]||"").match(/^(\d+)g/);return m?m[1]+"g":"";}
+function itemRow(it,i){
+  return `<div class="item"><div class="n">${i+1}</div><img class="ic" src="${itemIcon(it)}" alt="" loading="lazy" onerror="this.remove()"><div><b>${it}</b><span class="loc">📍 Shop → ${itemShop(it)} tab</span><small>${itemDesc(it)}</small></div></div>`;
+}
 const emoji = r=>({Tank:"🛡️",Fighter:"⚔️",Assassin:"🔪",Mage:"🔮",Marksman:"🏹",Support:"💚"}[r]||"🦸");
 let activeRole="All";
 
@@ -395,7 +463,8 @@ function renderAll(){
   const q=($("globalSearch").value||"").toLowerCase();
   const list=HEROES.filter(h=>(activeRole==="All"||h.role===activeRole||(activeRole==="Marksman"&&h.role==="Marksman"))&&h.name.toLowerCase().includes(q));
   $("heroGrid").innerHTML=list.map(cardHTML).join("")||"<p style='color:var(--muted)'>No hero found. Try the Counter tab.</p>";
-  $("heroCount").textContent=list.length+" heroes shown — click a card for full build (items, emblem, spell, tips).";
+  $("heroCount").textContent=list.length+" heroes shown — click a card for ⭐Best + 🔥Damage + 🛡️Tank + 💚Support builds.";
+  renderShop();
   const by=r=>HEROES.filter(h=>h.role===r).slice(0,24).map(cardHTML).join("");
   $("tankGrid").innerHTML=HEROES.filter(h=>["Tigreal","Atlas","Khufra","Belerick","Hylos","Gloo","Franco","Gatotkaca","Uranus","Esmeralda","Fredrinn","Akai","Baxia","Barats","Johnson"].includes(h.name)).map(cardHTML).join("");
   $("damageGrid").innerHTML=HEROES.filter(h=>["Hayabusa","Ling","Lancelot","Gusion","Nolan","Aamon","Karina","Saber","Fanny","Julian","Paquito","Yu Zhong","Dyrroth","Aldous","Chou","Terizla","Martis","Alice","Selena","Natalia","Balmond","Ruby","Phoveus","X.Borg"].includes(h.name)).map(cardHTML).join("");
@@ -404,16 +473,102 @@ function renderAll(){
   $("heroList").innerHTML=HEROES.map(h=>`<option value="${h.name}">`).join("");
   $("quickPicks").innerHTML=["Hayabusa","Eudora","Lesley","Wanwan","Estes","Yu Zhong","Aldous","Chang'e","Karrie","Gusion"].map(n=>`<button onclick="setCounter('${n}')">${n}</button>`).join("");
 }
-function openHero(name){
+/* ============ PER-HERO BUILD VARIANTS (Damage / Tank / Support for EVERY hero) ============ */
+const VARIANT_OVERRIDES = {
+"Rafaela":{
+  damage:{items:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Damage Rafaela: her heal AND poke scale with magic power. Stay backline, poke with Light of Retribution, save ult to peel divers off yourself."},
+  tank:{items:["Tough Boots","Antique Cuirass","Athena's Shield","Oracle","Dominance Ice","Immortality"],note:"Tank Rafaela: when you are the only roam vs burst — speed-boost your carry, reveal stealth, body-block skillshots."}},
+"Angela":{
+  damage:{items:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],note:"Damage Angela: shield + heal scale with power. Ult the fed carry and add real damage."},
+  tank:{items:["Tough Boots","Fleeting Time","Oracle","Athena's Shield","Dominance Ice","Immortality"],note:"Tank Angela: survive the ult-channel — if you die mid-possess, your host dies too."}},
+"Esmeralda":{
+  damage:{items:["Arcane Boots","Enchanted Talisman","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],note:"Full damage Esmeralda: steal shields, then burst. Glassy — only run this when snowballing."},
+  support:{items:["Tough Boots","Fleeting Time","Oracle","Dominance Ice","Radiant Armor","Immortality"],note:"Support Esmeralda (roam): frontline + shield-share for the team."}},
+"Alice":{
+  tank:{items:["Tough Boots","Cursed Helmet","Oracle","Radiant Armor","Dominance Ice","Immortality"],note:"Tank Alice: frontline drain-tank — ult in the middle of the team and refuse to die."}},
+"Gatotkaca":{
+  damage:{items:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Oracle","Immortality"],note:"Bruiser Gatot: ult + taunt, then actually kill them instead of tickling."}},
+"Estes":{
+  damage:{items:["Demon Shoes","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],note:"Damage Estes: bigger heals through more power + real poke. Still buy anti-heal for the enemy!"}},
+"Floryn":{
+  damage:{items:["Demon Shoes","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Damage Floryn: her Lantern scales — global heal + real burst."}},
+"Mathilda":{
+  damage:{items:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Damage Mathilda: assassin-style roam — dive, poke, dash out."}},
+"Faramis":{
+  tank:{items:["Tough Boots","Fleeting Time","Oracle","Radiant Armor","Dominance Ice","Immortality"],note:"Tank Faramis: stay alive to cast Nether Realm — dead Faramis casts nothing."}}
+};
+const AS_MM = ["Karrie","Claude","Moskov","Hanabi","Kimmy","Wanwan","Natan","Ixia","Sun","Zilong","Obsidia","Popol and Kupa","Irithel"];
+function genDamage(h){
+  const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].damage; if(ov) return ov;
+  if(h.role==="Marksman"){
+    if(h.name==="Lesley") return {items:["Swift Boots","Blade of the Heptaseas","Berserker's Fury","Endless Battle","Malefic Roar","Wind of Nature"],note:"Crit-sniper Lesley: true-damage crits. Heptaseas first for one-shot combos."};
+    if(["Beatrix","Granger","Clint"].includes(h.name)) return {items:["Swift Boots","Blade of the Heptaseas","Endless Battle","Blade of Despair","Malefic Roar","Immortality"],note:"Skill-based MM: play like an assassin — poke, then all-in."};
+    if(h.name==="Kimmy") return {items:["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],note:"Kimmy is a magic sprayer — build her like a mage, find her under the Magic tab."};
+    if(AS_MM.includes(h.name)) return {items:["Swift Boots","Windtalker","Golden Staff","Demon Hunter Sword","Corrosion Scythe","Wind of Nature"],note:"Attack-speed shred: melt tanks with Demon Hunter Sword + Golden Staff."};
+    return {items:["Swift Boots","Windtalker","Berserker's Fury","Scarlet Phantom","Malefic Roar","Blade of Despair"],note:"Crit route: the biggest late-game basic-attack damage."};
+  }
+  if(h.role==="Support") return {items:["Arcane Boots","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Winter Crown"],note:"Damage support: heals AND poke scale with magic power. Only when your team already has a tank."};
+  if(h.role==="Tank"){
+    if(h.dmg.indexOf("magic")===0||["Esmeralda","Alice","Uranus","Gatotkaca","Hylos","Belerick","Gloo","Fredrinn","Barats"].includes(h.name)) return {items:["Tough Boots","Cursed Helmet","Holy Crystal","Oracle","Dominance Ice","Immortality"],note:"Magic bruiser: Cursed burn + Holy Crystal damage while staying beefy. EXP-lane style."};
+    return {items:["Warrior Boots","War Axe","Hunter Strike","Antique Cuirass","Blade of Despair","Immortality"],note:"Physical bruiser: EXP-lane tank that still hurts. Never first-pick vs heavy magic."};
+  }
+  if(h.dmg.indexOf("magic")===0||h.role==="Mage"){
+    if(h.dmg==="magic-dps") return {items:["Demon Shoes","Enchanted Talisman","Glowing Wand","Holy Crystal","Divine Glaive","Blood Wings"],note:"Sustain/DPS mage: outlast and burn whole teams down."};
+    return {items:["Arcane Boots","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Crown"],note:"Full burst: delete one target per combo."};
+  }
+  if(h.role==="Assassin") return {items:["Rapid Boots","Blade of the Heptaseas","Hunter Strike","Blade of Despair","Malefic Roar","Sky Piercer"],note:"Full assassin snowball: finish your first core before 4 minutes, kill before first Turtle."};
+  if(h.name==="Julian") return {items:["Arcane Boots","Enchanted Talisman","Holy Crystal","Divine Glaive","Calamity Reaper","Winter Crown"],note:"Mixed-damage Julian: enhance third-skill combos, Zhuxin+Julian wombo ready."};
+  return {items:["Tough Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Queen's Wings"],note:"Bruiser damage: dive in, survive with Queen's Wings, kill the carry."};
+}
+function genTank(h){
+  const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].tank; if(ov) return ov;
+  return {items:["Tough Boots","Antique Cuirass","Athena's Shield","Dominance Ice","Radiant Armor","Immortality"],note:"Full tank "+h.name+": "+(h.role==="Tank"||h.role==="Support"?"your default job — start fights, eat skillshots, peel.":"EMERGENCY frontline only when your team has zero tanks — you trade most of your damage for this.")+" Swap Radiant ↔ Blade Armor by enemy damage."};
+}
+function genSupport(h){
+  const ov=VARIANT_OVERRIDES[h.name]&&VARIANT_OVERRIDES[h.name].support; if(ov) return ov;
+  return {items:["Tough Boots","Fleeting Time","Necklace of Durance","Oracle","Athena's Shield","Immortality"],note:"Roam support "+h.name+": enable your team, hold anti-heal (Durance) so their regen means nothing, ult to save fights. Swap Oracle ↔ Dominance Ice if THEY heal a lot."};
+}
+function variantMeta(h,kind){
+  if(kind==="tank") return {emblem:"Tank · Vitality + Tenacity + Concussive Blast",spell:"Flicker / Revitalize"};
+  if(kind==="support") return {emblem:"Support · Agility + Recovery + Pull Yourself Together",spell:"Flicker / Revitalize"};
+  if(kind==="damage"){
+    if(h.role==="Marksman") return {emblem:"Marksman · Fatal + Weapon Master + Weakness Finder",spell:"Flicker / Inspire"};
+    if(h.role==="Mage"||h.dmg.indexOf("magic")===0||h.role==="Support") return {emblem:"Mage · Inspire + Bargain Hunter + Lethal Ignition",spell:"Flicker"};
+    if(h.role==="Assassin") return {emblem:"Assassin · Rupture + Master Assassin + Killing Spree",spell:(h.lane.indexOf("Jungle")>=0?"Retribution":"Flicker")};
+    if(h.role==="Tank") return {emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker / Vengeance"};
+    return {emblem:"Fighter · Thrill + Weapon Master + War Cry",spell:"Flicker / Execute"};
+  }
+  return {emblem:h.emblem,spell:h.spell};
+}
+const VARIANT_TABS = [["best","⭐ Best"],["damage","🔥 Damage"],["tank","🛡️ Tank"],["support","💚 Support"]];
+function heroVariants(h){
+  return {
+    best:{items:h.build,note:"Most-picked meta preset for "+h.name+" ("+h.role+", "+h.lane+"). "+h.tips},
+    damage:genDamage(h), tank:genTank(h), support:genSupport(h)
+  };
+}
+function openHero(name,kind){
   const h=HEROES.find(x=>x.name.toLowerCase()===name.toLowerCase()); if(!h) return;
+  kind=kind||"best";
+  const esc=h.name.replace(/'/g,"\\'");
   $("modalBox").innerHTML=`<button class="close-btn" onclick="closeModal()">✕ Close</button>
   <div class="modal-hero"><img src="${heroImg(h.name)}" alt="${h.name}" onerror="this.style.display='none'"><div><h2>${emoji(h.role)} ${h.name}</h2><div class="sub">${h.role} · ${h.lane} · Damage type: <b>${h.dmg}</b></div></div></div>
-  <div class="meta-box">✨ Emblem: <b>${h.emblem}</b><br>🌀 Battle spell: <b>${h.spell}</b><br>💡 ${h.tips}</div>
-  <h3 style="margin:8px 0">Best build (researched meta):</h3>
-  <div class="build-list">${h.build.map((it,i)=>`<div class="item"><div class="n">${i+1}</div><div><b>${it}</b><small>${itemDesc(it)}</small></div></div>`).join("")}</div>
-  <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${h.name.replace(/'/g,"\\'")}')" style="color:var(--gold)">Open in Counter tab →</a></div>
-  <button onclick="setMain('${h.name.replace(/'/g,"\\'")}')" style="margin-top:10px;padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:#111;cursor:pointer;font-weight:700">⭐ Set ${h.name} as my main</button>`;
+  <div class="variant-row" id="vBtns">${VARIANT_TABS.map(([k,label])=>`<button data-k="${k}" class="${k===kind?"active":""}" onclick="showVariant('${esc}','${k}')">${label}</button>`).join("")}</div>
+  <div id="vBody"></div>
+  <div class="meta-box">🚫 To <b>counter ${h.name}</b>: buy <b>${h.counterItems.join(" → ")}</b>. Hero counters: <b>${h.counters.join(", ")}</b>. <a href="#" onclick="event.preventDefault();closeModal();setCounter('${esc}')" style="color:var(--gold)">Open in Counter tab →</a> · <a href="#" onclick="event.preventDefault();closeModal();switchTab('shop')" style="color:var(--cyan)">Where are these items in the shop? →</a></div>
+  <button onclick="setMain('${esc}')" style="margin-top:10px;padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:#111;cursor:pointer;font-weight:700">⭐ Set ${h.name} as my main</button>`;
   $("modalBg").classList.add("open");
+  showVariant(name,kind);
+}
+function showVariant(name,kind){
+  const h=HEROES.find(x=>x.name.toLowerCase()===name.toLowerCase()); if(!h) return;
+  const v=heroVariants(h)[kind]||heroVariants(h).best;
+  const m=variantMeta(h,kind);
+  document.querySelectorAll("#vBtns button").forEach(b=>b.classList.toggle("active",b.dataset.k===kind));
+  const label=(VARIANT_TABS.find(t=>t[0]===kind)||["","Build"])[1];
+  $("vBody").innerHTML=`<div class="meta-box">✨ Emblem: <b>${m.emblem}</b><br>🌀 Battle spell: <b>${m.spell}</b><br>💡 ${v.note}</div>
+  <h3 style="margin:8px 0">${label} build — ${h.name}:</h3>
+  <div class="build-list">${v.items.map((it,i)=>itemRow(it,i)).join("")}</div>`;
 }
 function closeModal(){$("modalBg").classList.remove("open");}
 function setMain(name){try{localStorage.setItem("mlbb_main",name);}catch(e){}renderMainChip();closeModal();}
@@ -443,6 +598,17 @@ document.querySelectorAll("#roleFilter button").forEach(b=>b.onclick=()=>{active
 $("globalSearch").addEventListener("input",renderAll);
 $("counterInput").addEventListener("keydown",e=>{if(e.key==="Enter")findCounter();});
 
+/* ===== SHOP GUIDE ===== */
+let activeShopCat="Attack";
+function renderShop(){
+  const q=(($("shopSearch")&&$("shopSearch").value)||"").toLowerCase();
+  const names=Object.keys(ITEM_INFO).filter(n=>(ITEM_SHOP[n]===activeShopCat)&&n.toLowerCase().includes(q)).sort();
+  document.querySelectorAll("#shopTabs button").forEach(b=>b.classList.toggle("active",b.dataset.cat===activeShopCat));
+  $("shopGrid").innerHTML=names.map(n=>`<div class="shop-item"><img src="${itemIcon(n)}" alt="" loading="lazy" onerror="this.remove()"><b>${n}</b><div class="price">💰 ${itemPrice(n)||"?"} · 📍 ${activeShopCat}</div><small>${ITEM_INFO[n]}</small></div>`).join("")||"<p style='color:var(--muted);padding:12px'>No item found — try another tab or spelling.</p>";
+}
+document.querySelectorAll("#shopTabs button").forEach(b=>b.onclick=()=>{activeShopCat=b.dataset.cat;renderShop();});
+$("shopSearch").addEventListener("input",renderShop);
+
 /* ===== COUNTER ENGINE ===== */
 function counterPlan(h){
   const d=h.dmg;
@@ -468,7 +634,7 @@ function findCounter(){
   <p style="color:var(--muted);font-size:13px">${h.role} · ${h.lane} · threat: <b>${h.dmg}</b></p>
   <div class="counter-item danger"><b>Why they hurt you:</b><br>${plan.explain}</div>
   <div class="counter-item"><b>⭐ MUST-BUY vs ${h.name} (so they barely damage you):</b><br>
-    ${must.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}`).join("<br><br>")}</div>
+    ${must.map((m,i)=>`${i+1}. <b>${m}</b> — ${itemDesc(m)}<br><span style="color:var(--cyan)">📍 Find it: Shop → ${itemShop(m)} tab</span>`).join("<br><br>")}</div>
   <div class="counter-item magic"><b>📦 Full counter build if YOU are:</b><br><br>
     🛡️ <b>Tank/Roam:</b> Tough Boots → ${must[0]||"Antique Cuirass"} → ${must[1]||"Athena's Shield"} → Dominance Ice → Guardian Helmet → Immortality<br><br>
     ⚔️ <b>Fighter/Assassin:</b> Tough Boots → War Axe/Hunter Strike → ${must[0]||"Antique Cuirass"} → Blade of Despair → ${must[1]||"Athena's Shield"} → Immortality<br><br>
