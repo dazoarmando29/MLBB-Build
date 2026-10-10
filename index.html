@@ -352,7 +352,14 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
       <div style="font-size:14px;margin:10px 0 6px"><span class="stepnum">2</span><b>Who keeps killing me:</b></div>
       <input id="counterInput" list="heroList" placeholder="e.g. Hayabusa, Eudora, Lesley, Dyrroth…">
       <datalist id="heroList"></datalist>
-      <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">3</span><b>Tap:</b></div>
+      <div style="font-size:14px;margin:10px 0 6px"><span class="stepnum">3</span><b>How do you want to counter them?</b></div>
+      <div class="variant-row" id="styleBtns" style="margin:0 0 4px">
+        <button data-s="unkillable" class="active" onclick="setStyle('unkillable')">🛡️ Unkillable — can't touch me</button>
+        <button data-s="balanced" onclick="setStyle('balanced')">⚖️ Balanced — 1 safety item</button>
+        <button data-s="slayer" onclick="setStyle('slayer')">🔥 Slayer — kill them first</button>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px" id="styleHint">🛡️ They'll hit you like a wet noodle — and start running when they see your build.</div>
+      <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">4</span><b>Tap:</b></div>
       <button onclick="findCounter()">What should I buy? 🛡️</button>
       <div style="margin-top:10px;color:var(--muted);font-size:12px">Popular:</div>
       <div class="quick-picks" id="quickPicks"></div>
@@ -878,24 +885,35 @@ function counterPlan(h){
   return {phys,magic,util,explain};
 }
 /* ===== MY-HERO vs ENEMY matchup counter ("I play X, they play Y") ===== */
-function antiHealFor(role){
-  if(role==="Tank"||role==="Support") return "Dominance Ice";
-  if(role==="Mage") return "Glowing Wand";
-  return "Sea Halberd";
-}
+let counterStyle="unkillable"; // unkillable | balanced | slayer
+const STYLE_HINTS = {
+unkillable:"🛡️ They'll hit you like a wet noodle — and start running when they see your build.",
+balanced:"⚖️ Just one safety item, rest stays YOUR game. For marksmen and mages who still want damage.",
+slayer:"🔥 No armor — pure damage race. Best for mages (magic pen) and marksmen who trust their aim. You MUST hit first."};
+const STYLE_NAMES = {unkillable:"🛡️ Unkillable — they can't touch me",balanced:"⚖️ Balanced — 1 safety item",slayer:"🔥 Slayer — kill them first"};
+function setStyle(s){counterStyle=s;document.querySelectorAll("#styleBtns button").forEach(b=>b.classList.toggle("active",b.dataset.s===s));if($("styleHint"))$("styleHint").textContent=STYLE_HINTS[s];}
+function myDealsMagic(myH){ return myH.role==="Mage"||myH.role==="Support"||myH.dmg.indexOf("magic")===0; }
 function matchupCounters(myH,enH){
-  const d=enH.dmg;
-  if(d==="phys-burst") return ["Antique Cuirass","Twilight Armor"];
-  if(d==="phys-dps") return ["Blade Armor","Dominance Ice"];
-  if(d==="magic-burst") return ["Athena's Shield"];
-  if(d==="magic-dps") return ["Radiant Armor"];
-  if(d==="sustain") return [antiHealFor(myH.role)];
-  return ["Antique Cuirass","Athena's Shield"];
+  const d=enH.dmg, magicMe=myDealsMagic(myH);
+  let def;
+  if(d==="phys-burst") def=["Antique Cuirass","Twilight Armor"];
+  else if(d==="phys-dps") def=["Blade Armor","Dominance Ice"];
+  else if(d==="magic-burst") def=["Athena's Shield"];
+  else if(d==="magic-dps") def=["Radiant Armor"];
+  else if(d==="sustain") def=[antiHealFor(myH.role)];
+  else def=["Antique Cuirass","Athena's Shield"];
+  if(counterStyle==="balanced") return def.slice(0,1);
+  if(counterStyle!=="slayer") return def;
+  /* slayer: answer damage with damage */
+  if(myH.role==="Tank") return myH.dmg.indexOf("magic")===0?["Holy Crystal","Divine Glaive"]:["War Axe","Malefic Roar"];
+  if(d==="sustain") return magicMe?["Glowing Wand","Divine Glaive"]:["Sea Halberd","Demon Hunter Sword"];
+  if(d==="phys-dps") return magicMe?["Holy Crystal","Divine Glaive"]:["Demon Hunter Sword","Malefic Roar"];
+  return magicMe?(d.indexOf("magic")===0?["Genius Wand","Divine Glaive"]:["Holy Crystal","Divine Glaive"]):["Blade of Despair","Malefic Roar"];
 }
 /* Rebuild MY hero's 6 items for this exact enemy: keep identity, inject counters early */
-function matchupBuild(myH,counters,magicFoe){
+function matchupBuild(myH,counters,magicFoe,style){
   let boots=myH.build[0];
-  if(magicFoe&&["Warrior Boots","Swift Boots","Rapid Boots"].includes(boots)) boots="Tough Boots";
+  if(style!=="slayer"&&magicFoe&&["Warrior Boots","Swift Boots","Rapid Boots"].includes(boots)) boots="Tough Boots";
   const base=myH.build.slice(1);
   const hasImmo=base.includes("Immortality");
   const pool=counters.filter(c=>c!==boots);
@@ -917,6 +935,9 @@ const FOE_STYLE = {
 "mixed":"hurts both physically AND magically"};
 function matchupTips(myH,enH,counters){
   const t=[];
+  if(counterStyle==="slayer") t.push(`🔥 Slayer rules: YOU hit first — from a bush, a flank, or with vision. If you both start at the same time, you can still lose. ${myH.role==="Marksman"?"Keep hitting while walking backwards (kite) — never stand still.":myH.role==="Mage"?"Poke from max range; keep Winter Crown ready in case they dive.":""}`);
+  else if(counterStyle==="balanced") t.push(`⚖️ Balanced rules: play your normal game. The safety item just forgives one mistake — it doesn't make you a tank.`);
+  else t.push(`🛡️ Unkillable rules: once your counter item is done, walk AT them. With no burst threat left, THEY start avoiding YOU — use that to take space for your team.`);
   if(enH.counters.includes(myH.name)) t.push(`⚠️ Heads-up: ${enH.name} is a known counter to ${myH.name}. Don't fight them alone — wait for your team, then go together.`);
   else if(myH.counters.includes(enH.name)) t.push(`✅ Good news: ${myH.name} naturally bothers ${enH.name}. Play bold — but still buy the ⭐ items below.`);
   const d=enH.dmg, c0=counters[0]||"your counter item";
@@ -937,14 +958,20 @@ function matchupTips(myH,enH,counters){
 function renderMatchup(myH,enH){
   const counters=matchupCounters(myH,enH);
   const magicFoe=enH.dmg.indexOf("magic")===0;
-  const build=matchupBuild(myH,counters,magicFoe);
+  const build=matchupBuild(myH,counters,magicFoe,counterStyle);
   const squishy=["Marksman","Mage","Assassin","Support"].includes(myH.role);
   const style=FOE_STYLE[enH.dmg]||"a bit of everything";
+  const styleName=STYLE_NAMES[counterStyle]||counterStyle;
+  const styleLine=counterStyle==="slayer"
+    ?`Forget armor — your answer is damage. ${counters.join(" + ")} deletes them before they delete you. But if THEY jump you first, you still die — so YOU must start the fight (bush, flank, vision).`
+    :counterStyle==="balanced"
+    ?`One safety item (${counters[0]||"defense"}), everything else stays YOUR normal game. Survive their first combo, then kill them like always.`
+    :`${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd. Finish it and they'll start avoiding YOU. Good — that's the point.`}`;
   const e1=myH.name.replace(/'/g,"\\'"), e2=enH.name.replace(/'/g,"\\'");
   return `
   <h2 style="color:var(--gold)">🛡️ ${myH.name} (you) vs ${enH.name} (them)</h2>
-  <p style="color:var(--muted);font-size:13px">You: <b>${myH.role}</b> · Them: <b>${enH.role}</b> — ${style}</p>
-  <div class="counter-item danger"><b>The problem:</b><br>${enH.name} ${style}. ${squishy?`You play ${myH.role} — squishy, so one mistake = death. Buy defense EARLY (2nd item), not last.`:`You are the frontline — your team needs you ALIVE, not dealing damage. Slot the counter in 2nd.`}</div>
+  <p style="color:var(--muted);font-size:13px">You: <b>${myH.role}</b> · Them: <b>${enH.role}</b> — ${style}<br>Style: <b>${styleName}</b></p>
+  <div class="counter-item danger"><b>The problem:</b><br>${styleLine}</div>
   <div class="counter-item"><b>⭐ Buy these (as ${myH.name}) — tap a picture to locate it:</b><div class="build-list">${counters.map((m,i)=>itemRow(m,i)).join("")}</div></div>
   <div class="counter-item magic"><b>📦 Your ${myH.name} build for THIS match (buy in order):</b><div class="build-list">${build.map((b,i)=>itemRow(b,i)).join("")}</div>
     <small style="color:var(--muted)">Same ${myH.name} you know — just with the ⭐ counters slotted in early.</small></div>
