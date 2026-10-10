@@ -357,6 +357,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;line-hei
         <button data-s="unkillable" class="active" onclick="setStyle('unkillable')">🛡️ Unkillable — can't touch me</button>
         <button data-s="balanced" onclick="setStyle('balanced')">⚖️ Balanced — 1 safety item</button>
         <button data-s="slayer" onclick="setStyle('slayer')">🔥 Slayer — kill them first</button>
+        <button data-s="dark" onclick="setStyle('dark')">🌑 Dark System — max fear</button>
       </div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:6px" id="styleHint">🛡️ They'll hit you like a wet noodle — and start running when they see your build.</div>
       <div style="font-size:14px;margin:10px 0 0"><span class="stepnum">4</span><b>Tap:</b></div>
@@ -885,12 +886,13 @@ function counterPlan(h){
   return {phys,magic,util,explain};
 }
 /* ===== MY-HERO vs ENEMY matchup counter ("I play X, they play Y") ===== */
-let counterStyle="unkillable"; // unkillable | balanced | slayer
+let counterStyle="unkillable"; // unkillable | balanced | slayer | dark
 const STYLE_HINTS = {
 unkillable:"🛡️ They'll hit you like a wet noodle — and start running when they see your build.",
 balanced:"⚖️ Just one safety item, rest stays YOUR game. For marksmen and mages who still want damage.",
-slayer:"🔥 No armor — pure damage race. Best for mages (magic pen) and marksmen who trust their aim. You MUST hit first."};
-const STYLE_NAMES = {unkillable:"🛡️ Unkillable — they can't touch me",balanced:"⚖️ Balanced — 1 safety item",slayer:"🔥 Slayer — kill them first"};
+slayer:"🔥 No armor — pure damage race. Best for mages (magic pen) and marksmen who trust their aim. You MUST hit first.",
+dark:"🌑 DARK SYSTEM: zero defense, abnormal damage. They will fear you — but one mistake and YOU explode."};
+const STYLE_NAMES = {unkillable:"🛡️ Unkillable — they can't touch me",balanced:"⚖️ Balanced — 1 safety item",slayer:"🔥 Slayer — kill them first",dark:"🌑 Dark System — max fear"};
 function setStyle(s){counterStyle=s;document.querySelectorAll("#styleBtns button").forEach(b=>b.classList.toggle("active",b.dataset.s===s));if($("styleHint"))$("styleHint").textContent=STYLE_HINTS[s];}
 function myDealsMagic(myH){ return myH.role==="Mage"||myH.role==="Support"||myH.dmg.indexOf("magic")===0; }
 function matchupCounters(myH,enH){
@@ -903,7 +905,14 @@ function matchupCounters(myH,enH){
   else if(d==="sustain") def=[antiHealFor(myH.role)];
   else def=["Antique Cuirass","Athena's Shield"];
   if(counterStyle==="balanced") return def.slice(0,1);
-  if(counterStyle!=="slayer") return def;
+  if(counterStyle!=="slayer"&&counterStyle!=="dark") return def;
+  if(counterStyle==="dark"){
+    /* 🌑 DARK SYSTEM: abnormal max damage for THIS hero — zero defense, pure fear */
+    if(myH.role==="Mage") return ["Holy Crystal","Blood Wings"];
+    if(myH.role==="Marksman") return ["Berserker's Fury","Blade of Despair"];
+    if(myH.role==="Assassin"||myH.role==="Fighter") return magicMe?["Holy Crystal","Blood Wings"]:["Blade of Despair","Blade of the Heptaseas"];
+    return ["Holy Crystal","Divine Glaive"];
+  }
   /* slayer: answer damage with damage */
   if(myH.role==="Tank") return myH.dmg.indexOf("magic")===0?["Holy Crystal","Divine Glaive"]:["War Axe","Malefic Roar"];
   if(d==="sustain") return magicMe?["Glowing Wand","Divine Glaive"]:["Sea Halberd","Demon Hunter Sword"];
@@ -913,7 +922,7 @@ function matchupCounters(myH,enH){
 /* Rebuild MY hero's 6 items for this exact enemy: keep identity, inject counters early */
 function matchupBuild(myH,counters,magicFoe,style){
   let boots=myH.build[0];
-  if(style!=="slayer"&&magicFoe&&["Warrior Boots","Swift Boots","Rapid Boots"].includes(boots)) boots="Tough Boots";
+  if(style!=="slayer"&&style!=="dark"&&magicFoe&&["Warrior Boots","Swift Boots","Rapid Boots"].includes(boots)) boots="Tough Boots";
   const base=myH.build.slice(1);
   const hasImmo=base.includes("Immortality");
   const pool=counters.filter(c=>c!==boots);
@@ -935,7 +944,8 @@ const FOE_STYLE = {
 "mixed":"hurts both physically AND magically"};
 function matchupTips(myH,enH,counters){
   const t=[];
-  if(counterStyle==="slayer") t.push(`🔥 Slayer rules: YOU hit first — from a bush, a flank, or with vision. If you both start at the same time, you can still lose. ${myH.role==="Marksman"?"Keep hitting while walking backwards (kite) — never stand still.":myH.role==="Mage"?"Poke from max range; keep Winter Crown ready in case they dive.":""}`);
+  if(counterStyle==="dark") t.push(`🌑 Dark System rules: you are a JUMPSCARE, not a fighter. Wait in bush/fog, delete ONE target, vanish. If they see you coming, it fails. Never build this from behind — only when even or ahead.`);
+  else if(counterStyle==="slayer") t.push(`🔥 Slayer rules: YOU hit first — from a bush, a flank, or with vision. If you both start at the same time, you can still lose. ${myH.role==="Marksman"?"Keep hitting while walking backwards (kite) — never stand still.":myH.role==="Mage"?"Poke from max range; keep Winter Crown ready in case they dive.":""}`);
   else if(counterStyle==="balanced") t.push(`⚖️ Balanced rules: play your normal game. The safety item just forgives one mistake — it doesn't make you a tank.`);
   else t.push(`🛡️ Unkillable rules: once your counter item is done, walk AT them. With no burst threat left, THEY start avoiding YOU — use that to take space for your team.`);
   if(enH.counters.includes(myH.name)) t.push(`⚠️ Heads-up: ${enH.name} is a known counter to ${myH.name}. Don't fight them alone — wait for your team, then go together.`);
@@ -962,7 +972,9 @@ function renderMatchup(myH,enH){
   const squishy=["Marksman","Mage","Assassin","Support"].includes(myH.role);
   const style=FOE_STYLE[enH.dmg]||"a bit of everything";
   const styleName=STYLE_NAMES[counterStyle]||counterStyle;
-  const styleLine=counterStyle==="slayer"
+  const styleLine=counterStyle==="dark"
+    ?`No defense. No mercy. ${counters.join(" + ")} turns your ${myH.name} into a jumpscare — one combo and they panic, type in chat, and ban you next lobby. 😈 But one CC on you = YOU explode. Strike from fog, never face-check. THEY will fear YOU.`
+    :counterStyle==="slayer"
     ?`Forget armor — your answer is damage. ${counters.join(" + ")} deletes them before they delete you. But if THEY jump you first, you still die — so YOU must start the fight (bush, flank, vision).`
     :counterStyle==="balanced"
     ?`One safety item (${counters[0]||"defense"}), everything else stays YOUR normal game. Survive their first combo, then kill them like always.`
